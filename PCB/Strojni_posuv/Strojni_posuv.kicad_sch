@@ -1863,10 +1863,10 @@
     (property "Datasheet" "~" (at 185.42 91.44 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "2" (uuid e74a5a13-ffce-4f7a-a06b-ce3142c2eac3))
+    (pin "2" (uuid e74a5a13-ffce-4f7a-a06b-ce3142c2eac5))
     (pin "4" (uuid 139d1f02-7808-4b11-bad8-d6d7e958b88f))
     (pin "3" (uuid ba68f1e5-f776-4594-9f1c-e376c12da2d7))
-    (pin "1" (uuid 46dfea0e-895b-44ee-8dc2-97c1616b6cfd))
+    (pin "1" (uuid 46dfea0e-895b-44ee-8dc2-97c1616b6cff))
     (instances
       (project "Strojni_posuv"
         (path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
@@ -2080,8 +2080,8 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "2" (uuid db9e4629-7155-48b5-aae3-9378bb163c37))
-    (pin "4" (uuid ac843f49-b7c3-43ed-aa3e-585d27df8dcc))
-    (pin "3" (uuid 4adb25af-79d6-4900-a580-f5160128fe31))
+    (pin "4" (uuid ac843f49-b7c3-43ed-aa3e-585d27df8dcd))
+    (pin "3" (uuid 4adb25af-79d6-4900-a580-f5160128fe32))
     (pin "1" (uuid b3215e5c-c4ae-4d51-8f1d-2b6f78953500))
     (instances
       (project "Strojni_posuv"
@@ -2263,10 +2263,10 @@
     (property "Datasheet" "~" (at 185.42 25.4 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "2" (uuid e74a5a13-ffce-4f7a-a06b-ce3142c2eac3))
+    (pin "2" (uuid e74a5a13-ffce-4f7a-a06b-ce3142c2eac6))
     (pin "4" (uuid ac843f49-b7c3-43ed-aa3e-585d27df8dca))
     (pin "3" (uuid 4adb25af-79d6-4900-a580-f5160128fe2f))
-    (pin "1" (uuid 46dfea0e-895b-44ee-8dc2-97c1616b6cfd))
+    (pin "1" (uuid 46dfea0e-895b-44ee-8dc2-97c1616b6d00))
     (instances
       (project "Strojni_posuv"
         (path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
@@ -2624,10 +2624,10 @@
     (property "Datasheet" "~" (at 185.42 29.21 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "2" (uuid e74a5a13-ffce-4f7a-a06b-ce3142c2eac3))
-    (pin "4" (uuid ac843f49-b7c3-43ed-aa3e-585d27df8dca))
-    (pin "3" (uuid 4adb25af-79d6-4900-a580-f5160128fe2f))
-    (pin "1" (uuid 46dfea0e-895b-44ee-8dc2-97c1616b6cfd))
+    (pin "2" (uuid e74a5a13-ffce-4f7a-a06b-ce3142c2eac7))
+    (pin "4" (uuid ac843f49-b7c3-43ed-aa3e-585d27df8dce))
+    (pin "3" (uuid 4adb25af-79d6-4900-a580-f5160128fe33))
+    (pin "1" (uuid 46dfea0e-895b-44ee-8dc2-97c1616b6d01))
     (instances
       (project "Strojni_posuv"
         (path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
@@ -2756,8 +2756,8 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "2" (uuid 1bead177-ba3c-4f1c-8765-c4cc96df7e4d))
-    (pin "4" (uuid ac843f49-b7c3-43ed-aa3e-585d27df8dcb))
-    (pin "3" (uuid 4adb25af-79d6-4900-a580-f5160128fe30))
+    (pin "4" (uuid ac843f49-b7c3-43ed-aa3e-585d27df8dcf))
+    (pin "3" (uuid 4adb25af-79d6-4900-a580-f5160128fe34))
     (pin "1" (uuid 8d4368cb-f95c-4438-b9cb-953cbfecbde7))
     (instances
       (project "Strojni_posuv"
@@ -2783,10 +2783,10 @@
     (property "Datasheet" "~" (at 185.42 74.93 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "2" (uuid e74a5a13-ffce-4f7a-a06b-ce3142c2eac3))
+    (pin "2" (uuid e74a5a13-ffce-4f7a-a06b-ce3142c2eac8))
     (pin "4" (uuid 24d9d438-438f-4334-8d9d-8bba603186df))
     (pin "3" (uuid 25a1a003-06fa-4328-a5a4-5ba4859a7a8f))
-    (pin "1" (uuid 46dfea0e-895b-44ee-8dc2-97c1616b6cfd))
+    (pin "1" (uuid 46dfea0e-895b-44ee-8dc2-97c1616b6d02))
     (instances
       (project "Strojni_posuv"
         (path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
