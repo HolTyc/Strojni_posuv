@@ -1,0 +1,246 @@
+
+(kicad_symbol_lib (version 20211014) (generator kicad_symbol_editor)
+  (symbol "TB6600HG" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (property "Reference" "IC" (id 0) (at -5.08 21.59 0)
+      (effects (font (size 1.27 1.27)) (justify bottom left))
+    )
+    (property "Value" "TB6600HG" (id 1) (at -5.08 -25.4 0)
+      (effects (font (size 1.27 1.27)) (justify bottom left))
+    )
+    (property "Footprint" "TB6600HG:HZIP25-P-1.00F" (id 2) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "MF" "Toshiba" (id 4) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Description" "\nBipolar Motor Driver Power MOSFET Parallel 25-HZIP\n" (id 5) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Package" "SIP-25 Toshiba" (id 6) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Price" "None" (id 7) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "SnapEDA_Link" "https://www.snapeda.com/parts/TB6600HG/Toshiba+Semiconductor+and+Storage/view-part/?ref=snap" (id 8) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "MP" "TB6600HG" (id 9) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Purchase-URL" "https://www.snapeda.com/api/url_track_click_mouser/?unipart_id=53327&manufacturer=Toshiba&part_name=TB6600HG&search_term=None" (id 10) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Availability" "In Stock" (id 11) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (property "Check_prices" "https://www.snapeda.com/parts/TB6600HG/Toshiba+Semiconductor+and+Storage/view-part/?ref=eda" (id 12) (at 0 0 0)
+      (effects (font (size 1.27 1.27)) (justify bottom) hide)
+    )
+    (symbol "TB6600HG_0_0"
+      (rectangle (start -17.78 -22.86) (end 17.78 20.32)
+        (stroke (width 0.254)) (fill (type background))
+      )
+      (pin output line (at -20.32 17.78 0) (length 2.54)
+        (name "ALERT"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -15.24 180.0) (length 2.54)
+        (name "SGND"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "2_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 15.24 0) (length 2.54)
+        (name "TQ"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "3"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 12.7 0) (length 2.54)
+        (name "LATCH/AUTO"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "4_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 7.62 0) (length 2.54)
+        (name "VREF"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "5"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 17.78 180.0) (length 2.54)
+        (name "VCC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "6_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 5.08 0) (length 2.54)
+        (name "M1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "7"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 2.54 0) (length 2.54)
+        (name "M2"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "8_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 0.0 0) (length 2.54)
+        (name "M3"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "9"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at 20.32 10.16 180.0) (length 2.54)
+        (name "OUT2B"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "10_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin passive line (at 20.32 -2.54 180.0) (length 2.54)
+        (name "NFB"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "11"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at 20.32 7.62 180.0) (length 2.54)
+        (name "OUT1B"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "12_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -17.78 180.0) (length 2.54)
+        (name "PGNDB"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "13"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at 20.32 5.08 180.0) (length 2.54)
+        (name "OUT2A"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "14_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin passive line (at 20.32 -10.16 180.0) (length 2.54)
+        (name "NFA"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "15"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at 20.32 2.54 180.0) (length 2.54)
+        (name "OUT1A"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "16_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin power_in line (at 20.32 -20.32 180.0) (length 2.54)
+        (name "PGNDA"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "17"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 -2.54 0) (length 2.54)
+        (name "ENABLE"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "18_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 -15.24 0) (length 2.54)
+        (name "RESET"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "19"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at 20.32 15.24 180.0) (length 2.54)
+        (name "VCC@1"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "20_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 -5.08 0) (length 2.54)
+        (name "CLK"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "21"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin input line (at -20.32 -7.62 0) (length 2.54)
+        (name "CW/CCW"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "22_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin passive line (at -20.32 -12.7 0) (length 2.54)
+        (name "OSC"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "23"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at -20.32 -17.78 0) (length 2.54)
+        (name "VREG"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "24_1"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+      (pin output line (at -20.32 -20.32 0) (length 2.54)
+        (name "MO"
+          (effects (font (size 1.016 1.016)))
+        )
+        (number "25"
+          (effects (font (size 1.016 1.016)))
+        )
+      )
+    )
+  )
+)
