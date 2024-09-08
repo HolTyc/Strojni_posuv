@@ -4360,10 +4360,16 @@
 		(uuid "072fb277-730b-48fe-b2b9-238b29eef4a9")
 	)
 	(junction
-		(at 152.4 63.5)
+		(at 163.83 71.12)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "07a91a95-e039-48b3-98ae-135e4d9ae091")
+		(uuid "08b57f4e-b874-4dac-98df-fc67d11e1146")
+	)
+	(junction
+		(at 152.4 80.01)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0b9c906c-e27f-40ce-ba16-6e73a6701659")
 	)
 	(junction
 		(at 190.5 87.63)
@@ -4372,10 +4378,10 @@
 		(uuid "14ac8dcd-09fd-4921-9d9e-90812e743ddf")
 	)
 	(junction
-		(at 40.64 19.05)
+		(at 152.4 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "154b31b5-9679-47ae-993b-ff5a6513e37b")
+		(uuid "16ba7c9a-ab11-4a96-a1b9-34609bb6f598")
 	)
 	(junction
 		(at 17.78 26.67)
@@ -4384,22 +4390,22 @@
 		(uuid "1b094a01-12bc-47e2-a3ba-623ccae2fb16")
 	)
 	(junction
-		(at 163.83 71.12)
+		(at 152.4 40.64)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "24f67386-76d7-4e14-8cc9-6ac9f44e1493")
+		(uuid "22244380-a050-4f04-a6d1-420f7ea2e7ad")
+	)
+	(junction
+		(at 163.83 40.64)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "255681bb-c2c0-4fad-ba9e-99fb39e70f1c")
 	)
 	(junction
 		(at 63.5 30.48)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "2bce7d67-68e6-4bee-9792-b98ea6ac250e")
-	)
-	(junction
-		(at 152.4 48.26)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2ce713ba-2a43-44b7-b18d-0cd09a46efb4")
 	)
 	(junction
 		(at 190.5 25.4)
@@ -4414,30 +4420,6 @@
 		(uuid "2d36563e-1c82-4e98-b2a7-77baf6991a66")
 	)
 	(junction
-		(at 152.4 33.02)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "364111e5-4ccc-40c8-bdd8-079700c04698")
-	)
-	(junction
-		(at 152.4 55.88)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3d9d20c5-f96a-4463-8509-1d999dee3e76")
-	)
-	(junction
-		(at 40.64 26.67)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "4043bc6d-d89d-4a37-a3f5-d6baa1c4474f")
-	)
-	(junction
-		(at 163.83 25.4)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "48887644-8794-46fc-9475-57585a98a506")
-	)
-	(junction
 		(at 180.34 40.64)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4450,12 +4432,6 @@
 		(uuid "5085e4b9-9aff-4942-a668-263e17cdc4d0")
 	)
 	(junction
-		(at 52.07 19.05)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "586a2b4c-5e21-4009-a2b8-3625ee9999ef")
-	)
-	(junction
 		(at 91.44 19.05)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4465,7 +4441,13 @@
 		(at 27.94 35.56)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "6f8d0ba4-334c-4aa1-8836-7aef6b49a6ab")
+		(uuid "69f610e4-35f0-44b4-a882-a13515e1189f")
+	)
+	(junction
+		(at 152.4 55.88)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "76eda4e8-4348-4f74-8e34-7e8f011313ea")
 	)
 	(junction
 		(at 66.04 30.48)
@@ -4474,10 +4456,22 @@
 		(uuid "7a97e113-c967-41cb-bb39-9bdc229add3c")
 	)
 	(junction
+		(at 152.4 71.12)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7d275cde-b29e-4135-85f6-d0583f4b3fd0")
+	)
+	(junction
 		(at 180.34 55.88)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8854990a-591c-442d-8a57-35c0d3d3378f")
+	)
+	(junction
+		(at 163.83 25.4)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8a7cdf65-6f1d-4b20-9f8c-be820caf959a")
 	)
 	(junction
 		(at 66.04 124.46)
@@ -4486,22 +4480,28 @@
 		(uuid "8d930ac3-23ec-41de-a27a-cf12f2b38100")
 	)
 	(junction
-		(at 152.4 87.63)
+		(at 41.91 26.67)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "97b3c52a-5aa8-4cb9-8209-f3685e063ccf")
+		(uuid "9119469b-3a33-4b6a-9d55-936d4bb23b80")
+	)
+	(junction
+		(at 30.48 19.05)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "94bbbbce-8618-4fba-8349-50cb6b4a8c6d")
+	)
+	(junction
+		(at 163.83 87.63)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "98b926ed-b40a-432a-a8b8-ebd426f52cdc")
 	)
 	(junction
 		(at 180.34 71.12)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "99f9f69e-fc8b-4a18-8685-000d06f3c50b")
-	)
-	(junction
-		(at 163.83 55.88)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "9f766c19-ac9e-44ae-9bc1-ad4a45916cbb")
 	)
 	(junction
 		(at 91.44 26.67)
@@ -4516,18 +4516,6 @@
 		(uuid "a2f06e79-9f92-41cf-803d-adf660696eb1")
 	)
 	(junction
-		(at 163.83 87.63)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a53d25d3-ac52-49bc-9cdd-906945694c4d")
-	)
-	(junction
-		(at 163.83 40.64)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a68aa622-b3a1-4cd5-8519-1b5d1ab1fee1")
-	)
-	(junction
 		(at 190.5 55.88)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4540,22 +4528,16 @@
 		(uuid "abdae596-3992-48d1-9728-dde327640d86")
 	)
 	(junction
+		(at 152.4 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b0c967f1-b997-43bf-8a81-5758be1aafe1")
+	)
+	(junction
 		(at 190.5 71.12)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b0e60582-26a0-4291-a89c-4637325ea8da")
-	)
-	(junction
-		(at 152.4 80.01)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "b769ca2f-6253-4a5d-b86e-ec632b240ac3")
-	)
-	(junction
-		(at 152.4 71.12)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "bbd6eb0c-901a-46d6-a6df-f123a9a7686f")
 	)
 	(junction
 		(at 68.58 30.48)
@@ -4570,12 +4552,6 @@
 		(uuid "c04ee8fe-50b9-4d31-ac52-3ba05ddef969")
 	)
 	(junction
-		(at 152.4 40.64)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "c05c5af9-9477-46c8-840c-ed644b1aaafb")
-	)
-	(junction
 		(at 152.4 25.4)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4588,22 +4564,46 @@
 		(uuid "c408b4b0-2270-458a-b13d-52ac0e3dac78")
 	)
 	(junction
+		(at 30.48 26.67)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d57bef67-98d6-4696-9876-9f647b9eea8d")
+	)
+	(junction
+		(at 152.4 48.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d655999b-8404-4258-9d23-7668b98df81b")
+	)
+	(junction
+		(at 41.91 19.05)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "dadc9818-db94-4708-9106-cce1feb6568e")
+	)
+	(junction
+		(at 163.83 55.88)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e0769750-3846-480d-a29f-dae7e8c06bdb")
+	)
+	(junction
 		(at 81.28 19.05)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e21274bc-b743-49a9-bb9b-a65cdc040c0d")
 	)
 	(junction
-		(at 29.21 19.05)
+		(at 53.34 19.05)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "e2e2ffd0-3a28-47bc-b7ef-ea156fa29483")
+		(uuid "e6f936c5-908b-488f-996d-5f875777bc11")
 	)
 	(junction
-		(at 29.21 26.67)
+		(at 152.4 87.63)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "fe4ab711-601f-4a93-8c99-c2e392a8a943")
+		(uuid "e975960c-dadc-467e-ab14-0c034b54e51a")
 	)
 	(no_connect
 		(at 241.3 87.63)
@@ -4701,13 +4701,13 @@
 	)
 	(wire
 		(pts
-			(xy 29.21 26.67) (xy 40.64 26.67)
+			(xy 147.32 87.63) (xy 152.4 87.63)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0f434cee-de28-4211-99c6-13adc761e45e")
+		(uuid "0ea959fb-1261-409d-92ee-6b96b91adab8")
 	)
 	(wire
 		(pts
@@ -4731,16 +4731,6 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 26.67) (xy 52.07 26.67)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1571d7ef-885d-45cd-97bf-142af4e2ffcc")
-	)
-	(wire
-		(pts
 			(xy 152.4 48.26) (xy 163.83 48.26)
 		)
 		(stroke
@@ -4761,16 +4751,6 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 87.63) (xy 166.37 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "20f26f46-4040-498f-bbbc-0680c03b7eb7")
-	)
-	(wire
-		(pts
 			(xy 81.28 19.05) (xy 91.44 19.05)
 		)
 		(stroke
@@ -4781,7 +4761,7 @@
 	)
 	(wire
 		(pts
-			(xy 152.4 71.12) (xy 163.83 71.12)
+			(xy 147.32 71.12) (xy 152.4 71.12)
 		)
 		(stroke
 			(width 0)
@@ -4831,7 +4811,7 @@
 	)
 	(wire
 		(pts
-			(xy 52.07 19.05) (xy 63.5 19.05)
+			(xy 30.48 19.05) (xy 41.91 19.05)
 		)
 		(stroke
 			(width 0)
@@ -4871,13 +4851,23 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 71.12) (xy 166.37 71.12)
+			(xy 41.91 19.05) (xy 53.34 19.05)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "3919e2c4-1ee0-459f-9681-2b19250eb7e5")
+		(uuid "37a986ec-e085-4613-b4ee-a667c5f2e90f")
+	)
+	(wire
+		(pts
+			(xy 152.4 71.12) (xy 163.83 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3813a21f-26bb-42ff-bf76-ea0f186c8c26")
 	)
 	(wire
 		(pts
@@ -4971,16 +4961,6 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 87.63) (xy 152.4 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4e106bdf-fac6-430d-bfc5-07b4be5a014d")
-	)
-	(wire
-		(pts
 			(xy 66.04 30.48) (xy 68.58 30.48)
 		)
 		(stroke
@@ -4998,6 +4978,16 @@
 			(type default)
 		)
 		(uuid "50dde23a-bb7f-4cd6-8e28-c6c1223a3b65")
+	)
+	(wire
+		(pts
+			(xy 163.83 87.63) (xy 166.37 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5139884a-5710-4823-b912-b6feb2120d19")
 	)
 	(wire
 		(pts
@@ -5028,16 +5018,6 @@
 			(type default)
 		)
 		(uuid "592b99f5-7541-447b-a9b3-350c31260806")
-	)
-	(wire
-		(pts
-			(xy 152.4 55.88) (xy 163.83 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5c4d0268-f410-4c38-9e46-041004b3327d")
 	)
 	(wire
 		(pts
@@ -5111,6 +5091,26 @@
 	)
 	(wire
 		(pts
+			(xy 163.83 71.12) (xy 166.37 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "82000c63-5e44-4f9a-93f9-49dc4d43e01d")
+	)
+	(wire
+		(pts
+			(xy 41.91 26.67) (xy 53.34 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "82d0ea6f-c602-4bb5-99dc-7895687b0a42")
+	)
+	(wire
+		(pts
 			(xy 190.5 55.88) (xy 195.58 55.88)
 		)
 		(stroke
@@ -5148,26 +5148,6 @@
 			(type default)
 		)
 		(uuid "89338e86-a0dc-4aec-8d23-77c492130dd6")
-	)
-	(wire
-		(pts
-			(xy 163.83 25.4) (xy 166.37 25.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8a95d6c2-0df5-4e58-8922-7acdc589ab1c")
-	)
-	(wire
-		(pts
-			(xy 147.32 71.12) (xy 152.4 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "91bff4e6-0eb4-4c10-8c0d-6eec60950055")
 	)
 	(wire
 		(pts
@@ -5211,13 +5191,13 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 19.05) (xy 52.07 19.05)
+			(xy 27.94 35.56) (xy 48.26 35.56)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9d906c1b-0c2f-41ff-b928-777c4b65cda9")
+		(uuid "9ff51f26-64f7-4882-806c-58dfe0de2c6a")
 	)
 	(wire
 		(pts
@@ -5241,6 +5221,16 @@
 	)
 	(wire
 		(pts
+			(xy 163.83 55.88) (xy 166.37 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a1305490-5eaf-4a97-a168-e9701ed6396b")
+	)
+	(wire
+		(pts
 			(xy 190.5 40.64) (xy 190.5 44.45)
 		)
 		(stroke
@@ -5258,16 +5248,6 @@
 			(type default)
 		)
 		(uuid "a42c4480-05c4-498e-abe7-8348b6001ae7")
-	)
-	(wire
-		(pts
-			(xy 27.94 35.56) (xy 48.26 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a691996e-5f26-4380-87ce-2fab8d7c285b")
 	)
 	(wire
 		(pts
@@ -5298,16 +5278,6 @@
 			(type default)
 		)
 		(uuid "ab9e2bd6-9542-4cfa-8fba-1b24735118fa")
-	)
-	(wire
-		(pts
-			(xy 163.83 55.88) (xy 166.37 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ada91b5d-5f67-48ad-8a9b-e948191c3f68")
 	)
 	(wire
 		(pts
@@ -5351,7 +5321,7 @@
 	)
 	(wire
 		(pts
-			(xy 17.78 26.67) (xy 29.21 26.67)
+			(xy 17.78 26.67) (xy 30.48 26.67)
 		)
 		(stroke
 			(width 0)
@@ -5361,13 +5331,13 @@
 	)
 	(wire
 		(pts
-			(xy 152.4 87.63) (xy 163.83 87.63)
+			(xy 24.13 35.56) (xy 27.94 35.56)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b7b9f1b5-b258-4535-890f-59f5b3ef9f59")
+		(uuid "b797e586-6f34-4208-8822-a33d8f397589")
 	)
 	(wire
 		(pts
@@ -5381,6 +5351,16 @@
 	)
 	(wire
 		(pts
+			(xy 152.4 40.64) (xy 163.83 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bf6033f1-fd38-4b8d-b69a-835c7e3eacd3")
+	)
+	(wire
+		(pts
 			(xy 45.72 143.51) (xy 45.72 154.94)
 		)
 		(stroke
@@ -5391,13 +5371,13 @@
 	)
 	(wire
 		(pts
-			(xy 24.13 35.56) (xy 27.94 35.56)
+			(xy 163.83 40.64) (xy 166.37 40.64)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c50209d7-0bc0-4154-8086-d3d36c80cb1d")
+		(uuid "c43d977c-3845-4faa-bbde-34dbaf8851af")
 	)
 	(wire
 		(pts
@@ -5471,6 +5451,16 @@
 	)
 	(wire
 		(pts
+			(xy 163.83 25.4) (xy 166.37 25.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d68635a0-b774-4a20-9c70-03b3df2ac0ac")
+	)
+	(wire
+		(pts
 			(xy 173.99 25.4) (xy 180.34 25.4)
 		)
 		(stroke
@@ -5491,7 +5481,7 @@
 	)
 	(wire
 		(pts
-			(xy 29.21 19.05) (xy 40.64 19.05)
+			(xy 17.78 19.05) (xy 30.48 19.05)
 		)
 		(stroke
 			(width 0)
@@ -5501,13 +5491,13 @@
 	)
 	(wire
 		(pts
-			(xy 152.4 40.64) (xy 163.83 40.64)
+			(xy 53.34 19.05) (xy 63.5 19.05)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e0e74a0d-bd5b-42e7-b9a1-e8bb97604c33")
+		(uuid "e24a1759-a077-460c-83a1-a08dceee6fb5")
 	)
 	(wire
 		(pts
@@ -5521,6 +5511,16 @@
 	)
 	(wire
 		(pts
+			(xy 152.4 55.88) (xy 163.83 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "edca0dc5-380b-4d8c-8771-a1b6f52b43cc")
+	)
+	(wire
+		(pts
 			(xy 73.66 30.48) (xy 76.2 30.48)
 		)
 		(stroke
@@ -5528,16 +5528,6 @@
 			(type default)
 		)
 		(uuid "effb4474-2e1e-465e-8ee4-c206156c8f86")
-	)
-	(wire
-		(pts
-			(xy 17.78 19.05) (xy 29.21 19.05)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f01ef4cf-27d2-4096-80bf-4080f0dc12a6")
 	)
 	(wire
 		(pts
@@ -5561,6 +5551,16 @@
 	)
 	(wire
 		(pts
+			(xy 30.48 26.67) (xy 41.91 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f80043d6-31f0-4b58-a481-477e858fee04")
+	)
+	(wire
+		(pts
 			(xy 173.99 55.88) (xy 180.34 55.88)
 		)
 		(stroke
@@ -5571,6 +5571,16 @@
 	)
 	(wire
 		(pts
+			(xy 152.4 87.63) (xy 163.83 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8191e80-a29d-430c-aa4f-895fbe371185")
+	)
+	(wire
+		(pts
 			(xy 20.32 143.51) (xy 34.29 143.51)
 		)
 		(stroke
@@ -5578,16 +5588,6 @@
 			(type default)
 		)
 		(uuid "fa1bbf06-4e57-4ff1-af9f-c7270ac2145d")
-	)
-	(wire
-		(pts
-			(xy 163.83 40.64) (xy 166.37 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fcaf7c35-400a-4943-a659-09ff3d3f5ac1")
 	)
 	(text "P/W"
 		(exclude_from_sim no)
@@ -6788,76 +6788,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 163.83 67.31 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "04ddac3a-89c7-41f1-b524-d29d08a15d08")
-		(property "Reference" "C13"
-			(at 167.64 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100n"
-			(at 167.64 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 164.7952 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 163.83 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 163.83 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "7141dc5d-658c-4143-861e-a03b24054d0d")
-		)
-		(pin "1"
-			(uuid "89304c3b-b266-4b4b-a572-93da9e60077a")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "C13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 152.4 30.48 180)
 		(unit 1)
@@ -6925,76 +6855,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 152.4 83.82 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "0a217d81-1c0d-43bd-93eb-70bcdaa982f9")
-		(property "Reference" "R10"
-			(at 154.94 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "16.5K"
-			(at 154.94 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 150.622 83.82 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 152.4 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 152.4 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "2a9fe012-5b93-4cf2-a746-22a2b6645453")
-		)
-		(pin "1"
-			(uuid "dfbf2104-afef-4099-8530-e252baf7e40b")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "R10")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Switch:SW_DPST_x2")
 		(at 185.42 44.45 0)
 		(unit 2)
@@ -7022,7 +6882,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 185.42 44.45 0)
 			(effects
 				(font
@@ -7066,6 +6926,161 @@
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "SW2")
 					(unit 2)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 163.83 52.07 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0f934655-0adb-4679-9817-2bf920ccf57e")
+		(property "Reference" "C12"
+			(at 167.64 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100n"
+			(at 167.64 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 164.7952 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 163.83 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 163.83 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 163.83 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "db8f948d-4a10-4058-8900-47c3ed2f7705")
+		)
+		(pin "1"
+			(uuid "f1937dfb-53ac-4b29-93c3-5b8907ce82dc")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "C12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 146.05 118.11 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "162e0d9b-92fd-4d87-a8fd-b3d8001d0352")
+		(property "Reference" "R15"
+			(at 146.05 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "470"
+			(at 142.24 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 146.05 116.332 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 146.05 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 146.05 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23179"
+			(at 146.05 118.11 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "6b39f07c-d716-4e94-a48b-7ff71e18ffd1")
+		)
+		(pin "1"
+			(uuid "8d287017-2cab-4920-9d8b-5e5cad5df161")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "R15")
+					(unit 1)
 				)
 			)
 		)
@@ -7156,7 +7171,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10u"
+		(property "Value" "10n"
 			(at 85.09 24.13 0)
 			(effects
 				(font
@@ -7165,7 +7180,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 82.2452 26.67 0)
 			(effects
 				(font
@@ -7184,6 +7199,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 81.28 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C100042"
 			(at 81.28 22.86 0)
 			(effects
 				(font
@@ -7235,7 +7259,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 185.42 59.69 0)
 			(effects
 				(font
@@ -7308,7 +7332,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 170.18 23.622 90)
 			(effects
 				(font
@@ -7335,6 +7359,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C23179"
+			(at 170.18 25.4 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "b4874162-cbf0-4fae-9678-e779bf2014c1")
 		)
@@ -7345,76 +7378,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "R3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 152.4 67.31 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "23ced733-2b58-4fed-a809-bc353764b9ec")
-		(property "Reference" "R7"
-			(at 154.94 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "16.5K"
-			(at 154.94 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 150.622 67.31 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 152.4 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 152.4 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "f897fa38-1e37-41ca-bb9e-34af62e4e562")
-		)
-		(pin "1"
-			(uuid "55021c2e-b55c-470a-8996-7d5aa4b77169")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "R7")
 					(unit 1)
 				)
 			)
@@ -7489,73 +7452,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 146.05 113.03 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "2a85483a-d502-44f5-a412-db72a1cff554")
-		(property "Reference" "R14"
-			(at 146.05 115.57 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "470"
-			(at 142.24 115.57 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 146.05 111.252 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 146.05 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 146.05 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "832e319f-823e-442d-af14-e69b7c1b0a05")
-		)
-		(pin "1"
-			(uuid "ba2fec19-68fc-456e-85a2-d1dfb3dbf589")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "R14")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 233.68 90.17 270)
 		(unit 1)
@@ -7617,76 +7513,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "#PWR041")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 29.21 22.86 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "305fd8a0-d5fd-4b65-9858-9a06cce35edb")
-		(property "Reference" "C2"
-			(at 33.02 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100n"
-			(at 33.02 24.13 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 30.1752 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 29.21 22.86 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 29.21 22.86 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "021ef359-ab11-4b9e-8008-25908c8f84f8")
-		)
-		(pin "1"
-			(uuid "5006608b-429e-4a9f-b1bb-ca08a671d2e4")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "C2")
 					(unit 1)
 				)
 			)
@@ -7761,16 +7587,16 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 152.4 52.07 0)
+		(at 152.4 67.31 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "34acf6d5-37bf-400f-b7f9-ab280fe14b29")
-		(property "Reference" "R6"
-			(at 154.94 50.8 0)
+		(uuid "3c2e6337-230a-47d1-a364-6aa47d687ab1")
+		(property "Reference" "R7"
+			(at 154.94 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7779,7 +7605,7 @@
 			)
 		)
 		(property "Value" "16.5K"
-			(at 154.94 53.34 0)
+			(at 154.94 68.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7787,8 +7613,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 150.622 52.07 90)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 150.622 67.31 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7797,7 +7623,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 152.4 52.07 0)
+			(at 152.4 67.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7806,7 +7632,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 152.4 52.07 0)
+			(at 152.4 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C22812"
+			(at 152.4 67.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7815,15 +7650,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "b062e879-fc49-434c-9776-b68917a6521a")
+			(uuid "abb0c392-aa01-4e43-b11b-de0cf6761385")
 		)
 		(pin "1"
-			(uuid "92c94d43-a42f-4619-b68c-56afbfb8c4eb")
+			(uuid "96fb9a74-2f82-4431-8e56-d45b10ed83d0")
 		)
 		(instances
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "R6")
+					(reference "R7")
 					(unit 1)
 				)
 			)
@@ -7855,7 +7690,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm"
 			(at 38.1 143.51 0)
 			(effects
 				(font
@@ -7917,9 +7752,9 @@
 		(at 154.94 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "42de716b-9245-4299-ad06-30e446ecc599")
 		(property "Reference" "D2"
@@ -7938,7 +7773,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_THT:LED_D5.0mm-4_RGB_Wide_Pins"
 			(at 154.94 114.3 0)
 			(effects
 				(font
@@ -8122,16 +7957,16 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 40.64 22.86 0)
+		(at 163.83 83.82 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "49331c07-ee7c-454c-9b1a-8e8f9d1cca76")
-		(property "Reference" "C1"
-			(at 44.45 21.59 0)
+		(uuid "4d62c2ac-42e1-4acd-81b3-a79cb8b6a927")
+		(property "Reference" "C14"
+			(at 167.64 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8140,7 +7975,7 @@
 			)
 		)
 		(property "Value" "100n"
-			(at 44.45 24.13 0)
+			(at 167.64 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8148,8 +7983,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 41.6052 26.67 0)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 164.7952 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8158,7 +7993,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 40.64 22.86 0)
+			(at 163.83 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8167,7 +8002,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 40.64 22.86 0)
+			(at 163.83 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 163.83 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8176,15 +8020,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "c54e7ac4-bd4b-44de-afca-8d231fef7002")
+			(uuid "13646cd8-067e-4062-8b95-40504b1a8723")
 		)
 		(pin "1"
-			(uuid "913ce79a-39c7-4d0d-9500-32a19c70f495")
+			(uuid "d0723f66-744e-431c-814b-a1455c136882")
 		)
 		(instances
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "C1")
+					(reference "C14")
 					(unit 1)
 				)
 			)
@@ -8328,6 +8172,164 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at 163.83 21.59 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "55877597-b08e-4361-8734-3a967a58c687")
+		(property "Reference" "C10"
+			(at 167.64 20.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100n"
+			(at 167.64 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 164.7952 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 163.83 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 163.83 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 163.83 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "3f4a7e42-ef30-4e9e-93ac-efd293a6015b")
+		)
+		(pin "1"
+			(uuid "b6d45161-aefa-4c8e-8212-4f242e89f884")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "C10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 152.4 83.82 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "59bdd1df-4b41-436e-9788-4e5e1d1f16b2")
+		(property "Reference" "R10"
+			(at 154.94 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "16.5K"
+			(at 154.94 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 150.622 83.82 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 152.4 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 152.4 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C22812"
+			(at 152.4 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f18df55b-e235-4a9e-9cc5-cb905e6f8508")
+		)
+		(pin "1"
+			(uuid "c7c79ef5-b10c-483b-8588-bb02524ed30f")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "R10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3.3VA")
 		(at 76.2 19.05 0)
 		(unit 1)
@@ -8394,17 +8396,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 152.4 36.83 0)
+		(lib_id "Device:C")
+		(at 27.94 39.37 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "617b28c5-5718-4970-a66b-e54e4fb72c64")
-		(property "Reference" "R4"
-			(at 154.94 35.56 0)
+		(uuid "604e40dd-cb7e-423b-b746-c3d6447b044c")
+		(property "Reference" "C9"
+			(at 31.75 38.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8412,8 +8414,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "16.5K"
-			(at 154.94 38.1 0)
+		(property "Value" "100n"
+			(at 31.75 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8421,8 +8423,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 150.622 36.83 90)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 28.9052 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8431,7 +8433,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 152.4 36.83 0)
+			(at 27.94 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8440,7 +8442,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 152.4 36.83 0)
+			(at 27.94 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 27.94 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8449,15 +8460,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "0fa27db7-5f26-48f1-83d8-32d84e6ed5ac")
+			(uuid "b121d69e-9421-4140-bbe3-411e5b5f0032")
 		)
 		(pin "1"
-			(uuid "b9e85ce9-5d95-4b37-808b-f26f553556c4")
+			(uuid "7d176f74-61e9-4681-b399-d026e4c0bd2b")
 		)
 		(instances
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "R4")
+					(reference "C9")
 					(unit 1)
 				)
 			)
@@ -8489,7 +8500,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 185.42 87.63 0)
 			(effects
 				(font
@@ -8632,7 +8643,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 21.2852 162.56 0)
 			(effects
 				(font
@@ -8651,6 +8662,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 20.32 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C1634"
 			(at 20.32 158.75 0)
 			(effects
 				(font
@@ -8811,16 +8831,16 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 163.83 21.59 0)
+		(at 41.91 22.86 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "6c0b30fc-207f-409c-9418-e231305cae78")
-		(property "Reference" "C10"
-			(at 167.64 20.32 0)
+		(uuid "76ad33b5-fe1c-41fc-ac30-537129799830")
+		(property "Reference" "C1"
+			(at 45.72 21.59 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8829,7 +8849,7 @@
 			)
 		)
 		(property "Value" "100n"
-			(at 167.64 22.86 0)
+			(at 45.72 24.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8837,8 +8857,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 164.7952 25.4 0)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 42.8752 26.67 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8847,7 +8867,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 163.83 21.59 0)
+			(at 41.91 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8856,7 +8876,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 163.83 21.59 0)
+			(at 41.91 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 41.91 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8865,47 +8894,50 @@
 			)
 		)
 		(pin "2"
-			(uuid "5ab1516c-5fd9-4033-a440-2e2f59acd5a6")
+			(uuid "c17dc19b-0230-4c9f-85e8-02753d704620")
 		)
 		(pin "1"
-			(uuid "e8bbe2df-254f-4312-a6af-8c2c94534dec")
+			(uuid "e843f4df-14ed-4655-9f30-7abf6e0a15ac")
 		)
 		(instances
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "C10")
+					(reference "C1")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 146.05 118.11 270)
+		(lib_id "Device:C")
+		(at 53.34 22.86 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "7d5ff095-79e2-4546-8d5d-4a3a1d780c07")
-		(property "Reference" "R15"
-			(at 146.05 120.65 90)
+		(fields_autoplaced yes)
+		(uuid "7d3858ae-454f-4552-8fd4-7834c3873c42")
+		(property "Reference" "C4"
+			(at 57.15 21.59 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "470"
-			(at 142.24 120.65 0)
+		(property "Value" "100n"
+			(at 57.15 24.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 146.05 116.332 90)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 54.3052 26.67 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8914,7 +8946,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 146.05 118.11 0)
+			(at 53.34 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8923,7 +8955,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 146.05 118.11 0)
+			(at 53.34 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 53.34 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8932,15 +8973,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "b3353cdd-b4ae-4830-bdec-c2f3d58a4fa2")
+			(uuid "5e7ae6ca-77f9-4bde-8e5b-5b9b942b8c07")
 		)
 		(pin "1"
-			(uuid "a867e7f1-8dc3-4090-a0af-cee5cdcd0245")
+			(uuid "1cf0171e-2747-4ff8-9ef1-5cf9b33e5d7e")
 		)
 		(instances
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "R15")
+					(reference "C4")
 					(unit 1)
 				)
 			)
@@ -8974,7 +9015,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 185.42 91.44 0)
 			(effects
 				(font
@@ -9018,6 +9059,82 @@
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "SW5")
 					(unit 2)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 170.18 71.12 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7fcb90ef-bdb3-44a2-a88c-ea0c78ff2f3e")
+		(property "Reference" "R9"
+			(at 170.18 73.66 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "470"
+			(at 166.37 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 170.18 69.342 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 170.18 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 170.18 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23179"
+			(at 170.18 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "6f302ef6-494e-4bce-b7c5-fa5b06b2aaf9")
+		)
+		(pin "1"
+			(uuid "a1437e90-3916-42bb-95f0-e3fbb3735304")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "R9")
+					(unit 1)
 				)
 			)
 		)
@@ -9358,6 +9475,161 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 152.4 52.07 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "906d8dca-dbc3-4cbe-b85c-d3faac08bfd6")
+		(property "Reference" "R6"
+			(at 154.94 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "16.5K"
+			(at 154.94 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 150.622 52.07 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 152.4 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 152.4 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C22812"
+			(at 152.4 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "efea5954-0cc5-4a3d-bab8-63cab073eaf7")
+		)
+		(pin "1"
+			(uuid "a69b5605-73cb-46fc-8dc9-60a271b87115")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "R6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 170.18 40.64 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "916032c0-c75b-45f9-adb7-3094600f387a")
+		(property "Reference" "R5"
+			(at 170.18 43.18 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "470"
+			(at 166.37 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 170.18 38.862 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 170.18 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 170.18 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23179"
+			(at 170.18 40.64 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "06859483-28ee-4bd4-9dd1-f133e526e95e")
+		)
+		(pin "1"
+			(uuid "8cbecf76-da5f-455e-a16d-7439a89cb02d")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "R5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "MCU_ST_STM32F1:STM32F103RBTx")
 		(at 66.04 78.74 0)
 		(unit 1)
@@ -9640,7 +9912,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 185.42 71.12 0)
 			(effects
 				(font
@@ -9757,6 +10029,85 @@
 	)
 	(symbol
 		(lib_id "Device:C")
+		(at 163.83 67.31 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "96d021db-4544-4c3c-8e9c-eebd09fed46b")
+		(property "Reference" "C13"
+			(at 167.64 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100n"
+			(at 167.64 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 164.7952 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 163.83 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 163.83 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 163.83 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "14f9e4d7-f9ff-488a-8af6-058462a99108")
+		)
+		(pin "1"
+			(uuid "67b01aeb-e61b-4d16-a0b2-d65b2a590468")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "C13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
 		(at 67.31 22.86 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9783,7 +10134,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 68.2752 26.67 0)
 			(effects
 				(font
@@ -9802,6 +10153,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 67.31 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C307517"
 			(at 67.31 22.86 0)
 			(effects
 				(font
@@ -9853,7 +10213,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 46.6852 162.56 0)
 			(effects
 				(font
@@ -9872,6 +10232,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 45.72 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C1634"
 			(at 45.72 158.75 0)
 			(effects
 				(font
@@ -9921,7 +10290,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 185.42 40.64 0)
 			(effects
 				(font
@@ -9964,76 +10333,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "SW2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 27.94 39.37 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a11bf521-9804-47d4-9fbe-dff2cfe0419a")
-		(property "Reference" "C9"
-			(at 31.75 38.1 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100n"
-			(at 31.75 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 28.9052 43.18 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 27.94 39.37 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 27.94 39.37 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "7c71aa66-1cc7-49a8-a589-70ed3e6b301e")
-		)
-		(pin "1"
-			(uuid "a6a0b2b3-d4b3-4182-b7ca-b9872f9ec844")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "C9")
 					(unit 1)
 				)
 			)
@@ -10134,7 +10433,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 111.4552 26.67 0)
 			(effects
 				(font
@@ -10161,6 +10460,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C15849"
+			(at 110.49 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "f64c98b5-0320-4d85-80ae-7df7894b201a")
 		)
@@ -10177,32 +10485,35 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 146.05 107.95 270)
+		(lib_id "Device:C")
+		(at 30.48 22.86 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a4caa5c0-758d-4aac-8790-55d6a698e7a3")
-		(property "Reference" "R13"
-			(at 146.05 110.49 90)
+		(fields_autoplaced yes)
+		(uuid "a270049b-a13d-4e1c-adb7-a5270b11eb11")
+		(property "Reference" "C2"
+			(at 34.29 21.59 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "470"
-			(at 142.24 110.49 0)
+		(property "Value" "100n"
+			(at 34.29 24.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 146.05 106.172 90)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 31.4452 26.67 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10211,7 +10522,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 146.05 107.95 0)
+			(at 30.48 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10220,7 +10531,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 146.05 107.95 0)
+			(at 30.48 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 30.48 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10229,15 +10549,91 @@
 			)
 		)
 		(pin "2"
-			(uuid "89b0fd69-3857-40c2-8e8c-23bcc749df1f")
+			(uuid "231e587f-f2f9-4de7-ac59-e4d87539be54")
 		)
 		(pin "1"
-			(uuid "d89a9eac-513e-4bcd-8795-445fc35c4b24")
+			(uuid "5b469cd0-6dc2-45da-8a5c-f0713bed43d6")
 		)
 		(instances
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "R13")
+					(reference "C2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 146.05 113.03 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a43b8630-944e-4165-87fe-476f12442f0f")
+		(property "Reference" "R14"
+			(at 146.05 115.57 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "470"
+			(at 142.24 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 146.05 111.252 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 146.05 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 146.05 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23179"
+			(at 146.05 113.03 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "ef575791-6ec6-4d5e-89b4-e878bf2e72c9")
+		)
+		(pin "1"
+			(uuid "cbe59279-fb05-474e-b137-b3cb5b2c1495")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "R14")
 					(unit 1)
 				)
 			)
@@ -10269,7 +10665,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 185.42 25.4 0)
 			(effects
 				(font
@@ -10312,76 +10708,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "SW1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 163.83 83.82 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a7cfb9e8-5dd2-4321-8667-3c3615a11a81")
-		(property "Reference" "C14"
-			(at 167.64 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100n"
-			(at 167.64 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 164.7952 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 163.83 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 163.83 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "b82b5302-f9bf-4eb2-8087-e056ff5b932d")
-		)
-		(pin "1"
-			(uuid "f59e6f3c-e731-43c1-9288-a696080cb033")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "C14")
 					(unit 1)
 				)
 			)
@@ -10482,7 +10808,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 18.7452 26.67 0)
 			(effects
 				(font
@@ -10501,6 +10827,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 17.78 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
 			(at 17.78 22.86 0)
 			(effects
 				(font
@@ -10591,17 +10926,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 163.83 36.83 0)
+		(lib_id "Device:R")
+		(at 152.4 36.83 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "b0a1c63a-b57e-4d92-acf5-d4abcefcb333")
-		(property "Reference" "C11"
-			(at 167.64 35.56 0)
+		(uuid "b257c9d5-dfbc-4ab8-977e-df1ddf4f517a")
+		(property "Reference" "R4"
+			(at 154.94 35.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10609,8 +10944,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n"
-			(at 167.64 38.1 0)
+		(property "Value" "16.5K"
+			(at 154.94 38.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10618,8 +10953,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 164.7952 40.64 0)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 150.622 36.83 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10628,7 +10963,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 163.83 36.83 0)
+			(at 152.4 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10637,7 +10972,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 163.83 36.83 0)
+			(at 152.4 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C22812"
+			(at 152.4 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10646,15 +10990,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "cf2c0edc-1fe2-40cc-8516-72818c475466")
+			(uuid "4cc1be05-83a7-4be1-a661-a25a3a8effcb")
 		)
 		(pin "1"
-			(uuid "3b601182-58ee-458e-80dd-67e96fc25897")
+			(uuid "d75df38d-a930-40a8-b823-bbbd882c5b3d")
 		)
 		(instances
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "C11")
+					(reference "R4")
 					(unit 1)
 				)
 			)
@@ -10662,15 +11006,15 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 170.18 40.64 270)
+		(at 170.18 55.88 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b6569f46-81a3-4ad8-9a0c-d8c5a2d86449")
-		(property "Reference" "R5"
-			(at 170.18 43.18 90)
+		(uuid "b4660912-b65a-447d-8d05-6e169577b19c")
+		(property "Reference" "R8"
+			(at 170.18 58.42 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10678,15 +11022,15 @@
 			)
 		)
 		(property "Value" "470"
-			(at 166.37 43.18 0)
+			(at 166.37 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 170.18 38.862 90)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 170.18 54.102 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10695,7 +11039,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 170.18 40.64 0)
+			(at 170.18 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10704,7 +11048,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 170.18 40.64 0)
+			(at 170.18 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23179"
+			(at 170.18 55.88 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10713,15 +11066,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "af8c8e14-f709-4cb3-85fa-e0a73b5abfed")
+			(uuid "f121ae36-9dad-44c3-8f67-a0d607b51c02")
 		)
 		(pin "1"
-			(uuid "9aedb9e9-3d55-4537-a2eb-866d531062cc")
+			(uuid "065919e6-5c2c-4405-ab78-e197325e9dd8")
 		)
 		(instances
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "R5")
+					(reference "R8")
 					(unit 1)
 				)
 			)
@@ -10819,7 +11172,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Inductor_SMD:L_0603_1608Metric"
 			(at 102.87 20.828 90)
 			(effects
 				(font
@@ -10846,6 +11199,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C1002"
+			(at 102.87 19.05 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "89988b04-19e6-410d-a5b4-f8ef1622df85")
 		)
@@ -10856,76 +11218,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "FB1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 52.07 22.86 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "bea3d0f5-a4c0-4183-9609-2a368de50209")
-		(property "Reference" "C4"
-			(at 55.88 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100n"
-			(at 55.88 24.13 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 53.0352 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 52.07 22.86 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 52.07 22.86 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "a4b05ea4-3f41-4fc4-a2eb-2f5e1e32b4a9")
-		)
-		(pin "1"
-			(uuid "4106d842-846d-4501-8ca3-350b788d9088")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "C4")
 					(unit 1)
 				)
 			)
@@ -10993,140 +11285,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "#PWR011")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 170.18 71.12 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "c47b26ef-4ffc-4876-81d1-9b027565f27c")
-		(property "Reference" "R9"
-			(at 170.18 73.66 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "470"
-			(at 166.37 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 170.18 69.342 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 170.18 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 170.18 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "e40142be-d921-4ea8-bffb-8ce211ff524f")
-		)
-		(pin "1"
-			(uuid "f9282ca0-c35c-4113-83a4-20b0f1e1f4e0")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "R9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 170.18 87.63 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "c9d78a0d-c06b-4edc-a25d-4b2b03f16972")
-		(property "Reference" "R11"
-			(at 170.18 90.17 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "470"
-			(at 166.37 90.17 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 170.18 85.852 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 170.18 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 170.18 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "a2b76569-3209-4b0e-b3e2-349d985eed7f")
-		)
-		(pin "1"
-			(uuid "3f06f252-04ac-4d23-90c8-6d0cf6f878d1")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "R11")
 					(unit 1)
 				)
 			)
@@ -11227,7 +11385,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 185.42 29.21 0)
 			(effects
 				(font
@@ -11276,73 +11434,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 170.18 55.88 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "d8db5678-b66f-472a-b8f3-dea07ff8e49b")
-		(property "Reference" "R8"
-			(at 170.18 58.42 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "470"
-			(at 166.37 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 170.18 54.102 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 170.18 55.88 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 170.18 55.88 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "cb6b9bf4-5d8c-452f-900a-76f034c7af99")
-		)
-		(pin "1"
-			(uuid "be22e875-8687-47da-8e35-116d3c496f4c")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "R8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C")
 		(at 91.44 22.86 0)
 		(unit 1)
@@ -11370,7 +11461,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 92.4052 26.67 0)
 			(effects
 				(font
@@ -11389,6 +11480,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 91.44 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C15849"
 			(at 91.44 22.86 0)
 			(effects
 				(font
@@ -11480,35 +11580,32 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 163.83 52.07 0)
+		(lib_id "Device:R")
+		(at 146.05 107.95 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "e696a2fe-d6ef-4c9c-9f6f-74ba58a2fd93")
-		(property "Reference" "C12"
-			(at 167.64 50.8 0)
+		(uuid "e7f6b10b-78b3-4cbe-a8de-b180be3531c9")
+		(property "Reference" "R13"
+			(at 146.05 110.49 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "100n"
-			(at 167.64 53.34 0)
+		(property "Value" "470"
+			(at 142.24 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Footprint" ""
-			(at 164.7952 55.88 0)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 146.05 106.172 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11517,7 +11614,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 163.83 52.07 0)
+			(at 146.05 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11526,7 +11623,16 @@
 			)
 		)
 		(property "Description" ""
-			(at 163.83 52.07 0)
+			(at 146.05 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23179"
+			(at 146.05 107.95 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11535,15 +11641,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "f24b25a0-f5a8-402c-b5f4-79372e28d19d")
+			(uuid "3241ad21-7533-4feb-a274-5233963d5842")
 		)
 		(pin "1"
-			(uuid "9341b2c9-a792-48c0-a685-a492ccfa4595")
+			(uuid "f68a0df6-a02e-4780-85b5-70283e9718e0")
 		)
 		(instances
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "C12")
+					(reference "R13")
 					(unit 1)
 				)
 			)
@@ -11575,7 +11681,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 185.42 55.88 0)
 			(effects
 				(font
@@ -11618,6 +11724,85 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "SW3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 163.83 36.83 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "eb988cac-bd36-4360-9d0e-ac1a2dd34349")
+		(property "Reference" "C11"
+			(at 167.64 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100n"
+			(at 167.64 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 164.7952 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 163.83 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 163.83 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 163.83 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "3f2387c7-2307-486a-8047-36affdf5ca94")
+		)
+		(pin "1"
+			(uuid "79f8a03c-33df-46bc-aefe-494158978894")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "C11")
 					(unit 1)
 				)
 			)
@@ -11762,9 +11947,9 @@
 		(at 246.38 80.01 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "f423dd70-1553-4a47-946e-5d06059ad5ff")
 		(property "Reference" "J1"
@@ -11785,7 +11970,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x20_P2.54mm_Vertical"
 			(at 246.38 80.01 0)
 			(effects
 				(font
@@ -11909,7 +12094,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 185.42 74.93 0)
 			(effects
 				(font
@@ -12120,7 +12305,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 150.622 21.59 90)
 			(effects
 				(font
@@ -12147,6 +12332,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C22812"
+			(at 152.4 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "6af3339f-d8d2-410b-8bbb-4dff0a549688")
 		)
@@ -12157,6 +12351,82 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 170.18 87.63 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "fef577ab-a673-4c33-aad1-25b3f4e7588d")
+		(property "Reference" "R11"
+			(at 170.18 90.17 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "470"
+			(at 166.37 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 170.18 85.852 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 170.18 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 170.18 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23179"
+			(at 170.18 87.63 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5c07b275-538d-47c3-96bd-d76954144532")
+		)
+		(pin "1"
+			(uuid "4628aa70-a74e-4327-9531-de93ccbdb64e")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "R11")
 					(unit 1)
 				)
 			)
@@ -12187,7 +12457,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 44.45 42.418 90)
 			(effects
 				(font
@@ -12207,6 +12477,15 @@
 		)
 		(property "Description" ""
 			(at 44.45 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C25804"
+			(at 44.45 40.64 90)
 			(effects
 				(font
 					(size 1.27 1.27)
