@@ -245,6 +245,125 @@
 				)
 			)
 		)
+		(symbol "Connector:Conn_01x01_Pin"
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x01_Pin"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x01, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x01_Pin_1_1"
+				(polyline
+					(pts
+						(xy 1.27 0) (xy 0.8636 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 0.8636 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Connector:Conn_01x20_Pin"
 			(pin_names
 				(offset 1.016) hide)
@@ -4372,12 +4491,6 @@
 		(uuid "0b9c906c-e27f-40ce-ba16-6e73a6701659")
 	)
 	(junction
-		(at 190.5 87.63)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "14ac8dcd-09fd-4921-9d9e-90812e743ddf")
-	)
-	(junction
 		(at 152.4 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4412,12 +4525,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "2d05016e-1658-4aac-b0a7-dd21c70a86e7")
-	)
-	(junction
-		(at 180.34 87.63)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2d36563e-1c82-4e98-b2a7-77baf6991a66")
 	)
 	(junction
 		(at 180.34 40.64)
@@ -4498,12 +4605,6 @@
 		(uuid "98b926ed-b40a-432a-a8b8-ebd426f52cdc")
 	)
 	(junction
-		(at 180.34 71.12)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "99f9f69e-fc8b-4a18-8685-000d06f3c50b")
-	)
-	(junction
 		(at 91.44 26.67)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4532,12 +4633,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b0c967f1-b997-43bf-8a81-5758be1aafe1")
-	)
-	(junction
-		(at 190.5 71.12)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "b0e60582-26a0-4291-a89c-4637325ea8da")
 	)
 	(junction
 		(at 68.58 30.48)
@@ -4691,16 +4786,6 @@
 	)
 	(wire
 		(pts
-			(xy 180.34 71.12) (xy 180.34 74.93)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "08529089-2d36-4a6c-8b0f-43f0d10e6653")
-	)
-	(wire
-		(pts
 			(xy 147.32 87.63) (xy 152.4 87.63)
 		)
 		(stroke
@@ -4821,6 +4906,16 @@
 	)
 	(wire
 		(pts
+			(xy 173.99 71.12) (xy 180.34 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3096ffe6-9f0e-4846-a83c-01ca3b80734e")
+	)
+	(wire
+		(pts
 			(xy 152.4 25.4) (xy 163.83 25.4)
 		)
 		(stroke
@@ -4868,16 +4963,6 @@
 			(type default)
 		)
 		(uuid "3813a21f-26bb-42ff-bf76-ea0f186c8c26")
-	)
-	(wire
-		(pts
-			(xy 190.5 87.63) (xy 190.5 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3a02e5e7-9907-4e0c-bf10-ac6555bd3f13")
 	)
 	(wire
 		(pts
@@ -4948,16 +5033,6 @@
 			(type default)
 		)
 		(uuid "473f06ec-7611-4f96-bb06-96a18670dac3")
-	)
-	(wire
-		(pts
-			(xy 173.99 71.12) (xy 180.34 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "47d0b142-d2c2-4801-badb-33252c9c8212")
 	)
 	(wire
 		(pts
@@ -5128,16 +5203,6 @@
 			(type default)
 		)
 		(uuid "86d8c234-80b3-40ed-9916-e869a98a4115")
-	)
-	(wire
-		(pts
-			(xy 190.5 71.12) (xy 190.5 74.93)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "86eef3e0-d266-490a-ae38-b9f823ce7e06")
 	)
 	(wire
 		(pts
@@ -5418,16 +5483,6 @@
 			(type default)
 		)
 		(uuid "cf5d1f7b-a8da-44c9-9c8a-45a558914cee")
-	)
-	(wire
-		(pts
-			(xy 180.34 87.63) (xy 180.34 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d05b2036-e680-44e7-b59a-f87d381167e1")
 	)
 	(wire
 		(pts
@@ -8052,7 +8107,7 @@
 				)
 			)
 		)
-		(property "Value" "R_Potentiometer"
+		(property "Value" "R_Potentiometer_10k"
 			(at 156.21 144.78 90)
 			(effects
 				(font
@@ -8060,7 +8115,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Potentiometer_THT:Potentiometer_Alps_RK09K_Single_Vertical"
 			(at 156.21 138.43 0)
 			(effects
 				(font
@@ -8080,6 +8135,15 @@
 		)
 		(property "Description" "Potentiometer"
 			(at 156.21 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C209779"
+			(at 156.21 138.43 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8469,80 +8533,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "C9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_DPST_x2")
-		(at 185.42 87.63 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "63473466-638a-45a7-bf23-842c48644c4a")
-		(property "Reference" "SW5"
-			(at 185.42 81.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SW_DPST_x2"
-			(at 185.42 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
-			(at 185.42 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 185.42 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 185.42 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "e5dae010-1049-4f1c-8096-38217210a315")
-		)
-		(pin "4"
-			(uuid "ac843f49-b7c3-43ed-aa3e-585d27df8dcc")
-		)
-		(pin "3"
-			(uuid "4adb25af-79d6-4900-a580-f5160128fe31")
-		)
-		(pin "1"
-			(uuid "e2f83289-418f-4d40-b6ff-0e21d3244aaa")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "SW5")
 					(unit 1)
 				)
 			)
@@ -8983,82 +8973,6 @@
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "C4")
 					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_DPST_x2")
-		(at 185.42 91.44 0)
-		(unit 2)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "7ede382b-b77e-4da1-b579-e364eab06db3")
-		(property "Reference" "SW5"
-			(at 185.42 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "SW_DPST_x2"
-			(at 185.42 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
-			(at 185.42 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 185.42 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 185.42 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "e74a5a13-ffce-4f7a-a06b-ce3142c2eac5")
-		)
-		(pin "4"
-			(uuid "139d1f02-7808-4b11-bad8-d6d7e958b88f")
-		)
-		(pin "3"
-			(uuid "ba68f1e5-f776-4594-9f1c-e376c12da2d7")
-		)
-		(pin "1"
-			(uuid "46dfea0e-895b-44ee-8dc2-97c1616b6cff")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "SW5")
-					(unit 2)
 				)
 			)
 		)
@@ -9887,80 +9801,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Switch:SW_DPST_x2")
-		(at 185.42 71.12 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "947d7442-233f-43cf-b96d-5b99b707af82")
-		(property "Reference" "SW4"
-			(at 185.42 64.77 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SW_DPST_x2"
-			(at 185.42 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
-			(at 185.42 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 185.42 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 185.42 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "db9e4629-7155-48b5-aae3-9378bb163c37")
-		)
-		(pin "4"
-			(uuid "ac843f49-b7c3-43ed-aa3e-585d27df8dcd")
-		)
-		(pin "3"
-			(uuid "4adb25af-79d6-4900-a580-f5160128fe32")
-		)
-		(pin "1"
-			(uuid "b3215e5c-c4ae-4d51-8f1d-2b6f78953500")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "SW4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 67.31 26.67 0)
 		(unit 1)
@@ -10022,6 +9862,73 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "#PWR02")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Pin")
+		(at 190.5 92.71 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "95ede0d8-6a56-4ca5-ba9f-1af847026173")
+		(property "Reference" "J10"
+			(at 191.77 90.8049 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Button_right_A"
+			(at 191.77 93.3449 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
+			(at 190.5 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 190.5 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated"
+			(at 190.5 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "09cc1039-2f97-4fb1-8941-5a55c820bc12")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "J10")
 					(unit 1)
 				)
 			)
@@ -10333,6 +10240,73 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "SW2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Pin")
+		(at 180.34 66.04 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a0505378-727b-47ae-8269-54f998b724d9")
+		(property "Reference" "J7"
+			(at 181.61 65.4049 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Button_left_A"
+			(at 181.61 67.9449 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
+			(at 180.34 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 180.34 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated"
+			(at 180.34 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c030fa61-e78c-4cc7-b497-97999941c47e")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "J7")
 					(unit 1)
 				)
 			)
@@ -12067,82 +12041,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Switch:SW_DPST_x2")
-		(at 185.42 74.93 0)
-		(unit 2)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "f4271744-2e9c-449c-aad3-2c222ee8879f")
-		(property "Reference" "SW4"
-			(at 185.42 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "SW_DPST_x2"
-			(at 185.42 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
-			(at 185.42 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 185.42 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 185.42 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "e74a5a13-ffce-4f7a-a06b-ce3142c2eac8")
-		)
-		(pin "4"
-			(uuid "24d9d438-438f-4334-8d9d-8bba603186df")
-		)
-		(pin "3"
-			(uuid "25a1a003-06fa-4328-a5a4-5ba4859a7a8f")
-		)
-		(pin "1"
-			(uuid "46dfea0e-895b-44ee-8dc2-97c1616b6d02")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "SW4")
-					(unit 2)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_name "+3.3V_1")
 		(lib_id "power:+3.3V")
 		(at 148.59 138.43 90)
@@ -12351,6 +12249,140 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Pin")
+		(at 180.34 82.55 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "faae646c-3ad7-4b14-b3a2-1391a9cc77a1")
+		(property "Reference" "J9"
+			(at 181.61 81.9149 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Button_right_A"
+			(at 181.61 84.4549 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
+			(at 180.34 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 180.34 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated"
+			(at 180.34 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "47d1bb1f-df1e-4526-bcf6-065714aab30c")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "J9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Pin")
+		(at 190.5 76.2 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fd058be0-f5e1-4ea6-9460-f311be9b463c")
+		(property "Reference" "J8"
+			(at 191.77 74.2949 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Button_left_B"
+			(at 191.77 76.8349 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
+			(at 190.5 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 190.5 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated"
+			(at 190.5 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a7d4aba0-afe1-4286-8d84-0f5305dcb1ba")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "J8")
 					(unit 1)
 				)
 			)
