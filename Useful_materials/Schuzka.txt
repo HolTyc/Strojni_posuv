@@ -1,0 +1,9 @@
+Opravy/Dotazy
+1. Senzory tak jak jsou
+2. Rychloposuv - dve tlacitka vedle sebe (vlastni tlacitko)
+3. Bude stacit 0.5Nm - najit vhodny 48V motor (https://dratek.cz/arduino/48396-krokovy-motor-nema23-45mm-57hd1016-01.html?utm_source=ehub&utm_medium=affiliate&ehub=c93a48c2205241c398b3f270a0b5a5b6)
+4. Packa s trema pozicema na smery (https://www.gme.cz/v/1501025/smts-102-packovy-spinac)
+5. ROTACNI ENKODAR - misto potentiometru
+6. ENKODER bude mit TLACITKO
+7. Vyhodit presnostni tlacitko - Tlacitko s pozici na vypnuti a zapnuti motoru
+8. Confirmacni tlacitko bude na nulovy bod a dalsi veci
