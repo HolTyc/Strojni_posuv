@@ -1,4 +1,6 @@
 (fp_lib_table
   (version 7)
   (lib (name "StuffBench")(type "KiCad")(uri "${KIPRJMOD}/StuffBench.pretty")(options "")(descr ""))
+  (lib (name "Three_way_switch")(type "KiCad")(uri "${KIPRJMOD}/Three_way_switch.pretty")(options "")(descr ""))
+  (lib (name "Encoder")(type "KiCad")(uri "${KIPRJMOD}/Encoder.pretty")(options "")(descr ""))
 )

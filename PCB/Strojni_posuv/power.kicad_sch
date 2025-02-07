@@ -4012,7 +4012,6 @@
 	)
 	(label "GND_48V"
 		(at 35.56 111.76 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
