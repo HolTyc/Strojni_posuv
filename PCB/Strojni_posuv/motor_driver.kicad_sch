@@ -7975,6 +7975,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 105.41 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 105.41 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "672fd37d-b8db-45f8-99c3-f384d054435f")
 		)
@@ -8182,6 +8200,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 273.05 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 273.05 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "152b5ed9-b9e9-42af-b651-173331828386")
 		)
@@ -8252,6 +8288,24 @@
 			)
 		)
 		(property "LCSC" "C66042"
+			(at 139.065 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 139.065 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 139.065 121.92 0)
 			(effects
 				(font
@@ -8408,6 +8462,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 27.94 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 27.94 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "8"
 			(uuid "2d6efdb0-8e21-4195-b853-2395352e4e3d")
 		)
@@ -8502,6 +8574,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 271.78 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 271.78 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "fcd67f25-beab-48ff-b0b3-06d028f477ab")
 		)
@@ -8571,6 +8661,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 239.395 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 239.395 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "ff959c22-ff3d-46c1-947d-76ad579dcf17")
 		)
@@ -8630,6 +8738,24 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 90.17 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 90.17 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 90.17 184.15 0)
 			(effects
 				(font
@@ -8717,6 +8843,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 95.885 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 95.885 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "0e298c54-04fe-48d5-a76e-96979b7fa356")
 		)
@@ -8786,6 +8930,24 @@
 			)
 		)
 		(property "LCSC" "C14663"
+			(at 69.85 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 69.85 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 69.85 143.51 0)
 			(effects
 				(font
@@ -9005,6 +9167,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 254 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 254 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "24ed7a32-4d6e-45f9-9fed-9a7580a4601b")
 		)
@@ -9152,6 +9332,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 35.56 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 35.56 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "c1eb3424-948e-471a-b6bd-5275274f0dc6")
 		)
@@ -9237,6 +9435,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 188.595 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 188.595 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "575c0149-a1dc-4508-bc06-b4e491547498")
 		)
@@ -9297,6 +9513,24 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, open"
+			(at 240.665 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 240.665 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 240.665 147.955 0)
 			(effects
 				(font
@@ -9378,6 +9612,24 @@
 		)
 		(property "LCSC" "C78284"
 			(at 261.62 77.47 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 261.62 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 261.62 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9602,6 +9854,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 262.89 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 262.89 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "91fa807b-190b-4bba-8c4b-6f179fb1f54c")
 		)
@@ -9684,6 +9954,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 178.435 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 178.435 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "ea1d291f-ed9f-4ae2-bfd2-abe951fc5f4b")
 		)
@@ -9744,6 +10032,24 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, open"
+			(at 137.795 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 137.795 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 137.795 76.2 0)
 			(effects
 				(font
@@ -9820,6 +10126,24 @@
 			)
 		)
 		(property "LCSC" "C25804"
+			(at 167.005 73.025 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 167.005 73.025 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 167.005 73.025 0)
 			(effects
 				(font
@@ -9905,6 +10229,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 213.995 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 213.995 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "c63f7544-593f-4017-b4b7-c6698b098322")
 		)
@@ -9975,6 +10317,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 236.855 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 236.855 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 236.855 147.955 0)
 			(effects
 				(font
@@ -10193,6 +10553,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 262.89 153.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 262.89 153.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "c1dc0074-f423-4499-a923-f3584c5edac3")
 		)
@@ -10275,6 +10653,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 53.34 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 53.34 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "af079db9-962e-4b36-9813-421ff069c276")
 		)
@@ -10343,6 +10739,24 @@
 			)
 		)
 		(property "LCSC" "C23162"
+			(at 86.36 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 86.36 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 86.36 120.65 0)
 			(effects
 				(font
@@ -10621,6 +11035,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C84266"
+			(at 103.505 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 103.505 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 103.505 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "5b074735-5dbc-4a9f-82bc-01c36e853519")
 		)
@@ -10681,6 +11122,33 @@
 			)
 		)
 		(property "Description" "Light emitting diode"
+			(at 34.29 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C84266"
+			(at 34.29 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 34.29 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 34.29 43.18 0)
 			(effects
 				(font
@@ -10758,6 +11226,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 112.395 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 112.395 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "d0bea569-81a8-4951-8341-55ca9be9d00d")
 		)
@@ -10823,6 +11309,24 @@
 			)
 		)
 		(property "LCSC" "C25804"
+			(at 161.29 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 161.29 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 161.29 33.02 0)
 			(effects
 				(font
@@ -10966,6 +11470,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 130.175 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 130.175 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "0d00ec2b-8701-4880-a11e-5968918f3bbd")
 		)
@@ -11035,6 +11557,24 @@
 			)
 		)
 		(property "LCSC" "C14663"
+			(at 90.17 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 90.17 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 90.17 114.3 0)
 			(effects
 				(font
@@ -11245,6 +11785,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 133.985 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 133.985 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "278fdbec-a487-4239-992f-ae36e25d1e49")
 		)
@@ -11369,6 +11927,24 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, closed/bridged"
+			(at 233.045 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 233.045 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 233.045 147.955 0)
 			(effects
 				(font
@@ -11523,6 +12099,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 168.275 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 168.275 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "ba326f86-19f8-4cc5-878b-47b45b21e008")
 		)
@@ -11592,6 +12186,24 @@
 			)
 		)
 		(property "LCSC" "C151417"
+			(at 111.125 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 111.125 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 111.125 76.2 0)
 			(effects
 				(font
@@ -11820,6 +12432,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 262.89 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 262.89 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "dde36da7-2a19-43b0-be83-2d457c8a7bd7")
 		)
@@ -11951,6 +12581,24 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, open"
+			(at 151.765 37.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 151.765 37.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 151.765 37.465 0)
 			(effects
 				(font
@@ -12102,6 +12750,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 147.955 73.025 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 147.955 73.025 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "de440710-bd3c-4c00-b8cf-25c59399fadc")
 		)
@@ -12163,6 +12829,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 239.395 75.565 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 239.395 75.565 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 239.395 75.565 0)
 			(effects
 				(font
@@ -12303,6 +12987,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 200.025 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 200.025 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "8f07740e-7483-48de-94b1-24c495252f9b")
 		)
@@ -12369,6 +13071,24 @@
 			)
 		)
 		(property "LCSC" "C151417"
+			(at 216.535 75.565 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 216.535 75.565 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 216.535 75.565 0)
 			(effects
 				(font
@@ -12531,6 +13251,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 188.595 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 188.595 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "fca3f577-8626-48dc-a974-2e8d335b0b3c")
 		)
@@ -12599,7 +13337,25 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" "C5605"
+		(property "LCSC" "C5605"
+			(at 57.15 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 57.15 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 57.15 71.12 0)
 			(effects
 				(font
@@ -12777,8 +13533,26 @@
 				(hide yes)
 			)
 		)
-		(property "LSCS" "C780220"
+		(property "LCSC" "C780220"
 			(at 97.79 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 97.79 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 97.79 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12857,7 +13631,25 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" "C5605"
+		(property "LCSC" "C5605"
+			(at 57.15 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 57.15 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 57.15 57.15 0)
 			(effects
 				(font
@@ -12975,6 +13767,24 @@
 		)
 		(property "LCSC" "C78284"
 			(at 170.18 39.37 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 170.18 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 170.18 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13386,6 +14196,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 97.155 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 97.155 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "c995ab57-5e9b-4383-bc80-170d4d668071")
 		)
@@ -13592,6 +14420,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 125.095 37.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 125.095 37.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "3bb7e471-bd62-43eb-b7ca-fd9f321a766e")
 		)
@@ -13661,6 +14507,24 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, closed/bridged"
+			(at 144.145 37.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 144.145 37.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 144.145 37.465 0)
 			(effects
 				(font
@@ -13938,6 +14802,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 233.045 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 233.045 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "13307cca-0f72-4724-b527-448eb8ab148e")
 		)
@@ -14007,6 +14889,24 @@
 		)
 		(property "LCSC" "C23179"
 			(at 68.58 29.21 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 68.58 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 68.58 29.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14225,6 +15125,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 43.18 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 43.18 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "b4d13566-4ed9-4982-8c36-faee750a390b")
 		)
@@ -14286,6 +15204,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 200.025 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 200.025 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 200.025 147.955 0)
 			(effects
 				(font
@@ -14559,7 +15495,25 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" "C5605"
+		(property "LCSC" "C5605"
+			(at 57.15 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 57.15 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 57.15 29.21 0)
 			(effects
 				(font
@@ -14815,6 +15769,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 213.995 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 213.995 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "4b0a30f3-b5d9-4dcf-a923-a22ed96961fb")
 		)
@@ -14893,6 +15865,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 111.125 37.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 111.125 37.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "24a34399-54a0-4a44-ae28-f592fa7c3f1a")
 		)
@@ -14961,6 +15951,24 @@
 			)
 		)
 		(property "LCSC" "C19108"
+			(at 178.435 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 178.435 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 178.435 134.62 0)
 			(effects
 				(font
@@ -15179,6 +16187,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 254 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 254 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "cb478ba4-dce2-404c-bfa9-d7189b5ccea0")
 		)
@@ -15247,7 +16273,25 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" "C5605"
+		(property "LCSC" "C5605"
+			(at 26.67 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 26.67 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 26.67 58.42 0)
 			(effects
 				(font
@@ -15362,6 +16406,24 @@
 			)
 		)
 		(property "LCSC" "C249547"
+			(at 179.705 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 179.705 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 179.705 99.06 0)
 			(effects
 				(font
@@ -15513,6 +16575,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 180.34 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 180.34 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "c3a75956-a376-457d-980f-c536d80beb4f")
 		)
@@ -15573,6 +16653,24 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, closed/bridged"
+			(at 235.585 75.565 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 235.585 75.565 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 235.585 75.565 0)
 			(effects
 				(font
@@ -15649,7 +16747,25 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" "C5605"
+		(property "LCSC" "C5605"
+			(at 57.15 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 57.15 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 57.15 43.18 0)
 			(effects
 				(font
@@ -15842,6 +16958,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 87.63 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 87.63 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "75bda8e6-778d-48e9-980e-c88f188d564c")
 		)
@@ -15913,6 +17047,24 @@
 			)
 		)
 		(property "LCSC" "C25804"
+			(at 252.73 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 252.73 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 252.73 71.12 0)
 			(effects
 				(font
@@ -16058,6 +17210,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 236.855 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 236.855 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "4c16a5f6-d9af-4f25-bcbf-f720a0994d4e")
 		)
@@ -16124,6 +17294,24 @@
 		)
 		(property "LCSC" "C23179"
 			(at 112.395 104.14 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 112.395 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 112.395 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16274,6 +17462,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 64.77 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 64.77 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "bbe29f57-384a-4a34-be09-49194bad55ab")
 		)
@@ -16345,6 +17551,24 @@
 			)
 		)
 		(property "LCSC" "C23162"
+			(at 59.69 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 59.69 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 59.69 147.32 0)
 			(effects
 				(font
@@ -16499,6 +17723,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 54.61 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 54.61 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "9d2877aa-0be9-4ead-801e-477db12e8336")
 		)
@@ -16570,6 +17812,24 @@
 			)
 		)
 		(property "LCSC" "C92651"
+			(at 27.94 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 27.94 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 27.94 185.42 0)
 			(effects
 				(font
@@ -16665,6 +17925,24 @@
 			)
 		)
 		(property "LCSC" "C151417"
+			(at 216.535 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 216.535 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 216.535 36.83 0)
 			(effects
 				(font
@@ -16817,6 +18095,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 240.665 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 240.665 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "7dd1c3e0-bb1c-4dc2-be07-9514529e904a")
 		)
@@ -16879,6 +18175,24 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 90.17 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 90.17 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 90.17 191.77 0)
 			(effects
 				(font
@@ -17021,6 +18335,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 92.075 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 92.075 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "ffe442f0-0d2b-4658-a2e3-59e2aa59ad11")
 		)
@@ -17081,6 +18413,24 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, open"
+			(at 243.205 75.565 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 243.205 75.565 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 243.205 75.565 0)
 			(effects
 				(font
@@ -17165,6 +18515,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 112.395 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 112.395 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "53d090bd-75d3-4195-84c1-627bbbaa271c")
 		)
@@ -17226,6 +18594,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 112.395 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 112.395 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 112.395 129.54 0)
 			(effects
 				(font
@@ -17302,6 +18688,24 @@
 			)
 		)
 		(property "LCSC" "C19108"
+			(at 168.275 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 168.275 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 168.275 127 0)
 			(effects
 				(font
@@ -17579,6 +18983,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 202.565 75.565 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 202.565 75.565 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "b3b2beee-025a-4642-8450-5b00a5e372dc")
 		)
@@ -17652,6 +19074,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 254 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 254 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "c67c993a-e042-4907-bb13-115dab408f10")
 		)
@@ -17712,6 +19152,24 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, closed/bridged"
+			(at 235.585 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 235.585 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 235.585 36.83 0)
 			(effects
 				(font
@@ -17789,6 +19247,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 147.955 37.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 147.955 37.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "2136f237-dade-44ef-9d9b-aa1c17cab200")
 		)
@@ -17854,6 +19330,24 @@
 			)
 		)
 		(property "LCSC" "C25804"
+			(at 273.05 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 273.05 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 273.05 33.02 0)
 			(effects
 				(font
@@ -17996,6 +19490,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 243.205 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 243.205 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "da0a18c0-ba93-49b5-840d-bd82337e7934")
 		)
@@ -18057,6 +19569,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 202.565 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 202.565 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 202.565 36.83 0)
 			(effects
 				(font
@@ -18142,6 +19672,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 156.845 79.375 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 156.845 79.375 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "e620843e-c5ac-44d3-994b-065b0ba818a6")
 		)
@@ -18213,7 +19761,25 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" "C5605"
+		(property "LCSC" "C5605"
+			(at 26.67 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 26.67 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 26.67 72.39 0)
 			(effects
 				(font
@@ -18534,6 +20100,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 273.05 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 273.05 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "a3b9b991-401c-4253-8e6f-588851e0cc81")
 		)
@@ -18602,7 +20186,25 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" "C5605"
+		(property "LCSC" "C5605"
+			(at 41.91 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 41.91 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 41.91 82.55 0)
 			(effects
 				(font

@@ -244,6 +244,336 @@
 				)
 			)
 		)
+		(symbol "Connector:Conn_01x06_Socket"
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x06_Socket"
+				(at 0 -10.16 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x06, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x06_Socket_1_1"
+				(arc
+					(start 0 -7.112)
+					(mid -0.5058 -7.62)
+					(end 0 -8.128)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -4.572)
+					(mid -0.5058 -5.08)
+					(end 0 -5.588)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -2.032)
+					(mid -0.5058 -2.54)
+					(end 0 -3.048)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -7.62) (xy -0.508 -7.62)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -5.08) (xy -0.508 -5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -2.54) (xy -0.508 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 2.54) (xy -0.508 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 5.08) (xy -0.508 5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 0.508)
+					(mid -0.5058 0)
+					(end 0 -0.508)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 3.048)
+					(mid -0.5058 2.54)
+					(end 0 2.032)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 5.588)
+					(mid -0.5058 5.08)
+					(end 0 4.572)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 5.08 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -7.62 0)
+					(length 3.81)
+					(name "Pin_6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Connector:Conn_01x20_Pin"
 			(pin_names
 				(offset 1.016) hide)
@@ -5192,6 +5522,10 @@
 		(uuid "aa0349d1-e4a0-40cb-b207-839f838375ce")
 	)
 	(no_connect
+		(at 116.205 58.42)
+		(uuid "af447447-76bf-4316-9140-ef9e958f77c3")
+	)
+	(no_connect
 		(at 241.3 97.79)
 		(uuid "bec5a9c1-50d2-4354-aba2-763e471f73ba")
 	)
@@ -5579,6 +5913,16 @@
 	)
 	(wire
 		(pts
+			(xy 106.68 55.245) (xy 113.03 55.245)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "42b730b9-721c-4119-a967-21dc75810d73")
+	)
+	(wire
+		(pts
 			(xy 63.5 30.48) (xy 66.04 30.48)
 		)
 		(stroke
@@ -5766,6 +6110,16 @@
 			(type default)
 		)
 		(uuid "5beda0fe-41c2-4c21-a2d1-8be4c3faf2ad")
+	)
+	(wire
+		(pts
+			(xy 83.82 71.12) (xy 116.205 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5c7b6926-0db9-4b20-8497-c854e1fa5336")
 	)
 	(wire
 		(pts
@@ -5969,6 +6323,16 @@
 	)
 	(wire
 		(pts
+			(xy 116.205 60.96) (xy 113.03 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "85fc7573-eb17-4dd5-ad67-ec64923f5ba9")
+	)
+	(wire
+		(pts
 			(xy 87.63 186.69) (xy 90.17 186.69)
 		)
 		(stroke
@@ -6039,6 +6403,16 @@
 	)
 	(wire
 		(pts
+			(xy 113.03 60.96) (xy 113.03 55.245)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8ff120a5-c87a-416b-ab9b-75ceca3cf58c")
+	)
+	(wire
+		(pts
 			(xy 180.34 55.88) (xy 180.34 59.69)
 		)
 		(stroke
@@ -6056,6 +6430,16 @@
 			(type default)
 		)
 		(uuid "93b47842-2277-4121-885e-ec386d5c04eb")
+	)
+	(wire
+		(pts
+			(xy 83.82 68.58) (xy 116.205 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "943b303b-4ab0-4963-beb5-33d86847b778")
 	)
 	(wire
 		(pts
@@ -6648,6 +7032,16 @@
 		)
 		(uuid "3fbfa897-3166-4538-beff-8882ef92ed49")
 	)
+	(label "SWDIO"
+		(at 104.775 68.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "46964240-0ead-40bc-ad33-fad378e3cbee")
+	)
 	(label "BLK"
 		(at 236.22 102.87 0)
 		(effects
@@ -6667,6 +7061,16 @@
 			(justify left bottom)
 		)
 		(uuid "b44e61ec-4ccd-4254-82cf-63b36d7d0c98")
+	)
+	(label "NRST"
+		(at 107.95 55.245 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b4c66dca-165e-4ba6-ac62-ab97f8ddb7bd")
 	)
 	(label "BLA"
 		(at 236.22 100.33 0)
@@ -6697,6 +7101,16 @@
 			(justify left bottom)
 		)
 		(uuid "d8d14e2e-e39f-47fe-a2af-62c90630dfcb")
+	)
+	(label "SWCLK"
+		(at 104.775 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e832a09b-60a4-44fd-b7c9-e74db3d5112d")
 	)
 	(label "RCC_OSC_IN"
 		(at 20.32 143.51 0)
@@ -7082,7 +7496,7 @@
 			)
 		)
 	)
-	(global_label "Button_prec"
+	(global_label "Button_conf"
 		(shape input)
 		(at 147.32 40.64 180)
 		(fields_autoplaced yes)
@@ -7094,7 +7508,7 @@
 		)
 		(uuid "5ef34c2e-2105-4691-8cb0-0603f506762e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 133.0864 40.64 0)
+			(at 133.0865 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7566,6 +7980,28 @@
 			)
 		)
 	)
+	(global_label "Button_conf"
+		(shape input)
+		(at 48.26 55.88 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "cf8c2cee-447c-4aae-b893-2225446cb701")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 34.0265 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "LTC_STM"
 		(shape input)
 		(at 48.26 88.9 180)
@@ -7579,28 +8015,6 @@
 		(uuid "d27511fd-a902-47a1-bb54-166bfbe28c3a")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 37.413 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "Button_conf"
-		(shape input)
-		(at 48.26 55.88 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "d4574fc4-11a1-482a-924d-8142b5f233ef")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 34.0265 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8131,6 +8545,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 185.42 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 185.42 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "e74a5a13-ffce-4f7a-a06b-ce3142c2eac3")
 		)
@@ -8208,6 +8640,24 @@
 			)
 		)
 		(property "LCSC" "C14663"
+			(at 163.83 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 163.83 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 163.83 52.07 0)
 			(effects
 				(font
@@ -8295,6 +8745,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 72.39 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 72.39 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "1a3b2def-6879-45f6-b257-03475836b3f3")
 		)
@@ -8363,6 +8831,24 @@
 			)
 		)
 		(property "LCSC" "C25804"
+			(at 136.525 175.895 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 136.525 175.895 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 136.525 175.895 0)
 			(effects
 				(font
@@ -8440,6 +8926,24 @@
 		)
 		(property "LCSC" "C23179"
 			(at 217.805 153.035 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 217.805 153.035 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 217.805 153.035 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8660,6 +9164,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 81.28 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 81.28 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "e71f931a-19f8-4840-88ea-8a8e346e01d9")
 		)
@@ -8722,6 +9244,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 185.42 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 185.42 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 185.42 59.69 0)
 			(effects
 				(font
@@ -8812,6 +9352,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 169.545 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 169.545 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "b4874162-cbf0-4fae-9678-e779bf2014c1")
 		)
@@ -8890,6 +9448,88 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "#PWR040")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x06_Socket")
+		(at 121.285 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "26ff1501-fd11-48c1-981e-7c25226eb60a")
+		(property "Reference" "J15"
+			(at 123.19 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x06_Socket"
+			(at 123.19 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Vertical"
+			(at 121.285 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 121.285 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 121.285 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "c5a63237-b894-4f0a-b28a-18a45ae3ad7e")
+		)
+		(pin "2"
+			(uuid "cab97fad-9c39-43d4-a96b-860c50a04ce4")
+		)
+		(pin "4"
+			(uuid "b6cd67a1-25a5-45a1-87c3-5e6577ed6345")
+		)
+		(pin "5"
+			(uuid "006fd3f8-ccd1-4abd-b87d-204ecae55563")
+		)
+		(pin "6"
+			(uuid "9ff297d1-7d34-4b22-97ca-f52b92e7b219")
+		)
+		(pin "1"
+			(uuid "e49a967d-fdd1-47da-8dd1-d55e7999bed2")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "J15")
 					(unit 1)
 				)
 			)
@@ -9093,6 +9733,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 152.4 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 152.4 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "abb0c392-aa01-4e43-b11b-de0cf6761385")
 		)
@@ -9170,6 +9828,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 38.1 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 38.1 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "4"
 			(uuid "6ab3e3fa-3879-4857-b346-3e46fabec7f7")
 		)
@@ -9236,6 +9912,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 226.695 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 226.695 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 226.695 147.955 0)
 			(effects
 				(font
@@ -9463,6 +10157,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 163.83 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 163.83 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "13646cd8-067e-4062-8b95-40504b1a8723")
 		)
@@ -9542,6 +10254,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 163.83 102.235 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 163.83 102.235 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "41d81753-4b23-4b66-aa92-219d70570a81")
 		)
@@ -9613,6 +10343,24 @@
 			)
 		)
 		(property "LCSC" "C14663"
+			(at 163.83 118.745 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 163.83 118.745 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 163.83 118.745 0)
 			(effects
 				(font
@@ -9766,6 +10514,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 163.195 156.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 163.195 156.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "3f4a7e42-ef30-4e9e-93ac-efd293a6015b")
 		)
@@ -9837,6 +10603,24 @@
 			)
 		)
 		(property "LCSC" "C22812"
+			(at 152.4 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 152.4 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 152.4 83.82 0)
 			(effects
 				(font
@@ -9981,6 +10765,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 190.5 111.125 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 190.5 111.125 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "8cf4251c-9b43-4fa6-b244-abbaed793b22")
 		)
@@ -10057,6 +10859,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 27.94 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 27.94 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "b121d69e-9421-4140-bbe3-411e5b5f0032")
 		)
@@ -10118,6 +10938,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 93.345 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 93.345 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 93.345 93.98 0)
 			(effects
 				(font
@@ -10400,6 +11238,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 170.18 106.045 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 170.18 106.045 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "f93e1b76-40e5-400e-8afb-64aad03dd4ea")
 		)
@@ -10471,6 +11327,24 @@
 			)
 		)
 		(property "LCSC" "C1634"
+			(at 20.32 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 20.32 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 20.32 158.75 0)
 			(effects
 				(font
@@ -10693,6 +11567,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 87.63 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 87.63 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "2b5fcf17-8633-4da1-a2a6-860ad3718fec")
 		)
@@ -10764,6 +11656,24 @@
 			)
 		)
 		(property "LCSC" "C14663"
+			(at 41.91 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 41.91 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 41.91 22.86 0)
 			(effects
 				(font
@@ -10848,6 +11758,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 170.18 122.555 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 170.18 122.555 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "e62b3ea3-6380-4e8f-85bf-8969012f3f11")
 		)
@@ -10917,6 +11845,24 @@
 		)
 		(property "LCSC" "C23179"
 			(at 67.31 186.69 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 67.31 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 67.31 186.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11070,6 +12016,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 53.34 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 53.34 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "5e7ae6ca-77f9-4bde-8e5b-5b9b942b8c07")
 		)
@@ -11139,6 +12103,24 @@
 		)
 		(property "LCSC" "C23179"
 			(at 170.18 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 170.18 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 170.18 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11350,6 +12332,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 180.34 117.475 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 180.34 117.475 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "79bc1c82-f3e8-45a7-a3a3-c1ea8f83d21b")
 		)
@@ -11474,6 +12474,24 @@
 			)
 		)
 		(property "Description" "Rotary encoder, dual channel, incremental quadrate outputs, with switch"
+			(at 139.065 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 139.065 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 139.065 162.56 0)
 			(effects
 				(font
@@ -11637,6 +12655,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 152.4 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 152.4 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "efea5954-0cc5-4a3d-bab8-63cab073eaf7")
 		)
@@ -11780,6 +12816,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 170.18 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 170.18 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "06859483-28ee-4bd4-9dd1-f133e526e95e")
 		)
@@ -11843,6 +12897,33 @@
 			)
 		)
 		(property "Description" ""
+			(at 66.04 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C8735"
+			(at 66.04 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 66.04 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 66.04 78.74 0)
 			(effects
 				(font
@@ -12174,6 +13255,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 190.5 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 190.5 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "09cc1039-2f97-4fb1-8941-5a55c820bc12")
 		)
@@ -12242,6 +13341,24 @@
 			)
 		)
 		(property "LCSC" "C14663"
+			(at 163.83 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 163.83 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 163.83 67.31 0)
 			(effects
 				(font
@@ -12329,6 +13446,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 67.31 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 67.31 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "b1cda9bb-d024-4a94-a5f2-f76672b88784")
 		)
@@ -12408,6 +13543,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 45.72 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 45.72 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "3c2c04c0-1989-4e1b-b5b3-ac4531e6d2ef")
 		)
@@ -12468,6 +13621,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 185.42 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 185.42 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 185.42 40.64 0)
 			(effects
 				(font
@@ -12561,6 +13732,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 152.4 102.235 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 152.4 102.235 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "bf6b45c9-6f35-40aa-855f-a80241a0962b")
 		)
@@ -12623,6 +13812,24 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x01, script generated"
+			(at 180.34 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 180.34 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 180.34 66.04 0)
 			(effects
 				(font
@@ -12774,6 +13981,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 110.49 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 110.49 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "f64c98b5-0320-4d85-80ae-7df7894b201a")
 		)
@@ -12853,6 +14078,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 30.48 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 30.48 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "231e587f-f2f9-4de7-ac59-e4d87539be54")
 		)
@@ -12922,6 +14165,24 @@
 		)
 		(property "LCSC" "C23179"
 			(at 217.805 147.955 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 217.805 147.955 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 217.805 147.955 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13075,6 +14336,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 83.82 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 83.82 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "c96e5607-3887-48c8-8124-25068831c297")
 		)
@@ -13137,6 +14416,24 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x01, script generated"
+			(at 180.34 100.965 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 180.34 100.965 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 180.34 100.965 0)
 			(effects
 				(font
@@ -13213,6 +14510,24 @@
 			)
 		)
 		(property "LCSC" "C14663"
+			(at 17.78 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 17.78 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 17.78 22.86 0)
 			(effects
 				(font
@@ -13500,6 +14815,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 152.4 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 152.4 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "4cc1be05-83a7-4be1-a661-a25a3a8effcb")
 		)
@@ -13569,6 +14902,24 @@
 		)
 		(property "LCSC" "C23179"
 			(at 170.18 55.88 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 170.18 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 170.18 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13647,6 +14998,24 @@
 			)
 		)
 		(property "LCSC" "C22812"
+			(at 152.4 118.745 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 152.4 118.745 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 152.4 118.745 0)
 			(effects
 				(font
@@ -13798,6 +15167,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 102.87 19.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 102.87 19.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "89988b04-19e6-410d-a5b4-f8ef1622df85")
 		)
@@ -13868,6 +15255,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 190.5 127.635 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 190.5 127.635 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "1faebb80-4cc4-4900-8691-cc733f6e8118")
 		)
@@ -13923,6 +15328,24 @@
 			)
 		)
 		(property "Description" "Switch, single pole double throw"
+			(at 55.88 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 55.88 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 55.88 172.72 0)
 			(effects
 				(font
@@ -14011,6 +15434,73 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "#PWR011")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3V")
+		(at 116.205 63.5 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ced617e8-9148-4588-b7f3-33c6516a9e3b")
+		(property "Reference" "#PWR0122"
+			(at 120.015 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 112.395 63.5 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 116.205 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.205 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 116.205 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "59892864-2664-4b9e-b1d8-c4c59471f7ba")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "#PWR0122")
 					(unit 1)
 				)
 			)
@@ -14144,6 +15634,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 136.525 182.245 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 136.525 182.245 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "d974cdec-0f7e-417e-9528-4008e359d75a")
 		)
@@ -14154,6 +15662,74 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "R48")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 116.205 66.04 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d9e5f1c4-f8ec-4ce6-b1fd-695937ac8188")
+		(property "Reference" "#PWR0123"
+			(at 109.855 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 112.395 66.04 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 116.205 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.205 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 116.205 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b55c20fc-0fc6-4af6-85f5-9f239fe15393")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "#PWR0123")
 					(unit 1)
 				)
 			)
@@ -14215,6 +15791,24 @@
 			)
 		)
 		(property "LCSC" "C15849"
+			(at 91.44 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 91.44 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 91.44 22.86 0)
 			(effects
 				(font
@@ -14294,6 +15888,24 @@
 			)
 		)
 		(property "LCSC" "C22812"
+			(at 76.2 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 76.2 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 76.2 182.88 0)
 			(effects
 				(font
@@ -14512,6 +16124,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 217.805 142.875 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 217.805 142.875 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "3241ad21-7533-4feb-a274-5233963d5842")
 		)
@@ -14572,6 +16202,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 185.42 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 185.42 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 185.42 55.88 0)
 			(effects
 				(font
@@ -14657,6 +16305,24 @@
 			)
 		)
 		(property "LCSC" "C14663"
+			(at 163.83 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 163.83 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 163.83 36.83 0)
 			(effects
 				(font
@@ -14936,6 +16602,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 246.38 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 246.38 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "18"
 			(uuid "c9290709-2fb4-49d7-a715-7e7c94ec1e99")
 		)
@@ -15136,6 +16820,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 151.765 156.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 151.765 156.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "6af3339f-d8d2-410b-8bbb-4dff0a549688")
 		)
@@ -15205,6 +16907,24 @@
 		)
 		(property "LCSC" "C23179"
 			(at 66.04 170.18 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 66.04 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 66.04 170.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15282,6 +17002,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 180.34 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 180.34 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "47d1bb1f-df1e-4526-bcf6-065714aab30c")
 		)
@@ -15341,6 +17079,24 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x01, script generated"
+			(at 190.5 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 190.5 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
 			(at 190.5 76.2 0)
 			(effects
 				(font
@@ -15422,6 +17178,24 @@
 				(hide yes)
 			)
 		)
+		(property "Field5" ""
+			(at 170.18 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 170.18 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "5c07b275-538d-47c3-96bd-d76954144532")
 		)
@@ -15491,6 +17265,24 @@
 		)
 		(property "LCSC" "C25804"
 			(at 44.45 40.64 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Field5" ""
+			(at 44.45 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LSCS" ""
+			(at 44.45 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
