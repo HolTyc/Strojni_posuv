@@ -13506,7 +13506,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Potentiometer_SMD:Potentiometer_Bourns_3314G_Vertical"
+		(property "Footprint" "Potentiometer_SMD:Potentiometer_Bourns_TC33X_Vertical"
 			(at 97.79 120.65 0)
 			(effects
 				(font
@@ -13533,7 +13533,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C780220"
+		(property "LCSC" "C719176"
 			(at 97.79 120.65 90)
 			(effects
 				(font
