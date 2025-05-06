@@ -68,6 +68,7 @@ void delay_us_motor (uint16_t us);
 /* USER CODE BEGIN 0 */
 uint32_t adcValue1;
 uint32_t adcValue2;
+uint16_t speed = 50;
 char message[100] = "Hello World!";
 uint32_t last_print = 0, now = 0;
 int pos = 0;
@@ -169,18 +170,18 @@ int main(void)
 
 	  for (int i = 0; i < 6400; i++) {
 	      HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 1);
-	      delay_us_motor(50);  // Very short pulse
+	      delay_us_motor(speed);  // Very short pulse
 	      HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);
-	      delay_us_motor(50);
+	      delay_us_motor(speed);
 	  }
 
 	  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);//Anti clock wise rotation
 
 	  for (int i = 0; i < 6400; i++) {
 	      HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 1);
-	      delay_us_motor(50);  // Very short pulse
+	      delay_us_motor(speed);  // Very short pulse
 	      HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);
-	      delay_us_motor(50);  // Very short pulse
+	      delay_us_motor(speed);  // Very short pulse
 	  }
 	  /*
 	  now = HAL_GetTick();

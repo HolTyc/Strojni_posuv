@@ -1,0 +1,18 @@
+1. Srovnat Diplej do vyznaceneho obdelniku
+2. Zvetsit desku at je displej symetricky uprostred
+3. Posunout enkoder, emergency button, conf button, kolebkovy rychloposuv - (ON)-OFF(ON)
+4. Pravo-Levo switch musi mit 3 pozice
+5. Enkoder ma spatny zapojeni do STM32
+6. Logic level shifters
+7. Resistor u optocoupleru - R39
+8. Resistory NFB a NFA
+9. Sroubovaci konektory na motor
+10. JST konektory pro dorazy
+11. Power button na PCB do leveho horniho rohu
+12. Lepsi konektor pro programovani
+(13. smazat obvod na DIR a na ENABLE)
+14. Opravit prohozeny DIR a STEP
+15. Novy footprint pro emergency button
+16. Volne OUTPUT a INPUT sroubovaci terminaly
+17. Pretocit RGB led
+18. VREF/VREG - staly odpor - 16.5k a 10k - delicka napeti na 1,8V a opdor by byl 0.150 ohmu
