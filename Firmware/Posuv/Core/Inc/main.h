@@ -93,16 +93,16 @@ void Error_Handler(void);
 #define RGB_R_GPIO_Port GPIOC
 #define STEP_Pin GPIO_PIN_8
 #define STEP_GPIO_Port GPIOA
-#define Enc_CLK_Pin GPIO_PIN_10
-#define Enc_CLK_GPIO_Port GPIOA
-#define Enc_DT_Pin GPIO_PIN_11
-#define Enc_DT_GPIO_Port GPIOA
+#define ENC_CLK_Pin GPIO_PIN_15
+#define ENC_CLK_GPIO_Port GPIOA
 #define M1_Pin GPIO_PIN_10
 #define M1_GPIO_Port GPIOC
 #define M2_Pin GPIO_PIN_11
 #define M2_GPIO_Port GPIOC
 #define M3_Pin GPIO_PIN_12
 #define M3_GPIO_Port GPIOC
+#define ENC_DT_Pin GPIO_PIN_3
+#define ENC_DT_GPIO_Port GPIOB
 #define GLCD_SCK_Pin GPIO_PIN_6
 #define GLCD_SCK_GPIO_Port GPIOB
 

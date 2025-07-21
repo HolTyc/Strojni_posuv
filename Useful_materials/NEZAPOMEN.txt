@@ -1,0 +1,5 @@
+Velikost ploch x proud
+0.2mm - 0.5-0.7A
+0.5mm - 1.5A
+1mm - 2.5-3A
+2mm - 5-6A

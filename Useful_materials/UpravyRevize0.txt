@@ -16,3 +16,4 @@
 16. Volne OUTPUT a INPUT sroubovaci terminaly
 17. Pretocit RGB led
 18. VREF/VREG - staly odpor - 16.5k a 10k - delicka napeti na 1,8V a opdor by byl 0.150 ohmu
+19. Spravne zapinani systemu - podle datasheetu

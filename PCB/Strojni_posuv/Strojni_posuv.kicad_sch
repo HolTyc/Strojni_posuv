@@ -125,7 +125,7 @@
 				)
 			)
 		)
-		(symbol "Connector:Conn_01x01_Pin"
+		(symbol "Connector:Conn_01x02_Pin"
 			(pin_names
 				(offset 1.016) hide)
 			(exclude_from_sim no)
@@ -139,8 +139,8 @@
 					)
 				)
 			)
-			(property "Value" "Conn_01x01_Pin"
-				(at 0 -2.54 0)
+			(property "Value" "Conn_01x02_Pin"
+				(at 0 -5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -165,7 +165,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Generic connector, single row, 01x01, script generated"
+			(property "Description" "Generic connector, single row, 01x02, script generated"
 				(at 0 0 0)
 				(effects
 					(font
@@ -200,7 +200,19 @@
 					(hide yes)
 				)
 			)
-			(symbol "Conn_01x01_Pin_1_1"
+			(symbol "Conn_01x02_Pin_1_1"
+				(polyline
+					(pts
+						(xy 1.27 -2.54) (xy 0.8636 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(polyline
 					(pts
 						(xy 1.27 0) (xy 0.8636 0)
@@ -211,6 +223,17 @@
 					)
 					(fill
 						(type none)
+					)
+				)
+				(rectangle
+					(start 0.8636 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 				(rectangle
@@ -235,6 +258,24 @@
 						)
 					)
 					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -2.54 180)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2109,7 +2150,7 @@
 				)
 			)
 		)
-		(symbol "Device:LED_RGBA"
+		(symbol "Device:LED_BAGR"
 			(pin_names
 				(offset 0) hide)
 			(exclude_from_sim no)
@@ -2123,7 +2164,7 @@
 					)
 				)
 			)
-			(property "Value" "LED_RGBA"
+			(property "Value" "LED_BAGR"
 				(at 0 -8.89 0)
 				(effects
 					(font
@@ -2149,7 +2190,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "RGB LED, red/green/blue/anode"
+			(property "Description" "RGB LED, blue/anode/green/red"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2176,7 +2217,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "LED_RGBA_0_0"
+			(symbol "LED_BAGR_0_0"
 				(text "B"
 					(at -1.905 -6.35 0)
 					(effects
@@ -2202,7 +2243,7 @@
 					)
 				)
 			)
-			(symbol "LED_RGBA_0_1"
+			(symbol "LED_BAGR_0_1"
 				(polyline
 					(pts
 						(xy -1.27 -5.08) (xy -2.54 -5.08)
@@ -2534,11 +2575,11 @@
 					)
 				)
 			)
-			(symbol "LED_RGBA_1_1"
+			(symbol "LED_BAGR_1_1"
 				(pin passive line
-					(at -5.08 5.08 0)
+					(at -5.08 -5.08 0)
 					(length 2.54)
-					(name "RK"
+					(name "BK"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2546,6 +2587,24 @@
 						)
 					)
 					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2563,24 +2622,6 @@
 							)
 						)
 					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -5.08 0)
-					(length 2.54)
-					(name "BK"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
 					(number "3"
 						(effects
 							(font
@@ -2590,9 +2631,9 @@
 					)
 				)
 				(pin passive line
-					(at 5.08 0 180)
+					(at -5.08 5.08 0)
 					(length 2.54)
-					(name "A"
+					(name "RK"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4844,6 +4885,190 @@
 				)
 			)
 		)
+		(symbol "Switch:SW_SPDT_MSM"
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "SW"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "SW_SPDT_MSM"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -13.97 11.43 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Switch, single pole double throw, center OFF position"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "switch spdt single-pole double-throw ON-OFF-ON"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "SW_SPDT_MSM_0_1"
+				(circle
+					(center -2.032 0)
+					(radius 0.4572)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.651 0.254) (xy 1.651 2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.032 -2.54)
+					(radius 0.4572)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.032 0)
+					(radius 0.4572)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.032 2.54)
+					(radius 0.4572)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "SW_SPDT_MSM_1_1"
+				(rectangle
+					(start -3.175 3.81)
+					(end 3.175 -3.81)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 5.08 2.54 180)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -2.54 180)
+					(length 2.54)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "power:+3.3V"
 			(power)
 			(pin_names
@@ -5543,13 +5768,13 @@
 	)
 	(wire
 		(pts
-			(xy 190.5 106.045) (xy 195.58 106.045)
+			(xy 198.12 114.3) (xy 201.295 114.3)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "000e09a0-bc90-4d3d-b478-b486be8d02fb")
+		(uuid "00b6600f-e5e2-44b2-ac2d-e14e4f429638")
 	)
 	(wire
 		(pts
@@ -5600,6 +5825,16 @@
 			(type default)
 		)
 		(uuid "0a778aaa-b50b-4f36-a0f5-aaecb3952713")
+	)
+	(wire
+		(pts
+			(xy 184.15 116.84) (xy 184.15 122.555)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0b57b1a3-df09-4068-8f0c-47b559caaffe")
 	)
 	(wire
 		(pts
@@ -5683,7 +5918,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 122.555) (xy 180.34 122.555)
+			(xy 173.99 122.555) (xy 184.15 122.555)
 		)
 		(stroke
 			(width 0)
@@ -5813,6 +6048,16 @@
 	)
 	(wire
 		(pts
+			(xy 186.69 71.12) (xy 195.58 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2e3b7332-060e-45fc-ad81-c45b26b0b2d9")
+	)
+	(wire
+		(pts
 			(xy 30.48 19.05) (xy 41.91 19.05)
 		)
 		(stroke
@@ -5823,7 +6068,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 71.12) (xy 180.34 71.12)
+			(xy 173.99 71.12) (xy 184.15 71.12)
 		)
 		(stroke
 			(width 0)
@@ -5843,7 +6088,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 87.63) (xy 180.34 87.63)
+			(xy 173.99 87.63) (xy 184.15 87.63)
 		)
 		(stroke
 			(width 0)
@@ -6023,13 +6268,23 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 106.045) (xy 180.34 106.045)
+			(xy 173.99 106.045) (xy 184.15 106.045)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "4f0c55c8-da00-4a27-9b4f-414a4e7d612e")
+	)
+	(wire
+		(pts
+			(xy 186.69 87.63) (xy 195.58 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5080b90f-c3f8-45cf-b2bc-1a30013ee9ea")
 	)
 	(wire
 		(pts
@@ -6263,6 +6518,16 @@
 	)
 	(wire
 		(pts
+			(xy 187.96 111.76) (xy 184.15 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7cd04c67-975e-421a-9301-c3764e05b9ce")
+	)
+	(wire
+		(pts
 			(xy 83.82 170.18) (xy 86.36 170.18)
 		)
 		(stroke
@@ -6393,16 +6658,6 @@
 	)
 	(wire
 		(pts
-			(xy 190.5 122.555) (xy 195.58 122.555)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8fdd5c47-621a-465b-b2ea-c218d21c6ffa")
-	)
-	(wire
-		(pts
 			(xy 113.03 60.96) (xy 113.03 55.245)
 		)
 		(stroke
@@ -6450,16 +6705,6 @@
 			(type default)
 		)
 		(uuid "94e2648c-44e7-497e-a8ed-b09a70907d3d")
-	)
-	(wire
-		(pts
-			(xy 190.5 87.63) (xy 195.58 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "96218b85-50ab-4ebf-8e97-c3c96369470c")
 	)
 	(wire
 		(pts
@@ -6713,6 +6958,16 @@
 	)
 	(wire
 		(pts
+			(xy 184.15 111.76) (xy 184.15 106.045)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1cb985c-54ce-4df1-82eb-c852b80422bf")
+	)
+	(wire
+		(pts
 			(xy 163.83 40.64) (xy 166.37 40.64)
 		)
 		(stroke
@@ -6720,16 +6975,6 @@
 			(type default)
 		)
 		(uuid "c43d977c-3845-4faa-bbde-34dbaf8851af")
-	)
-	(wire
-		(pts
-			(xy 190.5 71.12) (xy 195.58 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c9fc958b-725c-4c29-aed8-fd0bb3cfb65f")
 	)
 	(wire
 		(pts
@@ -6800,6 +7045,16 @@
 			(type default)
 		)
 		(uuid "da352358-3e50-4850-aefb-eaf3ead4f62c")
+	)
+	(wire
+		(pts
+			(xy 187.96 116.84) (xy 184.15 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dc0ffbcb-809c-4c35-866a-c195553245fc")
 	)
 	(wire
 		(pts
@@ -7476,7 +7731,7 @@
 	)
 	(global_label "Enc_DT"
 		(shape input)
-		(at 83.82 63.5 0)
+		(at 83.82 86.36 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -7486,7 +7741,7 @@
 		)
 		(uuid "5a40275e-df48-418a-9bee-accba6dd835e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 93.397 63.5 0)
+			(at 93.397 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7806,7 +8061,7 @@
 	)
 	(global_label "Enc_CLK"
 		(shape input)
-		(at 83.82 60.96 0)
+		(at 83.82 73.66 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -7816,7 +8071,7 @@
 		)
 		(uuid "9c2318db-5416-452d-a0b5-9f4ea496c055")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 94.7275 60.96 0)
+			(at 94.7275 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8682,6 +8937,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:Conn_01x02_Pin")
+		(at 184.15 76.2 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0fa4de28-2b2a-40b7-acdc-b9818c6013c3")
+		(property "Reference" "J7"
+			(at 187.96 74.2949 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Button_maxL"
+			(at 187.96 76.8349 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+			(at 184.15 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 184.15 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 184.15 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c9caebe1-04e1-438d-acc4-b088f7f6a7e5")
+		)
+		(pin "2"
+			(uuid "efce24b2-1895-4928-b262-19fce59ddf47")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "J7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 72.39 166.37 0)
 		(unit 1)
@@ -8709,7 +9034,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 70.612 166.37 90)
 			(effects
 				(font
@@ -8803,7 +9128,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 136.525 174.117 90)
 			(effects
 				(font
@@ -8897,7 +9222,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 217.805 151.257 90)
 			(effects
 				(font
@@ -9316,7 +9641,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 169.545 158.242 90)
 			(effects
 				(font
@@ -9670,6 +9995,77 @@
 		)
 	)
 	(symbol
+		(lib_id "Switch:SW_SPDT_MSM")
+		(at 193.04 114.3 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "36dcea95-88a8-4093-b69b-a13d81a5fc20")
+		(property "Reference" "SW1"
+			(at 193.04 106.045 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW_SPDT_MSM"
+			(at 193.04 108.585 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Button_Switch_THT:SW_CK_JS202011CQN_DPDT_Straight"
+			(at 207.01 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 193.04 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Switch, single pole double throw, center OFF position"
+			(at 193.04 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "bae77b45-07ac-4187-a8f3-9a753db16404")
+		)
+		(pin "1"
+			(uuid "bf29404d-09b0-41d5-8d0d-23a0305d5df6")
+		)
+		(pin "3"
+			(uuid "e48049ce-ea6b-4c99-9df2-d0339eb647ae")
+		)
+		(instances
+			(project ""
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "SW1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 152.4 67.31 0)
 		(unit 1)
@@ -9697,7 +10093,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 150.622 67.31 90)
 			(effects
 				(font
@@ -9862,98 +10258,6 @@
 			(project ""
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "Y1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:LED_RGBA")
-		(at 226.695 147.955 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp yes)
-		(fields_autoplaced yes)
-		(uuid "42de716b-9245-4299-ad06-30e446ecc599")
-		(property "Reference" "D2"
-			(at 226.695 135.255 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "LED_RGBA"
-			(at 226.695 137.795 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "LED_THT:LED_D5.0mm-4_RGB_Wide_Pins"
-			(at 226.695 149.225 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 226.695 149.225 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 226.695 147.955 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 226.695 147.955 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 226.695 147.955 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "adef32f1-d7b4-45ba-a69d-824c3625da4d")
-		)
-		(pin "4"
-			(uuid "5f6edf43-66ca-4d42-a18d-fd4b17b3b609")
-		)
-		(pin "2"
-			(uuid "c86c13ff-e8fa-4ce7-880a-311b13268558")
-		)
-		(pin "3"
-			(uuid "5f06d334-79ca-43cd-823d-7e56c523934e")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "D2")
 					(unit 1)
 				)
 			)
@@ -10575,7 +10879,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 150.622 83.82 90)
 			(effects
 				(font
@@ -10705,91 +11009,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "#PWR04")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 190.5 111.125 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "5dde5a54-d3a2-407a-a199-907f52a22db4")
-		(property "Reference" "J13"
-			(at 191.77 109.2199 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "Button_left_fast_B"
-			(at 191.77 111.7599 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
-			(at 190.5 111.125 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 190.5 111.125 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 190.5 111.125 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 190.5 111.125 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 190.5 111.125 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "8cf4251c-9b43-4fa6-b244-abbaed793b22")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "J13")
 					(unit 1)
 				)
 			)
@@ -11112,7 +11331,7 @@
 	)
 	(symbol
 		(lib_id "power:+3.3V")
-		(at 195.58 106.045 270)
+		(at 201.295 114.3 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -11121,7 +11340,7 @@
 		(fields_autoplaced yes)
 		(uuid "63fac1d9-4d2d-44ea-914a-93a047603385")
 		(property "Reference" "#PWR0116"
-			(at 191.77 106.045 0)
+			(at 197.485 114.3 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11130,7 +11349,7 @@
 			)
 		)
 		(property "Value" "+3.3V"
-			(at 199.39 106.045 90)
+			(at 205.105 114.3 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11139,7 +11358,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 195.58 106.045 0)
+			(at 201.295 114.3 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11148,7 +11367,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 195.58 106.045 0)
+			(at 201.295 114.3 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11157,7 +11376,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 195.58 106.045 0)
+			(at 201.295 114.3 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11202,7 +11421,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 170.18 104.267 90)
 			(effects
 				(font
@@ -11722,7 +11941,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 170.18 120.777 90)
 			(effects
 				(font
@@ -11816,7 +12035,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 67.31 184.912 90)
 			(effects
 				(font
@@ -12074,7 +12293,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 170.18 69.342 90)
 			(effects
 				(font
@@ -12272,91 +12491,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "#PWR012")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 180.34 117.475 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8da23690-fc56-4203-8092-6e4a8ecd3c1c")
-		(property "Reference" "J12"
-			(at 181.61 116.8399 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Button_right_fast_A"
-			(at 181.61 119.3799 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
-			(at 180.34 117.475 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 180.34 117.475 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 180.34 117.475 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 180.34 117.475 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 180.34 117.475 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "79bc1c82-f3e8-45a7-a3a3-c1ea8f83d21b")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "J12")
 					(unit 1)
 				)
 			)
@@ -12619,7 +12753,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 150.622 52.07 90)
 			(effects
 				(font
@@ -12780,7 +12914,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 170.18 38.862 90)
 			(effects
 				(font
@@ -13201,91 +13335,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 190.5 92.71 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "95ede0d8-6a56-4ca5-ba9f-1af847026173")
-		(property "Reference" "J10"
-			(at 191.77 90.8049 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "Button_right_A"
-			(at 191.77 93.3449 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
-			(at 190.5 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 190.5 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 190.5 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 190.5 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 190.5 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "09cc1039-2f97-4fb1-8941-5a55c820bc12")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "J10")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C")
 		(at 163.83 67.31 0)
 		(unit 1)
@@ -13410,7 +13459,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 68.2752 26.67 0)
 			(effects
 				(font
@@ -13696,7 +13745,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 150.622 102.235 90)
 			(effects
 				(font
@@ -13760,91 +13809,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "R49")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 180.34 66.04 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a0505378-727b-47ae-8269-54f998b724d9")
-		(property "Reference" "J7"
-			(at 181.61 65.4049 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Button_left_A"
-			(at 181.61 67.9449 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
-			(at 180.34 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 180.34 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 180.34 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 180.34 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 180.34 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c030fa61-e78c-4cc7-b497-97999941c47e")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "J7")
 					(unit 1)
 				)
 			)
@@ -14136,7 +14100,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 217.805 146.177 90)
 			(effects
 				(font
@@ -14364,91 +14328,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "C35")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 180.34 100.965 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "adae7087-97d6-4105-bd2b-348f345b4b33")
-		(property "Reference" "J11"
-			(at 181.61 100.3299 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Button_left_fast_A"
-			(at 181.61 102.8699 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
-			(at 180.34 100.965 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 180.34 100.965 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 180.34 100.965 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 180.34 100.965 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 180.34 100.965 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c868cd47-cd34-4e5d-b6d4-bdc979ee34af")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "J11")
 					(unit 1)
 				)
 			)
@@ -14779,7 +14658,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 150.622 36.83 90)
 			(effects
 				(font
@@ -14873,7 +14752,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 170.18 54.102 90)
 			(effects
 				(font
@@ -14970,7 +14849,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 150.622 118.745 90)
 			(effects
 				(font
@@ -15195,91 +15074,6 @@
 			(project "Strojni_posuv"
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
 					(reference "FB1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 190.5 127.635 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "b76c0536-4f78-4d45-a812-d200e7293af7")
-		(property "Reference" "J14"
-			(at 191.77 125.7299 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "Button_right_fast_B"
-			(at 191.77 128.2699 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
-			(at 190.5 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 190.5 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 190.5 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 190.5 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 190.5 127.635 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "1faebb80-4cc4-4900-8691-cc733f6e8118")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "J14")
 					(unit 1)
 				)
 			)
@@ -15598,7 +15392,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 136.525 180.467 90)
 			(effects
 				(font
@@ -15860,7 +15654,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 74.422 182.88 90)
 			(effects
 				(font
@@ -15997,17 +15791,33 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3.3V")
-		(at 195.58 122.555 270)
+		(lib_id "Device:LED_BAGR")
+		(at 226.695 147.955 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
-		(uuid "e70fe850-aaf8-422f-a334-a33a67e888c4")
-		(property "Reference" "#PWR0117"
-			(at 191.77 122.555 0)
+		(uuid "e53746da-a3c3-4690-9a18-8a9e93653b1a")
+		(property "Reference" "D6"
+			(at 226.695 133.985 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LED_BAGR"
+			(at 226.695 136.525 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "LED_THT:LED_D5.0mm-4_RGB_Wide_Pins"
+			(at 226.695 149.225 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16015,17 +15825,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+3.3V"
-			(at 199.39 122.555 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 195.58 122.555 0)
+		(property "Datasheet" "~"
+			(at 226.695 149.225 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16033,8 +15834,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
-			(at 195.58 122.555 0)
+		(property "Description" "RGB LED, blue/anode/green/red"
+			(at 226.695 147.955 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16042,22 +15843,22 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 195.58 122.555 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
+		(pin "3"
+			(uuid "c266cbc8-41a1-4cad-ae01-274377bf3c4c")
+		)
+		(pin "4"
+			(uuid "6d0d9454-e4dc-4d07-871c-0e3e88c29cb0")
 		)
 		(pin "1"
-			(uuid "8e6adc4e-95a0-4fb2-aa42-67da92e32901")
+			(uuid "127cb37a-4961-4483-b26a-7bdcf03b4ab7")
+		)
+		(pin "2"
+			(uuid "c09311a5-a8da-4dd0-9c60-fed69f6d24ce")
 		)
 		(instances
-			(project "Strojni_posuv"
+			(project ""
 				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "#PWR0117")
+					(reference "D6")
 					(unit 1)
 				)
 			)
@@ -16088,7 +15889,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 217.805 141.097 90)
 			(effects
 				(font
@@ -16548,6 +16349,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:Conn_01x02_Pin")
+		(at 184.15 92.71 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f3bfe7bf-5290-4e4e-a589-71ceabc25547")
+		(property "Reference" "J9"
+			(at 187.96 90.8049 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Button_maxR"
+			(at 187.96 93.3449 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+			(at 184.15 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 184.15 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 184.15 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3b622477-6b05-4ab3-bcde-ba76aa2f1266")
+		)
+		(pin "2"
+			(uuid "88e72b04-4bb0-4265-a1b7-c8b8daefbabd")
+		)
+		(instances
+			(project "Strojni_posuv"
+				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
+					(reference "J9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:Conn_01x20_Pin")
 		(at 246.38 80.01 180)
 		(unit 1)
@@ -16784,7 +16655,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 149.987 156.21 90)
 			(effects
 				(font
@@ -16878,7 +16749,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 66.04 168.402 90)
 			(effects
 				(font
@@ -16948,176 +16819,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 180.34 82.55 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "faae646c-3ad7-4b14-b3a2-1391a9cc77a1")
-		(property "Reference" "J9"
-			(at 181.61 81.9149 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Button_right_A"
-			(at 181.61 84.4549 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
-			(at 180.34 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 180.34 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 180.34 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 180.34 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 180.34 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "47d1bb1f-df1e-4526-bcf6-065714aab30c")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "J9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Conn_01x01_Pin")
-		(at 190.5 76.2 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "fd058be0-f5e1-4ea6-9460-f311be9b463c")
-		(property "Reference" "J8"
-			(at 191.77 74.2949 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "Button_left_B"
-			(at 191.77 76.8349 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Connector_Pin:Pin_D1.3mm_L11.3mm_W2.8mm_Flat"
-			(at 190.5 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 190.5 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 190.5 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 190.5 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 190.5 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "a7d4aba0-afe1-4286-8d84-0f5305dcb1ba")
-		)
-		(instances
-			(project "Strojni_posuv"
-				(path "/36664f97-4753-4126-9e35-a8ab7ac5ffb4"
-					(reference "J8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
 		(at 170.18 87.63 270)
 		(unit 1)
@@ -17142,7 +16843,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 170.18 85.852 90)
 			(effects
 				(font
@@ -17236,7 +16937,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 44.45 42.418 90)
 			(effects
 				(font
