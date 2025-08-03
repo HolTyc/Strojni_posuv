@@ -3,4 +3,6 @@
   (lib (name "StuffBench")(type "KiCad")(uri "${KIPRJMOD}/StuffBench.pretty")(options "")(descr ""))
   (lib (name "Three_way_switch")(type "KiCad")(uri "${KIPRJMOD}/Three_way_switch.pretty")(options "")(descr ""))
   (lib (name "Encoder")(type "KiCad")(uri "${KIPRJMOD}/Encoder.pretty")(options "")(descr ""))
+  (lib (name "ON_Off_ON")(type "KiCad")(uri "${KIPRJMOD}/ON_Off_ON.pretty")(options "")(descr ""))
+  (lib (name "Emergency")(type "KiCad")(uri "${KIPRJMOD}/Emergency.pretty")(options "")(descr ""))
 )
