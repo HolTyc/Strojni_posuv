@@ -133,7 +133,7 @@
 		)
 	)
 	(pad "1" thru_hole circle
-		(at 5 0)
+		(at 4.75 0)
 		(size 4 4)
 		(drill 2.5)
 		(layers "*.Cu" "*.Mask" "In1.Cu" "In2.Cu" "In3.Cu" "In4.Cu" "In5.Cu" "In6.Cu"
@@ -159,7 +159,7 @@
 		(uuid "28f1bb24-de45-401d-b272-b4ea92973dd8")
 	)
 	(pad "3" thru_hole circle
-		(at -5 0)
+		(at -4.75 0)
 		(size 4 4)
 		(drill 2.5)
 		(layers "*.Cu" "*.Mask" "In1.Cu" "In2.Cu" "In3.Cu" "In4.Cu" "In5.Cu" "In6.Cu"

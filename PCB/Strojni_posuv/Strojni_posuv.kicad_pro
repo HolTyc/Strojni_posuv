@@ -182,7 +182,9 @@
         0.175,
         0.3,
         0.5,
-        1.0
+        1.0,
+        1.5,
+        2.0
       ],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
@@ -218,6 +220,14 @@
         {
           "diameter": 0.45,
           "drill": 0.3
+        },
+        {
+          "diameter": 0.8,
+          "drill": 0.35
+        },
+        {
+          "diameter": 1.5,
+          "drill": 0.4
         }
       ],
       "zones_allow_external_fillets": false
