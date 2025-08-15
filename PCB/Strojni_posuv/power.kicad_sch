@@ -4057,24 +4057,6 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" ""
-			(at 161.29 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 161.29 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "2"
 			(uuid "9c4e3bd2-68ab-47fd-b376-f2ba462623da")
 		)
@@ -4097,7 +4079,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "126d3336-14df-414e-a9e8-43899ec5554e")
 		(property "Reference" "J6"
@@ -4137,24 +4119,6 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 53.34 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 53.34 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
 			(at 53.34 111.76 0)
 			(effects
 				(font
@@ -4238,24 +4202,6 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" ""
-			(at 125.73 44.45 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 125.73 44.45 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "2"
 			(uuid "a1c1272c-ebb8-488c-9eb5-c961ff90e4d6")
 		)
@@ -4327,24 +4273,6 @@
 			)
 		)
 		(property "LCSC" "C14663"
-			(at 130.81 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 130.81 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
 			(at 130.81 71.12 0)
 			(effects
 				(font
@@ -4565,24 +4493,6 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" ""
-			(at 190.5 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 190.5 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "8"
 			(uuid "41cc2c30-d516-40c8-9986-3ff876b36be0")
 		)
@@ -4673,24 +4583,6 @@
 		)
 		(property "LCSC" "C2482"
 			(at 93.98 44.45 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 93.98 44.45 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 93.98 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5046,24 +4938,6 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" ""
-			(at 113.03 44.45 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 113.03 44.45 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "2"
 			(uuid "4e3c41b6-95e1-4233-ad5a-59b6c47de901")
 		)
@@ -5277,24 +5151,6 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" ""
-			(at 54.61 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 54.61 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "2"
 			(uuid "35483353-3a32-4763-9160-25f3a6e7e266")
 		)
@@ -5373,24 +5229,6 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" ""
-			(at 118.11 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 118.11 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "2"
 			(uuid "51edc502-0e95-4f59-b951-1691447b98bb")
 		)
@@ -5461,24 +5299,6 @@
 		)
 		(property "LCSC" "C964119"
 			(at 212.09 33.02 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 212.09 33.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 212.09 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5729,24 +5549,6 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" ""
-			(at 88.9 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 88.9 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "2"
 			(uuid "88944988-9ebc-415d-9f48-6e0526a1a63a")
 		)
@@ -5884,25 +5686,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C1705"
-			(at 165.1 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 165.1 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
+		(property "LCSC" "C1779"
 			(at 165.1 40.64 0)
 			(effects
 				(font
@@ -6124,25 +5908,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C4197"
-			(at 118.11 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 118.11 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
+		(property "LCSC" "C25824"
 			(at 118.11 71.12 0)
 			(effects
 				(font
@@ -6240,7 +6006,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "98f5141a-2c24-4891-a2de-39777180eb70")
 		(property "Reference" "SW6"
@@ -6555,24 +6321,6 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" ""
-			(at 118.11 172.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 118.11 172.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "d56105fc-2eec-4615-a05f-aae25a03fd56")
 		)
@@ -6647,24 +6395,6 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" ""
-			(at 104.14 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 104.14 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "2"
 			(uuid "3f36c285-93e0-412f-b8ea-f80ab84daa04")
 		)
@@ -6725,24 +6455,6 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated"
-			(at 29.21 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 29.21 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
 			(at 29.21 111.76 0)
 			(effects
 				(font
@@ -6830,24 +6542,6 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" ""
-			(at 237.49 38.1 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 237.49 38.1 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "2"
 			(uuid "aaf77a30-0748-4529-a42c-f8cf46c97f81")
 		)
@@ -6915,26 +6609,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C23179"
+		(property "LCSC" "C17710"
 			(at 138.43 44.45 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 138.43 44.45 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 138.43 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7153,24 +6829,6 @@
 				(hide yes)
 			)
 		)
-		(property "Field5" ""
-			(at 140.97 177.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
-			(at 140.97 177.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "5"
 			(uuid "41be0e9a-54a7-4594-885f-37893c794050")
 		)
@@ -7316,25 +6974,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C23058"
-			(at 223.52 38.1 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 223.52 38.1 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
+		(property "LCSC" "C322483"
 			(at 223.52 38.1 0)
 			(effects
 				(font
@@ -7480,25 +7120,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C25804"
-			(at 223.52 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 223.52 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
+		(property "LCSC" "C17414"
 			(at 223.52 50.8 0)
 			(effects
 				(font
@@ -7641,25 +7263,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC" "C25804"
-			(at 120.65 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 120.65 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
+		(property "LCSC" "C17414"
 			(at 120.65 83.82 0)
 			(effects
 				(font
@@ -7757,7 +7361,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "fda88041-3258-4dd2-b0e1-08a6299390d1")
 		(property "Reference" "J2"
@@ -7797,24 +7401,6 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x01, script generated"
-			(at 44.45 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Field5" ""
-			(at 44.45 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LSCS" ""
 			(at 44.45 101.6 0)
 			(effects
 				(font
