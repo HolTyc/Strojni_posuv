@@ -83,6 +83,10 @@ void Error_Handler(void);
 #define Left_GPIO_Port GPIOB
 #define DIR_Pin GPIO_PIN_10
 #define DIR_GPIO_Port GPIOB
+#define Enable_Pin GPIO_PIN_12
+#define Enable_GPIO_Port GPIOB
+#define Reset_Pin GPIO_PIN_14
+#define Reset_GPIO_Port GPIOB
 #define Bright_fast_Pin GPIO_PIN_6
 #define Bright_fast_GPIO_Port GPIOC
 #define RGB_G_Pin GPIO_PIN_7

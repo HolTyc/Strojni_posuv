@@ -68,7 +68,7 @@ void delay_us_motor (uint16_t us);
 /* USER CODE BEGIN 0 */
 uint32_t adcValue1;
 uint32_t adcValue2;
-uint16_t speed = 50;
+uint16_t speed = 1000;
 char message[100] = "Hello World!";
 uint32_t last_print = 0, now = 0;
 int pos = 0;
@@ -122,19 +122,38 @@ int main(void)
   //HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
   HAL_TIM_Base_Start(&htim4);
 
-  HAL_GPIO_WritePin(LTC_GPIO_Port, LTC_Pin, 0);//Clock wise rotation
+  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 0);
+  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 0);
+  HAL_GPIO_WritePin(LTC_GPIO_Port, LTC_Pin, 1);//Clock wise rotation
   HAL_GPIO_WritePin(M1_GPIO_Port, M1_Pin, 1);//Clock wise rotation
-  HAL_GPIO_WritePin(M2_GPIO_Port, M2_Pin, 1);//Clock wise rotation
+  HAL_GPIO_WritePin(M2_GPIO_Port, M2_Pin, 0);//Clock wise rotation
   HAL_GPIO_WritePin(M3_GPIO_Port, M3_Pin, 0);//Clock wise rotation
   HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /*
-	  if (HAL_GPIO_ReadPin(Right_GPIO_Port, Right_Pin)) {
+	  /*if (HAL_GPIO_ReadPin(Bright_fast_GPIO_Port, Bright_fast_Pin)) {
+		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
+		  delay_us_motor(speed);  // Very short pulse
+		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+		  delay_us_motor(speed);
+		  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
+		  for (int i = 0; i < 100; i++) {
+			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
+			  delay_us_motor(speed);  // Very short pulse
+			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+			  delay_us_motor(speed);
+		  }
+	  } else {
+
+	  }
+	  if (HAL_GPIO_ReadPin(Right_GPIO_Port, Right_Pin)) {  // Very short pulse
+		  			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+		  			  delay_us_motor(speed);
 		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
 	  } else {
 		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 0);
@@ -166,23 +185,30 @@ int main(void)
 			  HAL_GPIO_WritePin(RGB_G_GPIO_Port, RGB_G_Pin, 0);
 	  }
 	  */
-	  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);//Clock wise rotation
+	  if (HAL_GPIO_ReadPin(Left_GPIO_Port, Left_Pin)) {
+		  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
+		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
+		  delay_us_motor(speed);  // Very short pulse
+		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+		  delay_us_motor(speed);
+		  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
+		  for (int i = 0; i < 100; i++) {
+			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
+			  delay_us_motor(speed);  // Very short pulse
+			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+			  delay_us_motor(speed);
+		  }
 
-	  for (int i = 0; i < 6400; i++) {
-	      HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 1);
-	      delay_us_motor(speed);  // Very short pulse
-	      HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);
-	      delay_us_motor(speed);
+	  } else {
+		  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 0);
+		  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 0);
+		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
 	  }
+	  //HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 1);//Clock wise rotation
 
-	  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);//Anti clock wise rotation
 
-	  for (int i = 0; i < 6400; i++) {
-	      HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 1);
-	      delay_us_motor(speed);  // Very short pulse
-	      HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);
-	      delay_us_motor(speed);  // Very short pulse
-	  }
+
+	  //HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);//Anti clock wise rotation
 	  /*
 	  now = HAL_GetTick();
 	  if (now - last_print >= 1000) {
@@ -509,7 +535,8 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, GLCD_CS_Pin|GLCD_SID_Pin|STEP_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GLCD_RST_Pin|DIR_Pin|GLCD_SCK_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GLCD_RST_Pin|DIR_Pin|Enable_Pin|Reset_Pin
+                          |GLCD_SCK_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : LTC_Pin RGB_G_Pin RGB_B_Pin RGB_R_Pin
                            M1_Pin M2_Pin M3_Pin */
@@ -541,8 +568,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : GLCD_RST_Pin DIR_Pin GLCD_SCK_Pin */
-  GPIO_InitStruct.Pin = GLCD_RST_Pin|DIR_Pin|GLCD_SCK_Pin;
+  /*Configure GPIO pins : GLCD_RST_Pin DIR_Pin Enable_Pin Reset_Pin
+                           GLCD_SCK_Pin */
+  GPIO_InitStruct.Pin = GLCD_RST_Pin|DIR_Pin|Enable_Pin|Reset_Pin
+                          |GLCD_SCK_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
