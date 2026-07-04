@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "ST7920_SERIAL.h"
 #include <stdio.h>
+#include <stdlib.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,17 +63,233 @@ static void MX_TIM2_Init(void);
 static void MX_TIM4_Init(void);
 /* USER CODE BEGIN PFP */
 void delay_us_motor (uint16_t us);
+static void Menu_KeepVisible(void);
+static void Menu_Draw(void);
+static int Inside_CursorCount(int sel);
+static void Inside_Draw(void);
+void Menu_Init(void);
+void Menu_Inside_Init(void);
+void Menu_Task(void);
+void Menu_Inside(void);
+static char Keypad_ScanRaw(void);   // neblokujici sken: vrati stisknutou klavesu nebo 0
+static void Confirm_Action(void);   // sdilena akce potvrzeni: enkoder tlacitko (Benc) i '#'
+static void Keypad_Task(void);      // cteni numpadu: cislice/# do editace, # = potvrdit
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static const char *menu[] = {
+    "Auto posuv",
+    "Absolutni",
+    "Inkrementalni",
+    "HW setup"
+};
+#define MENU_COUNT   ((int)(sizeof(menu)/sizeof(menu[0])))
+
+// How many lines you want visible at once
+#define MENU_VISIBLE_LINES 4
+
+// Display positions (adjust to your font/layout)
+#define MENU_X 0
+#define MENU_Y0 0   // first line Y
+#define MENU_LINE_SPACING 1  // if y is line-based, keep 1; if pixel-based, change
+
+// After >>2, range is 0..16383 (16384 steps total)
+#define ENC_STEPS_RANGE  (65536 / 4)     // 16384
+#define ENC_HALF_RANGE   (ENC_STEPS_RANGE / 2) // 8192
+
+// Jak dlouho musi byt stav klavesnice stabilni, nez se ohlasi (ms).
+#define KEYPAD_DEBOUNCE_MS 20
+
+// ------------ STATE ------------
+static int16_t enc_last = 0;
+static int selected = 0;   // highlighted item
+static int top = 0;        // first visible item (for scrolling)
+
+// ----- MODES -----
+int8_t _inMenu = 1;
+
+// ---- Inside screen state ----
+static int inside_cursor = 0;       // which line/field is highlighted
+static int16_t enc1_last = 0;
+
+//POMOCNY RYCHLO FUNKCE
+static inline int16_t Encoder_GetSteps(void)
+{
+    return (int16_t)(TIM2->CNT >> 2);
+}
+static void PrintLineSel(uint8_t y, const char *text, uint8_t active)
+{
+    char buf[24];
+    if (active) snprintf(buf, sizeof(buf), ">%s", text);
+    else        snprintf(buf, sizeof(buf), " %s ", text);
+    GLCD_Font_Print(0, y, buf);
+}
+
+//NUMPAD
+static const char keymap[4][4] = {
+    {'1','2','3','A'},
+    {'4','5','6','B'},
+    {'7','8','9','C'},
+    {'*','0','#','D'}
+};
+
+static GPIO_TypeDef* rowPorts[4] = {Num_R1_GPIO_Port, Num_R2_GPIO_Port, Num_R3_GPIO_Port, Num_R4_GPIO_Port};
+static uint16_t      rowPins [4] = {Num_R1_Pin,  Num_R2_Pin,  Num_R3_Pin,  Num_R4_Pin};
+
+static GPIO_TypeDef* colPorts[4] = {Num_C1_GPIO_Port, Num_C2_GPIO_Port, Num_C3_GPIO_Port, Num_C4_GPIO_Port};
+static uint16_t      colPins [4] = {Num_C1_Pin,  Num_C2_Pin,  Num_C3_Pin,  Num_C4_Pin};
+
+// Promene na nastaveni
+int rychlost = 1;     // mm/s
+int rychlost_last = 0;
+int pozice = 0;       // mm
+int pozice_last = 0;
+int poziceAktualni = 0;
+int smer_pohybu = 1;   // 1 = Pravo, 0 = Levo, -1 = stop
+
 uint32_t adcValue1;
 uint32_t adcValue2;
-uint16_t speed = 1000;
+uint16_t speed = 500;
+int maxSpeed = 70;   // "Max rychlost": uzivatelsky strop 'rychlost' (<= MAXSPEED_HARD_CAP)
+// Kolik STEP pulzu odpovida 1 mm posuvu. Urcuje vzdalenost (ne rychlost).
+// Neni fyzicky kalibrovano - naladeno tak, aby pri rychlost=1 platilo ~1 mm/s.
+// TODO: nahradit skutecnou kalibraci (kroky/mm ze stoupani sroubu + mikrokrokovani).
+const int STEPS_PER_MM = 60;
+const int POZICE_MAX = 999;   // horni mez pro zadani pozice z klavesnice (mm)
+static int keypad_fresh = 0;  // 1 = prvni cislice zacne nove cislo (prepise stavajici)
+// Tlacitko enkoderu (Benc) jen nastavi tento priznak v ISR; kresleni displeje
+// se deje az v hlavni smycce, aby ISR nepreteklo probihajici SW-SPI prenos na
+// ST7920 (jinak se displej rozsype - nahodne pixely/znaky).
+static volatile uint8_t benc_event = 0;
+static volatile uint32_t benc_last_ms = 0;  // softwarovy debounce
 char message[100] = "Hello World!";
 uint32_t last_print = 0, now = 0;
 int pos = 0;
 const uint8_t ICON_Flag[8]			={0x00,0x80,0xff,0x8e,0x0e,0x1c,0x18,0x10};
+// ---- HW setup: konstanty ----
+// Pulzni zpozdeni (ticky TIM4): vetsi rychlost -> kratsi zpozdeni.
+// Drive: speed = maxSpeed*60 - rychlost*56 (maxSpeed byl pevne 70).
+// Oddeleno od Max rychlost, aby zmena stropu neprevracela realnou rychlost.
+#define SPEED_BASE         4200   // = 70*60 (zachovava puvodni chovani)
+#define SPEED_SLOPE        56
+#define JOG_SPEED          490    // = 70*7 (rychly jog, pevny bezpecny krok)
+#define MAXSPEED_HARD_CAP  70     // tovarni strop Max rychlost (motor to bezpecne zvladne)
+#define STOUPANI_MIN       1      // 0.001 mm
+#define STOUPANI_MAX       99999  // 99.999 mm
+#define AKCEL_MIN          1      // mm/s^2
+#define AKCEL_MAX          999    // mm/s^2
+
+// ---- HW setup: hodnoty (RAM, neuklada se do flash) ----
+int stoupaniUm = 2000;    // Stoupani zavitu v tisicinach mm (krok 0.001 mm) - kalibrace
+int akcelerace = 50;      // Akcelerace/decelerace [mm/s^2] (zatim jen ulozeno; rampa TODO)
+int orientace = 1;        // 1 = + doprava (vychozi), 0 = + doleva (fyzicky DIR invertovan)
+int odpojeniMotoru = 1;   // 1 = ANO (v klidu uvolnit), 0 = NE (drzet moment)
+
+// Co se prave edituje v _inMenu==-1 (viz Edit_Binding()).
+enum { EDIT_NONE = 0, EDIT_RYCHLOST, EDIT_POZICE, EDIT_STOUPANI, EDIT_MAXRYCH, EDIT_AKCEL };
+int edit_target = EDIT_NONE;
+
+// Ukazatel na prave editovanou hodnotu (nebo NULL) + meze a krok enkoderu.
+static int *Edit_Binding(int *lo, int *hi, int *step)
+{
+	switch (edit_target) {
+		case EDIT_RYCHLOST: *lo = 1;            *hi = maxSpeed;          *step = 1; return &rychlost;
+		case EDIT_POZICE:   *lo = -POZICE_MAX;  *hi = POZICE_MAX;        *step = 1; return &pozice;
+		case EDIT_STOUPANI: *lo = STOUPANI_MIN; *hi = STOUPANI_MAX;      *step = 1; return &stoupaniUm;
+		case EDIT_MAXRYCH:  *lo = 1;            *hi = MAXSPEED_HARD_CAP; *step = 1; return &maxSpeed;
+		case EDIT_AKCEL:    *lo = AKCEL_MIN;    *hi = AKCEL_MAX;         *step = 1; return &akcelerace;
+		default: return NULL;
+	}
+}
+
+// Aplikuje Orientaci na fyzickou uroven DIR. 'level' je vychozi (orientace=1) uroven pinu.
+static inline GPIO_PinState DirApply(int level)
+{
+	int d = level ? 1 : 0;
+	if (!orientace) d = !d;
+	return d ? GPIO_PIN_SET : GPIO_PIN_RESET;
+}
+
+// ---- Trvale ulozeni HW-setup nastaveni do flash ----
+// Posledni 1KB stranka 128KB flash; program konci ~22KB, takze je volna.
+#define SETTINGS_FLASH_PAGE  0x0801FC00u
+#define SETTINGS_MAGIC       0x53503631u   // "SP61" - platny zaznam
+
+typedef struct {
+	uint32_t magic;
+	int32_t  stoupaniUm;
+	int32_t  maxSpeed;
+	int32_t  akcelerace;
+	int32_t  orientace;
+	int32_t  odpojeniMotoru;
+	uint32_t checksum;   // soucet predchozich slov
+} SettingsFlash;
+
+static uint32_t Settings_Checksum(const SettingsFlash *s)
+{
+	const uint32_t *w = (const uint32_t *)s;
+	uint32_t sum = 0;
+	for (unsigned i = 0; i < sizeof(SettingsFlash)/4 - 1; i++) sum += w[i];
+	return sum;
+}
+
+// Nacte nastaveni z flash (pokud je platne), jinak necha zkompilovane defaulty.
+static void Settings_Load(void)
+{
+	const SettingsFlash *s = (const SettingsFlash *)SETTINGS_FLASH_PAGE;
+	if (s->magic != SETTINGS_MAGIC) return;
+	if (s->checksum != Settings_Checksum(s)) return;
+	stoupaniUm     = s->stoupaniUm;
+	maxSpeed       = s->maxSpeed;
+	akcelerace     = s->akcelerace;
+	orientace      = s->orientace ? 1 : 0;
+	odpojeniMotoru = s->odpojeniMotoru ? 1 : 0;
+	// orez do platnych mezi (ochrana proti poskozenym datum)
+	if (stoupaniUm < STOUPANI_MIN) stoupaniUm = STOUPANI_MIN;
+	if (stoupaniUm > STOUPANI_MAX) stoupaniUm = STOUPANI_MAX;
+	if (maxSpeed < 1) maxSpeed = 1;
+	if (maxSpeed > MAXSPEED_HARD_CAP) maxSpeed = MAXSPEED_HARD_CAP;
+	if (akcelerace < AKCEL_MIN) akcelerace = AKCEL_MIN;
+	if (akcelerace > AKCEL_MAX) akcelerace = AKCEL_MAX;
+	if (rychlost > maxSpeed) rychlost = maxSpeed;
+}
+
+// Ulozi nastaveni do flash. Eraze+zapis jen kdyz se neco opravdu zmenilo (setri flash).
+static void Settings_Save(void)
+{
+	SettingsFlash ns;
+	ns.magic          = SETTINGS_MAGIC;
+	ns.stoupaniUm     = stoupaniUm;
+	ns.maxSpeed       = maxSpeed;
+	ns.akcelerace     = akcelerace;
+	ns.orientace      = orientace;
+	ns.odpojeniMotoru = odpojeniMotoru;
+	ns.checksum       = Settings_Checksum(&ns);
+
+	const SettingsFlash *cur = (const SettingsFlash *)SETTINGS_FLASH_PAGE;
+	if (cur->magic == ns.magic && cur->checksum == ns.checksum &&
+	    cur->stoupaniUm == ns.stoupaniUm && cur->maxSpeed == ns.maxSpeed &&
+	    cur->akcelerace == ns.akcelerace && cur->orientace == ns.orientace &&
+	    cur->odpojeniMotoru == ns.odpojeniMotoru) {
+		return;   // uz je ulozeno totez
+	}
+
+	HAL_FLASH_Unlock();
+	FLASH_EraseInitTypeDef er = {0};
+	er.TypeErase   = FLASH_TYPEERASE_PAGES;
+	er.PageAddress = SETTINGS_FLASH_PAGE;
+	er.NbPages     = 1;
+	uint32_t pageError = 0;
+	if (HAL_FLASHEx_Erase(&er, &pageError) == HAL_OK) {
+		const uint32_t *w = (const uint32_t *)&ns;
+		for (unsigned i = 0; i < sizeof(SettingsFlash)/4; i++) {
+			HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, SETTINGS_FLASH_PAGE + i*4, w[i]);
+		}
+	}
+	HAL_FLASH_Lock();
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -111,15 +328,17 @@ int main(void)
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
 
-  //HAL_TIM_Base_Start(&htim1);
-  //__HAL_TIM_SET_COUNTER(&htim1,0);
+  HAL_TIM_Base_Start(&htim1);
+  __HAL_TIM_SET_COUNTER(&htim1,0);
 
-  //ST7920_Init(&htim1);
-  //ST7920_GraphicMode(1);
-  //ST7920_Clear();
+  ST7920_Init(&htim1);
+  ST7920_GraphicMode(1);
+  ST7920_Clear();
+  Settings_Load();   // nacti ulozena nastaveni z flash (pred kreslenim menu)
+  Menu_Init();
   HAL_Delay(1000);
 
-  //HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
   HAL_TIM_Base_Start(&htim4);
 
   HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 0);
@@ -129,98 +348,205 @@ int main(void)
   HAL_GPIO_WritePin(M2_GPIO_Port, M2_Pin, 0);//Clock wise rotation
   HAL_GPIO_WritePin(M3_GPIO_Port, M3_Pin, 0);//Clock wise rotation
   HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
-  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);
+  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(0));
+
+  // Numpad sloupce potrebuji pull-up (membranova klavesnice nema vlastni odpory).
+  // CubeMX je generuje jako NOPULL, prekonfigurujeme je zde v USER CODE.
+  {
+    GPIO_InitTypeDef kp = {0};
+    kp.Mode  = GPIO_MODE_INPUT;
+    kp.Pull  = GPIO_PULLUP;
+    kp.Speed = GPIO_SPEED_FREQ_LOW;
+    for (int c = 0; c < 4; c++) {
+      kp.Pin = colPins[c];
+      HAL_GPIO_Init(colPorts[c], &kp);
+    }
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /*if (HAL_GPIO_ReadPin(Bright_fast_GPIO_Port, Bright_fast_Pin)) {
-		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
-		  delay_us_motor(speed);  // Very short pulse
-		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
-		  delay_us_motor(speed);
-		  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
-		  for (int i = 0; i < 100; i++) {
-			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
-			  delay_us_motor(speed);  // Very short pulse
-			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
-			  delay_us_motor(speed);
-		  }
-	  } else {
-
+	  // Potvrzeni z tlacitka enkoderu (Benc) - zpracovano zde v hlavnim kontextu,
+	  // aby kresleni nikdy nepreruusilo SW-SPI prenos na displej.
+	  if (benc_event) {
+		  benc_event = 0;
+		  Confirm_Action();
 	  }
-	  if (HAL_GPIO_ReadPin(Right_GPIO_Port, Right_Pin)) {  // Very short pulse
-		  			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
-		  			  delay_us_motor(speed);
-		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
-	  } else {
+
+	  // Numpad se necte behem behu motoru (_inMenu==-2), aby scan nenarusil
+	  // casovani kroku; motor prerusuji EXTI tlacitka (Back/enkoder).
+	  // Keypad_Task() je nyni neblokujici (sken bez cekani + debounce pres
+	  // casova razitka), takze uz nezamrzava hlavni smycku ani scrollovani.
+	  if (_inMenu != -2) {
+		  Keypad_Task();
+	  }
+
+	  if (_inMenu>=1) {
+		  Menu_Task();
+		  HAL_GPIO_WritePin(RGB_B_GPIO_Port, RGB_B_Pin, 0);
 		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 0);
-	  }
-	  if (HAL_GPIO_ReadPin(Left_GPIO_Port, Left_Pin)) {
-		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_G_Pin, 1);
-	  } else {
-		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_G_Pin, 0);
-	  }
-	  if (HAL_GPIO_ReadPin(Bconf_GPIO_Port, Bconf_Pin)) {
-		  	  for (int i = 0; i < 10; i++) {
-		  		  HAL_GPIO_TogglePin(RGB_B_GPIO_Port, RGB_B_Pin);
-		  		  HAL_Delay(100);
-		  	  }
-		  	  HAL_GPIO_WritePin(RGB_B_GPIO_Port, RGB_B_Pin, 0);
-	  }
-	  if (HAL_GPIO_ReadPin(Bgen_stop_GPIO_Port, Bgen_stop_Pin)) {
-			  for (int i = 0; i < 10; i++) {
-				  HAL_GPIO_TogglePin(RGB_R_GPIO_Port, RGB_R_Pin);
-				  HAL_Delay(100);
+		  HAL_GPIO_WritePin(RGB_G_GPIO_Port, RGB_G_Pin, 0);
+	  } else if (_inMenu==0) {
+		  Menu_Inside();
+		  HAL_GPIO_WritePin(RGB_B_GPIO_Port, RGB_B_Pin, 0);
+		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 0);
+	  } else if (_inMenu==-1) { //ZMENY DAT
+		  HAL_GPIO_WritePin(RGB_B_GPIO_Port, RGB_G_Pin, 1);
+
+		  //HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
+		  int16_t enc1_now = Encoder_GetSteps();
+		  int16_t delta1 = enc1_now - enc1_last;
+		  if (delta1 >  ENC_HALF_RANGE) delta1 -= ENC_STEPS_RANGE; // wrapped forward
+		  if (delta1 < -ENC_HALF_RANGE) delta1 += ENC_STEPS_RANGE; // wrapped backward
+		  if (delta1 != 0) {
+			  enc1_last = enc1_now;
+			  int lo, hi, step;
+			  int *v = Edit_Binding(&lo, &hi, &step);
+			  if (v) {
+				  int nv = *v + (delta1 > 0 ? step : -step);
+				  if (nv < lo) nv = lo;
+				  if (nv > hi) nv = hi;
+				  if (nv != *v) { *v = nv; Inside_Draw(); }
 			  }
-			  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 0);
-	  }
-	  if (HAL_GPIO_ReadPin(Benc_GPIO_Port, Benc_Pin)) {
-			  for (int i = 0; i < 10; i++) {
-				  HAL_GPIO_TogglePin(RGB_G_GPIO_Port, RGB_G_Pin);
-				  HAL_Delay(100);
-			  }
-			  HAL_GPIO_WritePin(RGB_G_GPIO_Port, RGB_G_Pin, 0);
-	  }
-	  */
-	  if (HAL_GPIO_ReadPin(Left_GPIO_Port, Left_Pin)) {
-		  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
-		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
-		  delay_us_motor(speed);  // Very short pulse
-		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
-		  delay_us_motor(speed);
-		  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
-		  for (int i = 0; i < 100; i++) {
+		  }
+	  } else if (_inMenu==-2) {
+		  Menu_Inside();
+		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
+
+		  if (smer_pohybu>=0 && selected==0) {
+			  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(smer_pohybu));
+			  speed = SPEED_BASE-(rychlost*SPEED_SLOPE);
 			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
 			  delay_us_motor(speed);  // Very short pulse
 			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
 			  delay_us_motor(speed);
-		  }
+		  } else if (selected==1) {
 
-	  } else {
-		  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 0);
-		  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 0);
+			  poziceAktualni = pozice-poziceAktualni;
+			  speed = SPEED_BASE-(rychlost*SPEED_SLOPE);
+
+			  if (poziceAktualni>=0) {
+				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(1));
+			  } else if (poziceAktualni<0) {
+				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(0));
+			  }
+
+			  for (int i = 0; i < abs(poziceAktualni)*STEPS_PER_MM; i++) {
+				  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
+				  delay_us_motor(speed);  // Very short pulse
+				  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+				  delay_us_motor(speed);
+			  }
+			  poziceAktualni = pozice;
+			  _inMenu=0;
+			  Inside_Draw();
+		  } else if (selected==2) {
+
+			  speed = SPEED_BASE-(rychlost*SPEED_SLOPE);
+
+			  if (pozice>=0) {
+				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(1));
+			  } else if (pozice<=0) {
+				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(0));
+			  }
+
+			  for (int i = 0; i < abs(pozice)*STEPS_PER_MM; i++) {
+				  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
+				  delay_us_motor(speed);  // Very short pulse
+				  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+				  delay_us_motor(speed);
+			  }
+
+			  _inMenu=0;
+			  Inside_Draw();
+		  }
+	  }
+
+
+	  while (HAL_GPIO_ReadPin(Bright_fast_GPIO_Port, Bright_fast_Pin)) {
+		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
+		  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(0));//Anti clock wise rotation
+		  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
+		  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
+
+		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
+		  delay_us_motor(JOG_SPEED);  // Very short pulse
+		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+		  delay_us_motor(JOG_SPEED);
+	  }
+	  while (HAL_GPIO_ReadPin(Bleft_fast_GPIO_Port, Bleft_fast_Pin)) {
+		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
+		  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(1));//Anti clock wise rotation
+		  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
+		  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
+
+		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
+		  delay_us_motor(JOG_SPEED);  // Very short pulse
+		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+		  delay_us_motor(JOG_SPEED);
+	  }
+	  if (_inMenu!=-2) {
+		  HAL_GPIO_WritePin(M1_GPIO_Port, M1_Pin, 1);//Clock wise rotation
+		  HAL_GPIO_WritePin(M2_GPIO_Port, M2_Pin, 0);//Clock wise rotation
+		  HAL_GPIO_WritePin(M3_GPIO_Port, M3_Pin, 0);//Clock wise rotation
+		  // Odpojeni motoru v klidu: ANO = uvolnit, NE = drzet moment
+		  if (odpojeniMotoru) {
+			  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 0);
+			  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 0);
+		  } else {
+			  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
+			  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
+		  }
 		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
 	  }
-	  //HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 1);//Clock wise rotation
 
+	  //BACK BUTTON
+	  if (HAL_GPIO_ReadPin(Bconf_GPIO_Port, Bconf_Pin)) {
+		  top=0;
+		  _inMenu=2;
+		  rychlost=1;
+		  pozice=0;
+		  poziceAktualni=0;
+		  //HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
+	  }
 
+	  //SMER POHYBU
+	  if (HAL_GPIO_ReadPin(Left_GPIO_Port, Left_Pin)) {
+		  if (_inMenu<=0 && smer_pohybu!=1) {
+			  smer_pohybu = 1;
+			  Inside_Draw();
+		  }
+	  } else if (HAL_GPIO_ReadPin(Right_GPIO_Port, Right_Pin)) {
+		  if (_inMenu<=0 && smer_pohybu!=0) {
+			  smer_pohybu = 0;
+			  Inside_Draw();
+		  }
+	  } else {
+		  if (_inMenu<=0 && smer_pohybu!=-1) {
+			  smer_pohybu = -1;
+			  Inside_Draw();
+		  }
+	  }
 
-	  //HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, 0);//Anti clock wise rotation
-	  /*
+	  //RESETING LED
+	  if (!HAL_GPIO_ReadPin(Benc_GPIO_Port, Benc_Pin) && !HAL_GPIO_ReadPin(Bconf_GPIO_Port, Bconf_Pin)) {
+		  HAL_GPIO_WritePin(RGB_B_GPIO_Port, RGB_B_Pin, 0);
+		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 0);
+		  HAL_GPIO_WritePin(RGB_G_GPIO_Port, RGB_G_Pin, 0);
+	  }
+
+/*
 	  now = HAL_GetTick();
 	  if (now - last_print >= 1000) {
 		  sprintf(message, "Hello World! %d", ((TIM2->CNT))>>2);
+		  ST7920_Clear();
+		  GLCD_Font_Print(0,3, message);
+		  ST7920_Update();
 		  last_print = now;
 	  }
-
-	  ST7920_Clear();
-	  GLCD_Font_Print(0,3, message);
-	  ST7920_Update();
-	  */
-	  HAL_Delay(10);
+*/
 
     /* USER CODE END WHILE */
 
@@ -439,7 +765,7 @@ static void MX_TIM2_Init(void)
   htim2.Init.Period = 65535;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
+  sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
@@ -532,11 +858,15 @@ static void MX_GPIO_Init(void)
                           |M1_Pin|M2_Pin|M3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GLCD_CS_Pin|GLCD_SID_Pin|STEP_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GLCD_CS_Pin|GLCD_SID_Pin|STEP_Pin|Num_R4_Pin
+                          |Num_R3_Pin|Num_R2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GLCD_RST_Pin|DIR_Pin|Enable_Pin|Reset_Pin
                           |GLCD_SCK_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(Num_R1_GPIO_Port, Num_R1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : LTC_Pin RGB_G_Pin RGB_B_Pin RGB_R_Pin
                            M1_Pin M2_Pin M3_Pin */
@@ -547,26 +877,22 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : Bconf_Pin Benc_Pin Bgen_stop_Pin Bleft_max_Pin
-                           Bright_max_Pin */
-  GPIO_InitStruct.Pin = Bconf_Pin|Benc_Pin|Bgen_stop_Pin|Bleft_max_Pin
-                          |Bright_max_Pin;
+  /*Configure GPIO pins : Bconf_Pin Benc_Pin Bleft_max_Pin Bright_max_Pin
+                           Bleft_fast_Pin Bright_fast_Pin */
+  GPIO_InitStruct.Pin = Bconf_Pin|Benc_Pin|Bleft_max_Pin|Bright_max_Pin
+                          |Bleft_fast_Pin|Bright_fast_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : GLCD_CS_Pin GLCD_SID_Pin STEP_Pin */
-  GPIO_InitStruct.Pin = GLCD_CS_Pin|GLCD_SID_Pin|STEP_Pin;
+  /*Configure GPIO pins : GLCD_CS_Pin GLCD_SID_Pin STEP_Pin Num_R4_Pin
+                           Num_R3_Pin Num_R2_Pin */
+  GPIO_InitStruct.Pin = GLCD_CS_Pin|GLCD_SID_Pin|STEP_Pin|Num_R4_Pin
+                          |Num_R3_Pin|Num_R2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : Bleft_fast_Pin Bright_fast_Pin */
-  GPIO_InitStruct.Pin = Bleft_fast_Pin|Bright_fast_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : GLCD_RST_Pin DIR_Pin Enable_Pin Reset_Pin
                            GLCD_SCK_Pin */
@@ -577,11 +903,33 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : Right_Pin Left_Pin */
-  GPIO_InitStruct.Pin = Right_Pin|Left_Pin;
+  /*Configure GPIO pins : Right_Pin Left_Pin Num_C3_Pin Num_C2_Pin
+                           Num_C1_Pin */
+  GPIO_InitStruct.Pin = Right_Pin|Left_Pin|Num_C3_Pin|Num_C2_Pin
+                          |Num_C1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Num_C4_Pin */
+  GPIO_InitStruct.Pin = Num_C4_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(Num_C4_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Num_R1_Pin */
+  GPIO_InitStruct.Pin = Num_R1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(Num_R1_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -589,9 +937,382 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+// Sdilena akce potvrzeni. Vola se z EXTI (tlacitko enkoderu Benc) i z klavesy '#'.
+static void Confirm_Action(void) {
+	if (_inMenu>=1) {
+		Menu_Inside_Init();
+		return;
+	}
+	if (_inMenu==-1) {                 // potvrzeni editace hodnoty -> zpet do modu
+		int lo, hi, step;
+		int *v = Edit_Binding(&lo, &hi, &step);
+		if (v) { if (*v < lo) *v = lo; if (*v > hi) *v = hi; }
+		if (rychlost < 1) rychlost = 1;               // platna rychlost i po numpadu
+		if (rychlost > maxSpeed) rychlost = maxSpeed; // po zmene Max rychlost srovnej strop
+		rychlost_last = rychlost;
+		pozice_last = pozice;
+		int was = edit_target;
+		edit_target = EDIT_NONE;
+		if (was == EDIT_STOUPANI || was == EDIT_MAXRYCH || was == EDIT_AKCEL) Settings_Save();
+		_inMenu=0;
+		enc_last = Encoder_GetSteps();   // re-sync cursor encoder so leaving edit doesn't jump
+		Inside_Draw();
+		return;
+	}
+	if (_inMenu==-2) {                 // beh motoru: Benc = STOP (Auto)
+		if (inside_cursor==1) { _inMenu=0; Inside_Draw(); }
+		return;
+	}
+	// ---- _inMenu==0 ----
+	if (selected==3) {                 // HW setup
+		switch (inside_cursor) {
+			case 0: edit_target = EDIT_STOUPANI; break;
+			case 1: edit_target = EDIT_MAXRYCH;  break;
+			case 2: edit_target = EDIT_AKCEL;    break;
+			case 3: orientace = !orientace;           Settings_Save(); Inside_Draw(); return; // +/-
+			case 4: odpojeniMotoru = !odpojeniMotoru; Settings_Save(); Inside_Draw(); return; // ANO / NE
+			default: return;
+		}
+		_inMenu=-1;                     // ciselne polozky se editaji jako rychlost/pozice
+		keypad_fresh = 1;
+		enc1_last = Encoder_GetSteps();
+		Inside_Draw();
+		return;
+	}
+	// ---- mody 0,1,2 ----
+	if (inside_cursor==0 || (inside_cursor==1 && selected!=0)) {
+		edit_target = (inside_cursor==0) ? EDIT_RYCHLOST : EDIT_POZICE;
+		_inMenu=-1;
+		keypad_fresh = 1;                // prvni cislice prepise stavajici hodnotu
+		enc1_last = Encoder_GetSteps();  // seed edit encoder so first detent = +/-1, no jump
+		Inside_Draw();
+	} else if ((inside_cursor==1 && selected==0) || (inside_cursor==3)) {
+		_inMenu=-2;                      // START
+		HAL_GPIO_WritePin(M1_GPIO_Port, M1_Pin, 1);//Clock wise rotation
+		HAL_GPIO_WritePin(M2_GPIO_Port, M2_Pin, 0);//Clock wise rotation
+		HAL_GPIO_WritePin(M3_GPIO_Port, M3_Pin, 1);//Clock wise rotation
+		HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
+		HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
+		Inside_Draw();
+	} else if (inside_cursor==2) {
+		poziceAktualni=0;               // NULOVY BOD
+		Inside_Draw();
+	}
+}
+
+// Cteni numpadu. Cislice a '*' upravuji editovanou hodnotu (jen v _inMenu==-1),
+// '#' se chova jako tlacitko enkoderu (potvrdit).
+static void Keypad_Task(void) {
+	// Neblokujici debounce pres casova razitka. Klavesa se ohlasi jednou pri
+	// stabilnim stisku (hrana nic->klavesa). Zadne blokujici cekani, takze
+	// hlavni smycka bezi dal a enkoder se stale cte.
+	static char last_stable = 0;    // posledni oddebouncovany stav (0 = nic)
+	static char candidate   = 0;    // kandidat behem debouncingu
+	static uint32_t cand_since = 0;
+
+	char raw = Keypad_ScanRaw();
+	uint32_t t = HAL_GetTick();
+
+	if (raw != candidate) {         // zmena vstupu -> restart debounce okna
+		candidate  = raw;
+		cand_since = t;
+		return;
+	}
+	if ((t - cand_since) < KEYPAD_DEBOUNCE_MS) return;  // jeste neni stabilni
+	if (candidate == last_stable) return;               // uz ohlaseno
+
+	last_stable = candidate;
+	if (candidate == 0) return;     // uvolneni klavesy -> zadna akce
+
+	char key = candidate;           // nova stisknuta klavesa (jednorazova udalost)
+
+	if (key == '#') {                 // '#' = potvrdit (jako Benc)
+		Confirm_Action();
+		return;
+	}
+
+	if (_inMenu != -1) return;        // cislice davaji smysl jen pri editaci hodnoty
+
+	int lo, hi, step;
+	int *v = Edit_Binding(&lo, &hi, &step);
+	if (!v) return;
+
+	if (key >= '0' && key <= '9') {
+		int d = key - '0';
+		int cur = keypad_fresh ? 0 : *v;
+		if (cur < 0) cur = 0;             // numpad zadava jen nezaporne
+		cur = cur*10 + d;
+		if (cur > hi) cur = hi;
+		*v = cur;
+		keypad_fresh = 0;
+		Inside_Draw();
+	} else if (key == '*') {          // '*' = smazat posledni cislici (backspace)
+		*v /= 10;
+		keypad_fresh = 0;
+		Inside_Draw();
+	}
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+
+	//CONFIRM BUTTON
+	if ( GPIO_Pin == Benc_Pin ) {
+		// Jen zaznamenat udalost + debounce; kresleni resi hlavni smycka (viz benc_event).
+		uint32_t now_ms = HAL_GetTick();
+		if (now_ms - benc_last_ms >= 150) {
+			benc_last_ms = now_ms;
+			benc_event = 1;
+		}
+	}
+}
 void delay_us_motor (uint16_t us) {
 	__HAL_TIM_SET_COUNTER(&htim4,0);
 	while (__HAL_TIM_GET_COUNTER(&htim4) < us);
+}
+
+// Keep selected visible by adjusting 'top'
+static void Menu_KeepVisible(void)
+{
+	if (selected < top) top = selected;
+	if (selected >= top + MENU_VISIBLE_LINES) top = selected - (MENU_VISIBLE_LINES - 1);
+
+	if (top < 0) top = 0;
+	if (top > MENU_COUNT - MENU_VISIBLE_LINES) top = MENU_COUNT - MENU_VISIBLE_LINES;
+	if (top < 0) top = 0;
+}
+
+static void Menu_Draw(void)
+{
+	GLCD_Buf_Clear();   // clear RAM buffer only; ST7920_Update() repaints every pixel
+
+
+	// Menu lines start at y=1 so debug fits on y=0
+	for (int line = 0; line < MENU_VISIBLE_LINES; line++) {
+		int idx = top + line;
+		if (idx >= MENU_COUNT) break;
+
+		char buf[24];
+		if (idx == selected) snprintf(buf, sizeof(buf), ">%s", menu[idx]);
+		else                 snprintf(buf, sizeof(buf), " %s", menu[idx]);
+
+		GLCD_Font_Print(0, (uint8_t)(line+idx), buf);
+	}
+
+	ST7920_Update();
+}
+
+static int Inside_CursorCount(int sel)
+{
+    switch (sel) {
+        case 0: return 2; // Rychlost, START
+        case 1: return 4; // Rychlost, NULOVY BOD (or Pozice if you prefer)
+        case 2: return 4; // Rychlost, NULOVY BOD (or Inkrement if you prefer)
+        case 3: return 5; // 4 visible setup lines (you listed 5; screen has 4 rows)
+        default: return 1;
+    }
+}
+static void Inside_Draw(void) {
+	char buf[32];
+	const char* pohybChar;
+
+
+	GLCD_Buf_Clear();   // clear RAM buffer only; ST7920_Update() repaints every pixel
+
+	if (smer_pohybu==1) {
+		pohybChar="Prava";
+	} else if (smer_pohybu==0) {
+		pohybChar="Leva";
+	} else {
+		pohybChar="Stop";
+	}
+	switch (selected)
+	{
+		/* ===================== 0: AUTO POSUV ===================== */
+		case 0:
+			snprintf(buf, sizeof(buf), "Tempo: %02d mm/s", rychlost);
+			PrintLineSel(1, buf, (inside_cursor == 0));
+
+			snprintf(buf, sizeof(buf), "Smer:%s", pohybChar);
+			PrintLineSel(2, buf, 0);
+
+			// Big visual separation
+			if (_inMenu!=-2) {
+				PrintLineSel(7, "         START", (inside_cursor == 1));
+			} else {
+				PrintLineSel(7, "          STOP", (inside_cursor == 1));
+			}
+			break;
+
+		/* ===================== 1: ABSOLUTNI ===================== */
+		case 1:
+			snprintf(buf, sizeof(buf), "Tempo: %02d mm/s", rychlost);
+			PrintLineSel(1, buf, (inside_cursor == 0));
+
+			if ((pozice-poziceAktualni)>0) {
+				snprintf(buf, sizeof(buf), "Smer:%s", "Prava");
+			} else if ((pozice-poziceAktualni)<0) {
+				snprintf(buf, sizeof(buf), "Smer:%s", "Leva");
+			} else {
+				snprintf(buf, sizeof(buf), "Smer:%s", "Stop");
+			}
+			PrintLineSel(2, buf, 0);
+
+
+			snprintf(buf, sizeof(buf), "Pozice: %02d mm", pozice);
+			PrintLineSel(4, buf, (inside_cursor == 1));
+
+			PrintLineSel(6, "    NULOVY BOD", (inside_cursor == 2));
+
+			if (_inMenu!=-2) {
+				PrintLineSel(7, "         START", (inside_cursor == 3));
+			} else {
+				PrintLineSel(7, "         CEKEJ", (inside_cursor == 3));
+			}
+			break;
+
+		/* ===================== 2: INKREMENTALNI ===================== */
+		case 2:
+			snprintf(buf, sizeof(buf), "Tempo: %02d mm/s", rychlost);
+			PrintLineSel(1, buf, (inside_cursor == 0));
+
+			if (pozice>0) {
+				snprintf(buf, sizeof(buf), "Smer:%s", "Prava");
+			} else if (pozice<0) {
+				snprintf(buf, sizeof(buf), "Smer:%s", "Leva");
+			} else {
+				snprintf(buf, sizeof(buf), "Smer:%s", "Stop");
+			}
+			PrintLineSel(2, buf, 0);
+
+
+			snprintf(buf, sizeof(buf), "Inkre: %02d mm", pozice);
+			PrintLineSel(4, buf, (inside_cursor == 1));
+
+			PrintLineSel(6, "    NULOVY BOD", (inside_cursor == 2));
+
+			if (_inMenu!=-2) {
+				PrintLineSel(7, "         START", (inside_cursor == 3));
+			} else {
+				PrintLineSel(7, "         CEKEJ", (inside_cursor == 3));
+			}
+
+			break;
+
+		/* ===================== 3: HW SETUP ===================== */
+		case 3:
+			snprintf(buf, sizeof(buf), "Stoup:%d.%03dmm", stoupaniUm/1000, stoupaniUm%1000);
+			PrintLineSel(1, buf, (inside_cursor == 0));
+			snprintf(buf, sizeof(buf), "MaxR: %d mm/s", maxSpeed);
+			PrintLineSel(2, buf, (inside_cursor == 1));
+			snprintf(buf, sizeof(buf), "Akcel:%dmm/s2", akcelerace);
+			PrintLineSel(3, buf, (inside_cursor == 2));
+			snprintf(buf, sizeof(buf), "Orient: %c", orientace ? '+' : '-');
+			PrintLineSel(4, buf, (inside_cursor == 3));
+			snprintf(buf, sizeof(buf), "Odpoj mot: %s", odpojeniMotoru ? "ANO" : "NE");
+			PrintLineSel(5, buf, (inside_cursor == 4));
+			break;
+
+		default:
+			GLCD_Font_Print(0, 0, "Neznamy stav");
+			break;
+	}
+
+	ST7920_Update();
+}
+
+// Call once at startup (after TIM2 is configured/running)
+void Menu_Init(void)
+{
+    enc_last = Encoder_GetSteps();
+    selected = 0;
+    top = 0;
+    _inMenu = 1;
+    Menu_Draw();
+}
+// Call once at startup (after TIM2 is configured/running)
+void Menu_Inside_Init(void)
+{
+    enc_last = Encoder_GetSteps();
+    inside_cursor=0;
+    _inMenu=0;
+    Inside_Draw();
+}
+
+// Call this repeatedly in main loop (or from a 10–50 ms timer tick)
+void Menu_Task(void)
+{
+    int16_t enc_now = Encoder_GetSteps();
+    int16_t delta = enc_now - enc_last;
+    if (delta >  ENC_HALF_RANGE) delta -= ENC_STEPS_RANGE; // wrapped forward
+	if (delta < -ENC_HALF_RANGE) delta += ENC_STEPS_RANGE; // wrapped backward
+
+    if (delta != 0 || _inMenu==2) {
+        _inMenu = 1;
+
+        if (delta != 0) {
+            // Update last immediately so we don't “repeat” the same movement
+            enc_last = enc_now;
+
+            // Move selection. If your encoder direction feels reversed, swap +/-
+            if (delta > 0) selected++;
+            else           selected--;
+
+            // Wrap around
+            if (selected < 0) selected = MENU_COUNT - 1;
+            if (selected >= MENU_COUNT) selected = 0;
+
+            Menu_KeepVisible();
+        }
+
+        Menu_Draw();
+    }
+}
+void Menu_Inside(void) {
+	uint16_t enc_now = Encoder_GetSteps();
+	int16_t delta = enc_now - enc_last;
+	if (delta >  ENC_HALF_RANGE) delta -= ENC_STEPS_RANGE; // wrapped forward
+	if (delta < -ENC_HALF_RANGE) delta += ENC_STEPS_RANGE; // wrapped backward
+
+	if (delta != 0) {
+		enc_last = enc_now;
+
+		// move cursor by 1 per movement (stable, no crazy jumps)
+		if (delta > 0) inside_cursor++;
+		else       inside_cursor--;
+
+		int cnt = Inside_CursorCount(selected);
+		if (inside_cursor < 0) inside_cursor = cnt - 1;
+		if (inside_cursor >= cnt) inside_cursor = 0;
+
+		Inside_Draw(); // redraw only when encoder moved
+	}
+}
+// Neblokujici sken klavesnice: vrati prvni prave stisknutou klavesu, nebo 0.
+// ZADNE HAL_Delay a ZADNE cekani na uvolneni - to drive zamrzalo hlavni smycku
+// (a scrollovani enkoderem). Debounce a detekci hrany resi Keypad_Task().
+static char Keypad_ScanRaw(void)
+{
+    for (int r = 0; r < 4; r++)
+    {
+        /* Set all rows HIGH */
+        for (int i = 0; i < 4; i++)
+            HAL_GPIO_WritePin(rowPorts[i], rowPins[i], GPIO_PIN_SET);
+
+        /* Pull current row LOW */
+        HAL_GPIO_WritePin(rowPorts[r], rowPins[r], GPIO_PIN_RESET);
+
+        /* Kratke ustaleni radku (radove us) - kratke busy-wait, ne HAL_Delay. */
+        for (volatile int s = 0; s < 200; s++) { __NOP(); }
+
+        /* Read columns (active LOW because pull-ups) */
+        for (int c = 0; c < 4; c++)
+        {
+            if (HAL_GPIO_ReadPin(colPorts[c], colPins[c]) == GPIO_PIN_RESET)
+                return keymap[r][c];
+        }
+    }
+
+    return 0;
 }
 /* USER CODE END 4 */
 

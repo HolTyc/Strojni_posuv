@@ -247,7 +247,19 @@ void HAL_TIM_Encoder_MspInit(TIM_HandleTypeDef* htim_encoder)
     __HAL_AFIO_REMAP_TIM2_PARTIAL_1();
 
     /* USER CODE BEGIN TIM2_MspInit 1 */
+    /* Re-enable internal pull-ups on the encoder inputs. A bare EC11-type
+     * encoder switches CLK/DT to GND and has no on-board pull-ups, so with the
+     * NOPULL config above the lines float and TIM2 never counts. Harmless if
+     * the encoder module already provides its own pull-ups. */
+    GPIO_InitStruct.Pin  = ENC_CLK_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    HAL_GPIO_Init(ENC_CLK_GPIO_Port, &GPIO_InitStruct);
 
+    GPIO_InitStruct.Pin  = ENC_DT_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    HAL_GPIO_Init(ENC_DT_GPIO_Port, &GPIO_InitStruct);
     /* USER CODE END TIM2_MspInit 1 */
 
   }
