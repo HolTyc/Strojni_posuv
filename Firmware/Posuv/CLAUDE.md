@@ -18,7 +18,7 @@ Guidance for working in this firmware. It controls a **universal electric machin
   - `Benc` — encoder push-button = **Confirm / "A"** (EXTI). Enters menus, confirms edits, starts motion.
   - `Left` / `Right` — two throws of an **ON-OFF-ON** switch selecting motor **direction**.
   - `Bleft_fast` / `Bright_fast` — two throws of an **(ON)-OFF-(ON)** momentary switch for **fast jog** (EXTI-configured, also polled in the main loop).
-  - `Bleft_max` / `Bright_max` — **limit switches** (configured; not yet acted upon in code).
+  - `Bleft_max` / `Bright_max` — **limit switches**, interrupt-driven (EXTI3/4, both edges; CubeMX has them rising-only without NVIC, so USER CODE 2 re-inits the pins and enables the IRQs, and the handlers live in `stm32f1xx_it.c` USER CODE 1). The ISR maintains `volatile limit_stop` from the pin levels and on press immediately drops `Enable`/`Reset` to de-energise the driver. Either switch stops **all** movement in **both** directions: Auto run ends, positional moves abort mid-move with `poziceAktualni` recomputed from steps actually done (`MmForSteps()`), jog loops exit — all via `LimitHit()`, which only reads the flag.
 
 ## Build
 
@@ -28,7 +28,7 @@ STM32CubeIDE project. The `Debug/` directory holds generated build artifacts (`.
 
 - `Core/Src/main.c` — **all application logic**: state machine, menu/UI, motion, encoder, keypad, peripheral init.
 - `Core/Inc/main.h` — pin name `#define`s (generated from the .ioc).
-- `Core/Src/stm32f1xx_it.c` — interrupt handlers. `EXTI1` → `Benc`; `EXTI9_5` → `Bleft_fast`/`Bright_fast`. All dispatch into `HAL_GPIO_EXTI_Callback()` in `main.c`.
+- `Core/Src/stm32f1xx_it.c` — interrupt handlers. `EXTI1` → `Benc`; `EXTI3`/`EXTI4` → `Bleft_max`/`Bright_max` (hand-written in USER CODE 1 — CubeMX doesn't know these IRQs are enabled); `EXTI9_5` → `Bleft_fast`/`Bright_fast`. All dispatch into `HAL_GPIO_EXTI_Callback()` in `main.c`.
 - `Core/Src/ST7920_SERIAL.c` / `.h` — GLCD driver + graphics primitives.
 - `Core/Inc/font.h` — 8×8 bitmap font.
 
@@ -53,9 +53,9 @@ Everything runs from a single `while(1)` superloop in `main()`, branching on the
 1. **Absolutni** — move to an absolute `pozice` (mm), tracked against `poziceAktualni`.
 2. **Inkrementalni** — move by a relative increment `pozice` (mm).
 3. **HW setup** — five settings, **persisted to flash** (`Settings_Load()`/`Settings_Save()`, last 1 KB page `0x0801FC00`, magic + checksum; saved on each confirmed change):
-   - **Stoupani** — leadscrew pitch, stored as `stoupaniUm` (thousandths of mm, 0.001 mm step). Editable; **not yet wired into steps/mm** (calibration TODO).
+   - **Stoupani** — leadscrew pitch, stored as `stoupaniUm` (thousandths of mm, 0.001 mm step). **Wired into distance**: `StepsForMm(mm)` computes STEP pulses as `mm × MOTOR_STEPS_PER_REV (200) × MICROSTEP (8) × 1000 / stoupaniUm` (rounded, 64-bit); Absolutni/Inkrementalni moves use it. `MICROSTEP` must match the M1/M2/M3 levels set at motion start in `Confirm_Action()` (1,0,1 = 1/8 step on the TB6600HG).
    - **Max rychlost** — user cap on `rychlost`, stored in `maxSpeed`, clamped to `MAXSPEED_HARD_CAP` (70). Wired: `rychlost` can't exceed it.
-   - **Akcelerace** — `akcelerace` (mm/s²). Editable/stored; **ramp not yet applied** to motion (TODO, needs the calibrated speed model).
+   - **Akcelerace** — `akcelerace` (mm/s²). **Applied**: accel/decel ramp for positional moves and ramp-up for Auto feed (see Motion / step timing).
    - **Orientace** — `orientace` toggle (`1` = "+ doprava", `0` = "+ doleva"); inverts every physical DIR write via `DirApply()`.
    - **Odpojeni motoru** — `odpojeniMotoru` toggle (ANO/NE); ANO de-energises the motor when idle, NE keeps holding torque.
 
@@ -64,14 +64,16 @@ Everything runs from a single `while(1)` superloop in `main()`, branching on the
 - `rychlost` — feed rate (labeled mm/s; clamped `1..maxSpeed`).
 - `pozice` / `poziceAktualni` — target / current position (labeled mm).
 - `smer_pohybu` — direction: `1` = Prava (right), `0` = Leva (left), `-1` = Stop.
-- `maxSpeed` (=70), `speed` — see motion timing below. `maxSpeed` doubles as the "Max rychlost" cap.
+- `maxSpeed` (=70) — the "Max rychlost" cap [mm/s]; see motion timing below.
 - HW-setup values: `stoupaniUm` (pitch, µm), `akcelerace` (mm/s²), `orientace` (0/1), `odpojeniMotoru` (0/1). `edit_target` selects what `_inMenu==-1` edits.
 
 ### Motion / step timing
 
-Steps are bit-banged: set `STEP` high, `delay_us_motor(speed)`, low, `delay_us_motor(speed)`. `delay_us_motor()` busy-waits on **TIM4** (1 µs tick, prescaler 64-1 at 32 MHz → ~0.5 MHz; treat the unit as "timer ticks", empirically tuned).
+Steps are bit-banged: set `STEP` high, `delay_us_motor(speed)`, low, `delay_us_motor(speed)`. `delay_us_motor()` busy-waits on **TIM4**; despite the name its unit is a **2 µs tick** (TIM4 kernel clock 32 MHz — APB1 16 MHz ×2 — / prescaler 64 = 0.5 MHz, `MOTOR_TICKS_PER_S`).
 
-The per-pulse delay is `speed = SPEED_BASE - rychlost*SPEED_SLOPE` (`SPEED_BASE`=4200, `SPEED_SLOPE`=56), i.e. **higher `rychlost` → shorter delay → faster**. The jog uses a fixed `JOG_SPEED` (490). These are **empirically tuned magic numbers** (formerly `maxSpeed*60`/`*56`/`maxSpeed*7` when `maxSpeed` was hardcoded 70), now decoupled from the user-adjustable `maxSpeed` so changing "Max rychlost" doesn't invert the real speed. (Intent: replace this inverse mapping with a normal, calibrated speed model.)
+The half-period is **calibrated**: `StepHalfTicks(rychlost)` = `MOTOR_TICKS_PER_S / (2 × rychlost × steps/mm)`, with steps/mm from Stoupani + microstepping (same basis as `StepsForMm()`), so `rychlost` is real mm/s (within tick rounding). The step rate is capped at `STEP_RATE_MAX` (8 kHz ≈ 4 rev/s at 1/8 step; tune on hardware). `MaxRychlostMms()` converts that cap to mm/s for the current pitch and bounds `rychlost` editing (together with `maxSpeed`) and re-clamps `rychlost` when Stoupani changes. The jog still uses a fixed, empirical `JOG_SPEED` (490 ticks) — and note jog runs with the **idle** M1/M2/M3 setting (full step), not the motion 1/8 setting, and has no ramp.
+
+**Acceleration ramp**: positional moves go through `MotorMove(kroky)` — a trapezoidal profile at `akcelerace` mm/s²: after n ramp steps the rate is √(2·a·n) steps/s (`RampHalfTicks()`, integer sqrt per ramp step, no per-step cost while cruising); deceleration mirrors it over the last `n_rozjezd` steps, and short moves switch to deceleration at the midpoint (triangular profile). Auto feed ramps up across superloop iterations (`auto_ramp_n`/`auto_ramp_smer`, reset on direction change, center-off, or leaving the run state) but **stops abruptly** — Stop/Back and the finite-move endpoint are as before; only the finite moves decelerate.
 
 ### Display coordinates
 
@@ -85,10 +87,11 @@ The per-pulse delay is `speed = SPEED_BASE - rychlost*SPEED_SLOPE` (`SPEED_BASE`
 
 ## Known TODOs / gotchas
 
-- **mm units are not calibrated.** `rychlost`/`pozice` are labeled mm·s⁻¹/mm but motion uses raw step counts and tuned constants. Per-machine calibration (steps/mm, leadscrew pitch) is a planned device-side setup feature.
-- **HW setup is partially wired.** Max rychlost, Orientace, Odpojeni motoru take effect immediately. Stoupani and Akcelerace are editable and stored but **not yet applied** to motion (need the calibrated speed/steps-per-mm model). All five are **persisted to flash** (last 1 KB page, `0x0801FC00`); this page is assumed free (program is ~22 KB) — if the firmware ever grows past ~127 KB, reserve it in the linker script.
+- **HW setup is fully wired.** Stoupani (steps/mm + speed model), Max rychlost, Akcelerace (ramp), Orientace, Odpojeni motoru all take effect. `STEP_RATE_MAX` (8 kHz) is an estimate — verify the motor doesn't stall at top speed under load and tune it.
+- **Auto feed has no deceleration** — the ramp only accelerates; Stop/Back and direction-switch-to-center cut steps instantly (as the firmware always did). Fine for a feed drive, but worth knowing.
+- **mm/s ↔ real speed accuracy** relies on `MOTOR_STEPS_PER_REV` (200) and `MICROSTEP` (8) matching the physical motor and the M1/M2/M3 levels; verify on hardware (measure a 100 mm move) before trusting the units. All five are **persisted to flash** (last 1 KB page, `0x0801FC00`); this page is assumed free (program is ~22 KB) — if the firmware ever grows past ~127 KB, reserve it in the linker script.
 - **Microstepping (`M1`/`M2`/`M3`) is hardcoded**, should become adjustable in the HW-setup menu.
-- **Limit switches `Bleft_max`/`Bright_max` are not handled** — wired and GPIO-configured but no end-stop logic.
+- **Limit stop blocks both directions** — a pressed limit switch stops and prevents *every* movement (per design), including moving *away* from the switch; back off the limit with the manual handwheel. Aborted positional moves stop without a deceleration ramp (intentional — it's an end stop).
 - **Keypad** — `Keypad_Task()` feeds digits/`*`/`#` into value editing (`_inMenu==-1`) for whatever `edit_target` points at, incl. HW-setup values. Note: for Stoupani the keypad enters raw thousandths of a mm (type `2000` → 2.000 mm), since there is no decimal-point key.
 - **RGB LED has no defined meaning yet** — current color writes are experimental.
 - **ADC1/ADC2 are dead code.** Initialized (`MX_ADC1_Init`/`MX_ADC2_Init`, `hadc1`/`hadc2`, channels 0/1) but never sampled, and **not even connected on the PCB** — safe to remove.

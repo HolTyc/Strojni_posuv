@@ -150,12 +150,11 @@ int smer_pohybu = 1;   // 1 = Pravo, 0 = Levo, -1 = stop
 
 uint32_t adcValue1;
 uint32_t adcValue2;
-uint16_t speed = 500;
 int maxSpeed = 70;   // "Max rychlost": uzivatelsky strop 'rychlost' (<= MAXSPEED_HARD_CAP)
-// Kolik STEP pulzu odpovida 1 mm posuvu. Urcuje vzdalenost (ne rychlost).
-// Neni fyzicky kalibrovano - naladeno tak, aby pri rychlost=1 platilo ~1 mm/s.
-// TODO: nahradit skutecnou kalibraci (kroky/mm ze stoupani sroubu + mikrokrokovani).
-const int STEPS_PER_MM = 60;
+// Kalibrace vzdalenosti: kroky/mm = kroky motoru na otacku * mikrokrokovani
+// / stoupani sroubu (stoupaniUm, HW setup). Viz StepsForMm() nize.
+#define MOTOR_STEPS_PER_REV  200   // krokovy motor 1.8 stupne
+#define MICROSTEP            8     // TB6600: M1=1,M2=0,M3=1 pri behu (Confirm_Action) = 1/8 krok
 const int POZICE_MAX = 999;   // horni mez pro zadani pozice z klavesnice (mm)
 static int keypad_fresh = 0;  // 1 = prvni cislice zacne nove cislo (prepise stavajici)
 // Tlacitko enkoderu (Benc) jen nastavi tento priznak v ISR; kresleni displeje
@@ -163,28 +162,159 @@ static int keypad_fresh = 0;  // 1 = prvni cislice zacne nove cislo (prepise sta
 // ST7920 (jinak se displej rozsype - nahodne pixely/znaky).
 static volatile uint8_t benc_event = 0;
 static volatile uint32_t benc_last_ms = 0;  // softwarovy debounce
+// Stav koncovych spinacu, udrzovany prerusenim EXTI3/4 (obe hrany, viz
+// HAL_GPIO_EXTI_Callback). 1 = nektery spinac sepnut -> zadny pohyb.
+static volatile uint8_t limit_stop = 0;
 char message[100] = "Hello World!";
 uint32_t last_print = 0, now = 0;
 int pos = 0;
 const uint8_t ICON_Flag[8]			={0x00,0x80,0xff,0x8e,0x0e,0x1c,0x18,0x10};
 // ---- HW setup: konstanty ----
-// Pulzni zpozdeni (ticky TIM4): vetsi rychlost -> kratsi zpozdeni.
-// Drive: speed = maxSpeed*60 - rychlost*56 (maxSpeed byl pevne 70).
-// Oddeleno od Max rychlost, aby zmena stropu neprevracela realnou rychlost.
-#define SPEED_BASE         4200   // = 70*60 (zachovava puvodni chovani)
-#define SPEED_SLOPE        56
-#define JOG_SPEED          490    // = 70*7 (rychly jog, pevny bezpecny krok)
-#define MAXSPEED_HARD_CAP  70     // tovarni strop Max rychlost (motor to bezpecne zvladne)
+// Kalibrovany model rychlosti: TIM4 bezi na 32 MHz (APB1 16 MHz x2) / 64
+// = 0.5 MHz, takze 1 tick delay_us_motor() = 2 us.
+#define MOTOR_TICKS_PER_S  500000
+// Strop krokove frekvence: 8 kHz pri 1/8 kroku = 4 ot/s. Rozjezd/dojezd
+// resi akceleracni rampa (MotorMove/RampHalfTicks), limitem je tocivy moment
+// motoru a rezie bit-bang smycky (polperioda 8 kHz = 32 ticku = 64 us).
+// Po overeni na stroji lze doladit.
+#define STEP_RATE_MAX      8000
+#define STEP_HALF_MIN_TICKS ((MOTOR_TICKS_PER_S + 2*STEP_RATE_MAX - 1) / (2*STEP_RATE_MAX))
+#define JOG_SPEED          490    // rychly jog: pevna polperioda (ticky), bezpecny krok
+#define MAXSPEED_HARD_CAP  70     // tovarni strop Max rychlost [mm/s]
 #define STOUPANI_MIN       1      // 0.001 mm
 #define STOUPANI_MAX       99999  // 99.999 mm
 #define AKCEL_MIN          1      // mm/s^2
 #define AKCEL_MAX          999    // mm/s^2
 
-// ---- HW setup: hodnoty (RAM, neuklada se do flash) ----
+// ---- HW setup: hodnoty (perzistentni, viz Settings_Load/Save) ----
 int stoupaniUm = 2000;    // Stoupani zavitu v tisicinach mm (krok 0.001 mm) - kalibrace
-int akcelerace = 50;      // Akcelerace/decelerace [mm/s^2] (zatim jen ulozeno; rampa TODO)
+int akcelerace = 50;      // Akcelerace/decelerace rampy [mm/s^2] (viz MotorMove)
 int orientace = 1;        // 1 = + doprava (vychozi), 0 = + doleva (fyzicky DIR invertovan)
 int odpojeniMotoru = 1;   // 1 = ANO (v klidu uvolnit), 0 = NE (drzet moment)
+
+// Pocet STEP pulzu pro posuv o 'mm' milimetru, ze stoupani sroubu a
+// mikrokrokovani (zaokrouhleno na nejblizsi krok). 64bit kvuli krajnim
+// hodnotam (stoupani az 0.001 mm, pozice az 999 mm by preteklo int).
+static int64_t StepsForMm(int mm)
+{
+	int64_t num = (int64_t)mm * MOTOR_STEPS_PER_REV * MICROSTEP * 1000;
+	return (num + stoupaniUm/2) / stoupaniUm;
+}
+
+// Zpetny prevod: kolik mm (zaokrouhlene) odpovida 'kroky' STEP pulzum.
+// Pro dopocet skutecne pozice po pohybu prerusenem koncovym spinacem.
+static int MmForSteps(int64_t kroky)
+{
+	int64_t den = (int64_t)MOTOR_STEPS_PER_REV * MICROSTEP * 1000;
+	return (int)((kroky * stoupaniUm + den/2) / den);
+}
+
+// Polperioda STEP pulzu (ticky TIM4, 2 us) pro rychlost v mm/s pri aktualnim
+// stoupani: f [kroku/s] = v * kroky/mm; polperioda = (ticky/s) / (2*f).
+// Spodni mez STEP_HALF_MIN_TICKS drzi krokovou frekvenci pod STEP_RATE_MAX.
+static uint16_t StepHalfTicks(int v_mms)
+{
+	if (v_mms < 1) v_mms = 1;
+	int64_t half = (int64_t)MOTOR_TICKS_PER_S * stoupaniUm
+	             / ((int64_t)2 * v_mms * MOTOR_STEPS_PER_REV * MICROSTEP * 1000);
+	if (half < STEP_HALF_MIN_TICKS) half = STEP_HALF_MIN_TICKS;
+	if (half > 65535) half = 65535;
+	return (uint16_t)half;
+}
+
+// Nejvyssi dosazitelna rychlost [mm/s] pri aktualnim stoupani (dana stropem
+// krokove frekvence STEP_RATE_MAX). Minimalne 1, aby slo vzdy neco zvolit.
+static int MaxRychlostMms(void)
+{
+	int64_t v = (int64_t)STEP_RATE_MAX * stoupaniUm
+	          / ((int64_t)MOTOR_STEPS_PER_REV * MICROSTEP * 1000);
+	if (v < 1) v = 1;
+	if (v > MAXSPEED_HARD_CAP) v = MAXSPEED_HARD_CAP;
+	return (int)v;
+}
+
+// Koncove spinace: 1 = nektery je sepnuty -> zastavit kazdy pohyb (Auto,
+// pozicni, jog) v obou smerech. Stav plni preruseni (EXTI3/4), tady se jen
+// cte priznak - pohybove smycky nesahaji na GPIO.
+static inline uint8_t LimitHit(void)
+{
+	return limit_stop;
+}
+
+// ---- Akceleracni rampa ----
+// Celociselna odmocnina (pro vypocet rychlosti rampy).
+static uint32_t Isqrt64(uint64_t x)
+{
+	uint64_t r = 0, bit = 1ULL << 62;
+	while (bit > x) bit >>= 2;
+	while (bit) {
+		if (x >= r + bit) { x -= r + bit; r = (r >> 1) + bit; }
+		else r >>= 1;
+		bit >>= 2;
+	}
+	return (uint32_t)r;
+}
+
+// Dvojnasobek akcelerace v krocich/s^2 (z 'akcelerace' [mm/s^2] a stoupani).
+static int64_t RampA2(void)
+{
+	int64_t a2 = ((int64_t)2 * akcelerace * MOTOR_STEPS_PER_REV * MICROSTEP * 1000
+	             + stoupaniUm/2) / stoupaniUm;
+	return (a2 < 1) ? 1 : a2;
+}
+
+// Polperioda n-teho kroku rozjezdu z klidu (n = 1, 2, ...): po n krocich je
+// rychlost v_n = sqrt(2*a*n) [kroku/s] (konstantni akcelerace po draze).
+// Nikdy nevrati mene nez cilovou polperiodu 'half_cil' (strop rychlosti).
+static uint16_t RampHalfTicks(int64_t a2, int64_t n, uint16_t half_cil)
+{
+	uint32_t f = Isqrt64((uint64_t)a2 * (uint64_t)n);
+	if (f < 1) f = 1;
+	uint32_t half = MOTOR_TICKS_PER_S / (2*f);
+	if (half < half_cil) half = half_cil;
+	if (half > 65535) half = 65535;
+	return (uint16_t)half;
+}
+
+// Provede 'kroky' STEP pulzu s lichobeznikovou rampou: rozjezd z klidu na
+// 'rychlost' (akcelerace [mm/s^2]), konstantni jizda, dojezd zpet do klidu.
+// Kratke pohyby prejdou na trojuhelnikovy profil (dojezd zacne v polovine,
+// jakmile zbyva prave tolik kroku, kolik jich rozjezd spotreboval).
+// Blokujici (jako drive) - UI bezi az po dokonceni pohybu.
+// Vraci pocet skutecne provedenych kroku: mene nez 'kroky', pokud pohyb
+// zastavil koncovy spinac.
+static int64_t MotorMove(int64_t kroky)
+{
+	uint16_t half_cil = StepHalfTicks(rychlost);
+	int64_t a2 = RampA2();
+	int64_t n_rozjezd = 0;   // kroku spotrebovanych rozjezdem (= delka dojezdu)
+	uint8_t plna = 0;        // 1 = cilova rychlost dosazena, jede se konstantne
+
+	for (int64_t i = 0; i < kroky; i++) {
+		if (LimitHit()) return i;    // koncovy spinac: okamzite zastavit
+		uint16_t half;
+		int64_t zbyva = kroky - i;
+		if (zbyva <= n_rozjezd) {
+			half = RampHalfTicks(a2, zbyva, half_cil);   // dojezd (zrcadlo rozjezdu)
+		} else if (!plna) {
+			n_rozjezd++;
+			half = RampHalfTicks(a2, n_rozjezd, half_cil);
+			if (half <= half_cil) plna = 1;
+		} else {
+			half = half_cil;
+		}
+		HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
+		delay_us_motor(half);
+		HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+		delay_us_motor(half);
+	}
+	return kroky;
+}
+
+// Rozjezd Auto posuvu: rampa bezi pres iterace hlavni smycky.
+// auto_ramp_n = poradi kroku rampy; -1 = cilova rychlost dosazena.
+static int64_t auto_ramp_n = 0;
+static int auto_ramp_smer = -1;   // smer, pro ktery rozjezd probehl
 
 // Co se prave edituje v _inMenu==-1 (viz Edit_Binding()).
 enum { EDIT_NONE = 0, EDIT_RYCHLOST, EDIT_POZICE, EDIT_STOUPANI, EDIT_MAXRYCH, EDIT_AKCEL };
@@ -194,7 +324,9 @@ int edit_target = EDIT_NONE;
 static int *Edit_Binding(int *lo, int *hi, int *step)
 {
 	switch (edit_target) {
-		case EDIT_RYCHLOST: *lo = 1;            *hi = maxSpeed;          *step = 1; return &rychlost;
+		case EDIT_RYCHLOST: { int cap = MaxRychlostMms();
+		                    *lo = 1; *hi = (maxSpeed < cap) ? maxSpeed : cap;
+		                    *step = 1; return &rychlost; }
 		case EDIT_POZICE:   *lo = -POZICE_MAX;  *hi = POZICE_MAX;        *step = 1; return &pozice;
 		case EDIT_STOUPANI: *lo = STOUPANI_MIN; *hi = STOUPANI_MAX;      *step = 1; return &stoupaniUm;
 		case EDIT_MAXRYCH:  *lo = 1;            *hi = MAXSPEED_HARD_CAP; *step = 1; return &maxSpeed;
@@ -362,6 +494,23 @@ int main(void)
       HAL_GPIO_Init(colPorts[c], &kp);
     }
   }
+
+  // Koncove spinace: CubeMX je ma jen na nabeznou hranu a bez NVIC.
+  // Prepneme na obe hrany (sepnuti i uvolneni) a povolime EXTI3/4 - stav
+  // 'limit_stop' pak udrzuje vyhradne HAL_GPIO_EXTI_Callback, bez pollingu.
+  {
+    GPIO_InitTypeDef lim = {0};
+    lim.Mode  = GPIO_MODE_IT_RISING_FALLING;
+    lim.Pull  = GPIO_NOPULL;
+    lim.Pin = Bleft_max_Pin;  HAL_GPIO_Init(Bleft_max_GPIO_Port, &lim);
+    lim.Pin = Bright_max_Pin; HAL_GPIO_Init(Bright_max_GPIO_Port, &lim);
+  }
+  limit_stop = HAL_GPIO_ReadPin(Bleft_max_GPIO_Port, Bleft_max_Pin)
+            || HAL_GPIO_ReadPin(Bright_max_GPIO_Port, Bright_max_Pin);  // vychozi stav
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+  HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_IRQn);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -415,36 +564,57 @@ int main(void)
 		  Menu_Inside();
 		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
 
+		  // Prepnuti smeru do stredu (stop) -> pristi rozbeh zase s rampou.
+		  if (selected==0 && smer_pohybu<0) {
+			  auto_ramp_smer = -1;
+			  auto_ramp_n = 0;
+		  }
+
 		  if (smer_pohybu>=0 && selected==0) {
-			  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(smer_pohybu));
-			  speed = SPEED_BASE-(rychlost*SPEED_SLOPE);
-			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
-			  delay_us_motor(speed);  // Very short pulse
-			  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
-			  delay_us_motor(speed);
+			  if (LimitHit()) {
+				  _inMenu=0;                                // koncovy spinac: ukoncit beh
+				  Inside_Draw();
+			  } else {
+				  // Zmena smeru (nebo prvni krok po startu/stopu) -> rozjezd znovu.
+				  if (smer_pohybu != auto_ramp_smer) {
+					  auto_ramp_smer = smer_pohybu;
+					  auto_ramp_n = 0;
+				  }
+				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(smer_pohybu));
+				  uint16_t half = StepHalfTicks(rychlost);
+				  if (auto_ramp_n >= 0) {                   // jeste se rozjizdi
+					  auto_ramp_n++;
+					  uint16_t rh = RampHalfTicks(RampA2(), auto_ramp_n, half);
+					  if (rh <= half) auto_ramp_n = -1;     // cil dosazen
+					  else half = rh;
+				  }
+				  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
+				  delay_us_motor(half);  // Very short pulse
+				  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
+				  delay_us_motor(half);
+			  }
 		  } else if (selected==1) {
 
-			  poziceAktualni = pozice-poziceAktualni;
-			  speed = SPEED_BASE-(rychlost*SPEED_SLOPE);
+			  int delta = pozice-poziceAktualni;   // mm se znamenkem
 
-			  if (poziceAktualni>=0) {
+			  if (delta>=0) {
 				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(1));
-			  } else if (poziceAktualni<0) {
+			  } else {
 				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(0));
 			  }
 
-			  for (int i = 0; i < abs(poziceAktualni)*STEPS_PER_MM; i++) {
-				  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
-				  delay_us_motor(speed);  // Very short pulse
-				  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
-				  delay_us_motor(speed);
+			  int64_t kroky = StepsForMm(abs(delta));
+			  int64_t hotovo = MotorMove(kroky);
+			  if (hotovo == kroky) {
+				  poziceAktualni = pozice;
+			  } else {
+				  // Koncovy spinac: dopocitej, kam se skutecne dojelo.
+				  int mm = MmForSteps(hotovo);
+				  poziceAktualni += (delta >= 0) ? mm : -mm;
 			  }
-			  poziceAktualni = pozice;
 			  _inMenu=0;
 			  Inside_Draw();
 		  } else if (selected==2) {
-
-			  speed = SPEED_BASE-(rychlost*SPEED_SLOPE);
 
 			  if (pozice>=0) {
 				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(1));
@@ -452,20 +622,14 @@ int main(void)
 				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(0));
 			  }
 
-			  for (int i = 0; i < abs(pozice)*STEPS_PER_MM; i++) {
-				  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
-				  delay_us_motor(speed);  // Very short pulse
-				  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
-				  delay_us_motor(speed);
-			  }
-
+			  MotorMove(StepsForMm(abs(pozice)));
 			  _inMenu=0;
 			  Inside_Draw();
 		  }
 	  }
 
 
-	  while (HAL_GPIO_ReadPin(Bright_fast_GPIO_Port, Bright_fast_Pin)) {
+	  while (HAL_GPIO_ReadPin(Bright_fast_GPIO_Port, Bright_fast_Pin) && !LimitHit()) {
 		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
 		  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(0));//Anti clock wise rotation
 		  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
@@ -476,7 +640,7 @@ int main(void)
 		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
 		  delay_us_motor(JOG_SPEED);
 	  }
-	  while (HAL_GPIO_ReadPin(Bleft_fast_GPIO_Port, Bleft_fast_Pin)) {
+	  while (HAL_GPIO_ReadPin(Bleft_fast_GPIO_Port, Bleft_fast_Pin) && !LimitHit()) {
 		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
 		  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(1));//Anti clock wise rotation
 		  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
@@ -488,6 +652,8 @@ int main(void)
 		  delay_us_motor(JOG_SPEED);
 	  }
 	  if (_inMenu!=-2) {
+		  auto_ramp_smer = -1;   // mimo beh: pristi Auto start zacne rampou
+		  auto_ramp_n = 0;
 		  HAL_GPIO_WritePin(M1_GPIO_Port, M1_Pin, 1);//Clock wise rotation
 		  HAL_GPIO_WritePin(M2_GPIO_Port, M2_Pin, 0);//Clock wise rotation
 		  HAL_GPIO_WritePin(M3_GPIO_Port, M3_Pin, 0);//Clock wise rotation
@@ -949,6 +1115,8 @@ static void Confirm_Action(void) {
 		if (v) { if (*v < lo) *v = lo; if (*v > hi) *v = hi; }
 		if (rychlost < 1) rychlost = 1;               // platna rychlost i po numpadu
 		if (rychlost > maxSpeed) rychlost = maxSpeed; // po zmene Max rychlost srovnej strop
+		{ int cap = MaxRychlostMms();                 // po zmene Stoupani srovnej dosazitelnou mez
+		  if (rychlost > cap) rychlost = cap; }
 		rychlost_last = rychlost;
 		pozice_last = pozice;
 		int was = edit_target;
@@ -1054,6 +1222,19 @@ static void Keypad_Task(void) {
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+
+	//KONCOVE SPINACE (EXTI3/4, obe hrany): aktualizuj 'limit_stop' podle
+	//urovne pinu a pri sepnuti okamzite odpoj driver - motor se zastavi
+	//jeste driv, nez pohybova smycka dojde ke kontrole priznaku.
+	if (GPIO_Pin == Bleft_max_Pin || GPIO_Pin == Bright_max_Pin) {
+		limit_stop = HAL_GPIO_ReadPin(Bleft_max_GPIO_Port, Bleft_max_Pin)
+		          || HAL_GPIO_ReadPin(Bright_max_GPIO_Port, Bright_max_Pin);
+		if (limit_stop) {
+			HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 0);
+			HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 0);
+		}
+		return;
+	}
 
 	//CONFIRM BUTTON
 	if ( GPIO_Pin == Benc_Pin ) {

@@ -229,4 +229,19 @@ void EXTI9_5_IRQHandler(void)
 
 /* USER CODE BEGIN 1 */
 
+/**
+  * @brief Koncove spinace Bleft_max (PC3) a Bright_max (PC4).
+  * EXTI3/4 negeneruje CubeMX (NVIC povolen rucne v main.c, USER CODE 2),
+  * proto jsou handlery zde. Obsluha stavu je v HAL_GPIO_EXTI_Callback().
+  */
+void EXTI3_IRQHandler(void)
+{
+  HAL_GPIO_EXTI_IRQHandler(Bleft_max_Pin);
+}
+
+void EXTI4_IRQHandler(void)
+{
+  HAL_GPIO_EXTI_IRQHandler(Bright_max_Pin);
+}
+
 /* USER CODE END 1 */
