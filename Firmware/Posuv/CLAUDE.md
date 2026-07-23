@@ -2,7 +2,7 @@
 
 Guidance for working in this firmware. It controls a **universal electric machine feed** ("strojní posuv") — a powered axis-feed unit that drives a stepper motor for milling machines, lathes, and similar tools. The operator picks a feed mode and rate on a small GLCD menu, and the unit steps the motor accordingly.
 
-**Status: work in progress.** Several screens are drawn but not wired to behavior, and the mm/speed units are not yet calibrated to real machines. See [Known TODOs / gotchas](#known-todos--gotchas).
+**Status: work in progress.** The motion screens and HW setup are wired, including selectable output/time units, but the mechanical values still need verification on real machines. See [Known TODOs / gotchas](#known-todos--gotchas).
 
 ## Hardware
 
@@ -10,15 +10,15 @@ Guidance for working in this firmware. It controls a **universal electric machin
 - **Clock:** 8 MHz HSE × PLL4 = **32 MHz** SYSCLK. APB1 = 16 MHz, APB2 = 8 MHz. ADC clock = PCLK2/2.
 - **Motor driver:** TB6600HG stepper driver. Controlled by bit-banged GPIO: `STEP`, `DIR`, `Enable`, `Reset`, plus microstep-select lines `M1`/`M2`/`M3` and `LTC`. Microstepping is meant to be **adjustable on the device** (not yet implemented — see TODOs).
 - **Display:** 128×64 ST7920 graphic LCD over **software SPI** (driver in `Core/Src/ST7920_SERIAL.c`). Runs in graphic mode; the firmware draws into a RAM framebuffer and pushes it with `ST7920_Update()`.
-- **Encoder:** rotary encoder on **TIM2 in encoder mode**. Raw `TIM2->CNT` is shifted `>> 2` (4 counts/detent) via `Encoder_GetSteps()`.
-- **Keypad:** 4×4 matrix numeric keypad, physically wired. Scanned by `Keypad_GetKey()`. **Not yet used** (entry of values by keypad is planned).
+- **Encoder:** rotary encoder on **TIM2 in encoder mode**. Raw `TIM2->CNT` is shifted `>> 2` (4 counts/detent) and inverted centrally by `Encoder_GetSteps()`.
+- **Keypad:** 4×4 matrix numeric keypad, physically wired. `Keypad_Task()` provides debounced numeric entry, `#` confirmation, and a silent `*` shortcut that toggles `odpojeniMotoru`; enumerated unit choices are encoder-only.
 - **RGB LED:** status indicator. **No signaling logic defined yet** — current `RGB_R/G/B` writes are placeholders/experiments, not a finalized scheme.
 - **Inputs / switches** (see `Core/Inc/main.h` for pin mapping):
   - `Bconf` — **Back** button (EXTI). Returns to the main menu, resets `rychlost`/`pozice`.
-  - `Benc` — encoder push-button = **Confirm / "A"** (EXTI). Enters menus, confirms edits, starts motion.
-  - `Left` / `Right` — two throws of an **ON-OFF-ON** switch selecting motor **direction**.
+  - `Benc` — encoder push-button = **Confirm / "A"** (EXTI). Enters menus, confirms edits, and starts motion; while any motor movement is active, its ISR instead raises `motor_stop_request` and immediately pulls `STEP` low. Auto, positional, and fast-jog loops all exit on that request.
+  - `Left` / `Right` — two throws of an **ON-OFF-ON** switch selecting motor **direction** for Auto and finite `°Rel` moves.
   - `Bleft_fast` / `Bright_fast` — two throws of an **(ON)-OFF-(ON)** momentary switch for **fast jog** (EXTI-configured, also polled in the main loop).
-  - `Bleft_max` / `Bright_max` — **limit switches**, interrupt-driven (EXTI3/4, both edges; CubeMX has them rising-only without NVIC, so USER CODE 2 re-inits the pins and enables the IRQs, and the handlers live in `stm32f1xx_it.c` USER CODE 1). The ISR maintains `volatile limit_stop` from the pin levels and on press immediately drops `Enable`/`Reset` to de-energise the driver. Either switch stops **all** movement in **both** directions: Auto run ends, positional moves abort mid-move with `poziceAktualni` recomputed from steps actually done (`MmForSteps()`), jog loops exit — all via `LimitHit()`, which only reads the flag.
+  - `Bleft_max` / `Bright_max` — **limit switches**, interrupt-driven (EXTI3/4, both edges; CubeMX has them rising-only without NVIC, so USER CODE 2 re-inits the pins and enables the IRQs, and the handlers live in `stm32f1xx_it.c` USER CODE 1). The ISR maintains `volatile limit_stop` from the pin levels and on press immediately drops `Enable`/`Reset` to de-energise the driver. Either switch stops **all** movement in **both** directions: Auto run ends, positional moves retain the actual completed STEP count in `poziceAktualniKroky`, and jog loops exit — all via `LimitHit()`.
 
 ## Build
 
@@ -50,30 +50,35 @@ Everything runs from a single `while(1)` superloop in `main()`, branching on the
 ### Menu modes (`selected`)
 
 0. **Auto posuv** — continuous feed at `rychlost`, direction from the `Left/Right` switch (`smer_pohybu`).
-1. **Absolutni** — move to an absolute `pozice` (mm), tracked against `poziceAktualni`.
-2. **Inkrementalni** — move by a relative increment `pozice` (mm).
-3. **HW setup** — five settings, **persisted to flash** (`Settings_Load()`/`Settings_Save()`, last 1 KB page `0x0801FC00`, magic + checksum; saved on each confirmed change):
-   - **Stoupani** — leadscrew pitch, stored as `stoupaniUm` (thousandths of mm, 0.001 mm step). **Wired into distance**: `StepsForMm(mm)` computes STEP pulses as `mm × MOTOR_STEPS_PER_REV (200) × MICROSTEP (8) × 1000 / stoupaniUm` (rounded, 64-bit); Absolutni/Inkrementalni moves use it. `MICROSTEP` must match the M1/M2/M3 levels set at motion start in `Confirm_Action()` (1,0,1 = 1/8 step on the TB6600HG).
-   - **Max rychlost** — user cap on `rychlost`, stored in `maxSpeed`, clamped to `MAXSPEED_HARD_CAP` (70). Wired: `rychlost` can't exceed it.
-   - **Akcelerace** — `akcelerace` (mm/s²). **Applied**: accel/decel ramp for positional moves and ramp-up for Auto feed (see Motion / step timing).
+1. **Absolutni** — move to an absolute `pozice` in the selected output unit, tracked internally in STEP pulses. With `°Rel`, the direction switch chooses the increasing/right or decreasing/left path around 0–359.99°; its center position prevents START.
+2. **Inkrementalni** — move by a relative increment `pozice` in the selected output unit. With `°Rel`, the direction switch applies the increment to the right or left; its center position prevents START.
+3. **HW setup** — ten settings with seven visible rows; `inside_top` scrolls to keep `inside_cursor` visible. Settings are **persisted to flash** (`Settings_Load()`/`Settings_Save()`, last 1 KB page `0x0801FC00`, checksum only; saved on each confirmed change):
+   - **Stoupani** — general mechanical ratio, stored as `stoupaniSetiny` in hundredths of the selected output unit per motor revolution. Labels are `mm/otM`, `°R/otM`, `°A/otM`, or `otV/otM`. Position inputs are also hundredths, so `StepsForDistance(valueHundredths)` effectively computes `valueHundredths × MOTOR_STEPS_PER_REV × MICROSTEP / stoupaniSetiny` (rounded, 64-bit).
+   - **Vzdalenost[...]** — `jednotkaDelky`: `mm`, `°Rel`, `°Abs`, or output revolutions `ot`. Width-constrained `R`, `Max`, `S`, and selector rows use compact `°R`/`°A`; `Poz` and `Ink` show full `°Rel`/`°Abs`. `°Rel` wraps in the range 0.00–359.99°; `°Abs` retains signed/cumulative behavior.
+   - **Cas[...]** — `jednotkaCasu`: `s` or `min`. It changes and converts only the live `R` feed-rate denominator. Stoupani remains per motor revolution, `Max` remains per second, and `Acc` remains per second squared.
+   - **Max rychlost** — user cap stored in hundredths of the selected output unit **per second** in `maxSpeed`, independent of `Cas`. `MaxRychlostPerSecond()` enforces the physical `STEP_RATE_MAX` limit, and `RychlostEditMax()` converts that cap to the active `s`/`min` denominator for `R`.
+   - **Akcelerace** — `akcelerace` in selected-output-unit/s². **Applied**: accel/decel ramp for positional moves and ramp-up for Auto feed.
+   - **RyM** — `rychlostManualSetiny`, fast-jog target speed in hundredths of the selected output unit per second (`128` = `1.28`), matching `Max`. It is physically capped by `STEP_RATE_MAX` using the jog's fixed 1/4-step mode.
+   - **RyAcc** — `rychlostManualAcc`, fast-jog acceleration in selected-output-unit/s².
+   - **RyDec** — `rychlostManualDec`, fast-jog deceleration after normal switch release in selected-output-unit/s². Encoder STOP and limit switches remain immediate.
    - **Orientace** — `orientace` toggle (`1` = "+ doprava", `0` = "+ doleva"); inverts every physical DIR write via `DirApply()`.
    - **Odpojeni motoru** — `odpojeniMotoru` toggle (ANO/NE); ANO de-energises the motor when idle, NE keeps holding torque.
 
 ### Key globals (`main.c`)
 
-- `rychlost` — feed rate (labeled mm/s; clamped `1..maxSpeed`).
-- `pozice` / `poziceAktualni` — target / current position (labeled mm).
+- `rychlost` — feed rate `R` stored in hundredths of the selected output/time unit (`100` = `1.00`), clamped to the per-second `maxSpeed` after conversion to the active time denominator and to the step-rate limit.
+- `pozice` — target/increment stored in hundredths of the selected output unit; `poziceAktualniKroky` retains the signed physical position in STEP pulses across unit changes.
 - `smer_pohybu` — direction: `1` = Prava (right), `0` = Leva (left), `-1` = Stop.
-- `maxSpeed` (=70) — the "Max rychlost" cap [mm/s]; see motion timing below.
-- HW-setup values: `stoupaniUm` (pitch, µm), `akcelerace` (mm/s²), `orientace` (0/1), `odpojeniMotoru` (0/1). `edit_target` selects what `_inMenu==-1` edits.
+- `maxSpeed` — the `Max` cap stored in hundredths of the selected output unit per second; changing `Cas` does not change it.
+- HW-setup values: `stoupaniSetiny`, `jednotkaDelky`, `jednotkaCasu`, `akcelerace`, `rychlostManualSetiny`, `rychlostManualAcc`, `rychlostManualDec`, `orientace`, and `odpojeniMotoru`. `edit_target` selects what `_inMenu==-1` edits.
 
 ### Motion / step timing
 
 Steps are bit-banged: set `STEP` high, `delay_us_motor(speed)`, low, `delay_us_motor(speed)`. `delay_us_motor()` busy-waits on **TIM4**; despite the name its unit is a **2 µs tick** (TIM4 kernel clock 32 MHz — APB1 16 MHz ×2 — / prescaler 64 = 0.5 MHz, `MOTOR_TICKS_PER_S`).
 
-The half-period is **calibrated**: `StepHalfTicks(rychlost)` = `MOTOR_TICKS_PER_S / (2 × rychlost × steps/mm)`, with steps/mm from Stoupani + microstepping (same basis as `StepsForMm()`), so `rychlost` is real mm/s (within tick rounding). The step rate is capped at `STEP_RATE_MAX` (8 kHz ≈ 4 rev/s at 1/8 step; tune on hardware). `MaxRychlostMms()` converts that cap to mm/s for the current pitch and bounds `rychlost` editing (together with `maxSpeed`) and re-clamps `rychlost` when Stoupani changes. The jog still uses a fixed, empirical `JOG_SPEED` (490 ticks) — and note jog runs with the **idle** M1/M2/M3 setting (full step), not the motion 1/8 setting, and has no ramp.
+The half-period is **calibrated** from the selected output/time units and `stoupaniSetiny`: `LengthUnitRatio()` gives motor revolutions per output unit, while `StepHalfTicks()` compensates for the hundredth-based speed storage and includes 1 or 60 seconds for the selected `R` denominator. The step rate is capped at `STEP_RATE_MAX` (8 kHz; tune on hardware). `MaxRychlostPerSecond()` exposes the physical cap per second, while `RychlostEditMax()` converts it for the active `R` denominator. `JogTargetStepRate()` converts hundredth-based `RyM` to the 1/4-step jog rate and applies the same physical step-rate cap.
 
-**Acceleration ramp**: positional moves go through `MotorMove(kroky)` — a trapezoidal profile at `akcelerace` mm/s²: after n ramp steps the rate is √(2·a·n) steps/s (`RampHalfTicks()`, integer sqrt per ramp step, no per-step cost while cruising); deceleration mirrors it over the last `n_rozjezd` steps, and short moves switch to deceleration at the midpoint (triangular profile). Auto feed ramps up across superloop iterations (`auto_ramp_n`/`auto_ramp_smer`, reset on direction change, center-off, or leaving the run state) but **stops abruptly** — Stop/Back and the finite-move endpoint are as before; only the finite moves decelerate.
+**Acceleration ramp**: positional moves go through `MotorMove(kroky)` — a trapezoidal profile at `akcelerace` selected-output-unit/s². `RampA2()` converts it through the same Stoupani ratio; deceleration mirrors acceleration, and short moves use a triangular profile. Auto feed ramps up across superloop iterations but still stops abruptly. `JogMove()` tracks squared step rate: it adds `RyAcc` while the fast switch is held and subtracts `RyDec` after release until stopped.
 
 ### Display coordinates
 
@@ -87,12 +92,12 @@ The half-period is **calibrated**: `StepHalfTicks(rychlost)` = `MOTOR_TICKS_PER_
 
 ## Known TODOs / gotchas
 
-- **HW setup is fully wired.** Stoupani (steps/mm + speed model), Max rychlost, Akcelerace (ramp), Orientace, Odpojeni motoru all take effect. `STEP_RATE_MAX` (8 kHz) is an estimate — verify the motor doesn't stall at top speed under load and tune it.
+- **HW setup is fully wired.** Stoupani, selectable length/time units, Max rychlost, Akcelerace, RyM, RyAcc, RyDec, Orientace, and Odpojeni motoru all take effect. `STEP_RATE_MAX` (8 kHz) is an estimate — verify the motor doesn't stall at top speed under load and tune it.
 - **Auto feed has no deceleration** — the ramp only accelerates; Stop/Back and direction-switch-to-center cut steps instantly (as the firmware always did). Fine for a feed drive, but worth knowing.
-- **mm/s ↔ real speed accuracy** relies on `MOTOR_STEPS_PER_REV` (200) and `MICROSTEP` (8) matching the physical motor and the M1/M2/M3 levels; verify on hardware (measure a 100 mm move) before trusting the units. All five are **persisted to flash** (last 1 KB page, `0x0801FC00`); this page is assumed free (program is ~22 KB) — if the firmware ever grows past ~127 KB, reserve it in the linker script.
+- **Real speed/distance accuracy** relies on `stoupaniSetiny`, `MOTOR_STEPS_PER_REV` (200), `MICROSTEP` (8), and `JOG_MICROSTEP` (4) matching the mechanics and M1/M2/M3 levels. All ten settings are stored directly with a checksum and no migration/version layer. Because this change extends that raw record, the previous record will fail its checksum and defaults will be used once after flashing. The final 1 KB flash page must remain reserved as the firmware grows.
 - **Microstepping (`M1`/`M2`/`M3`) is hardcoded**, should become adjustable in the HW-setup menu.
 - **Limit stop blocks both directions** — a pressed limit switch stops and prevents *every* movement (per design), including moving *away* from the switch; back off the limit with the manual handwheel. Aborted positional moves stop without a deceleration ramp (intentional — it's an end stop).
-- **Keypad** — `Keypad_Task()` feeds digits/`*`/`#` into value editing (`_inMenu==-1`) for whatever `edit_target` points at, incl. HW-setup values. Note: for Stoupani the keypad enters raw thousandths of a mm (type `2000` → 2.000 mm), since there is no decimal-point key.
+- **Keypad** — digits enter raw hundredths for `S`, `R`, `Max`, `RyM`, `Poz`, and `Ink` (`128` → `1.28`), and integers for `RyAcc`/`RyDec`; `#` confirms, and `*` silently toggles Odpojeni motoru between ANO/NE. In `°Rel`, keypad distance wraps modulo 360.00 just like the encoder; length/time enumerations are encoder-only.
 - **RGB LED has no defined meaning yet** — current color writes are experimental.
 - **ADC1/ADC2 are dead code.** Initialized (`MX_ADC1_Init`/`MX_ADC2_Init`, `hadc1`/`hadc2`, channels 0/1) but never sampled, and **not even connected on the PCB** — safe to remove.
-- Long blocking motion loops (e.g. `abs(pozice)*rychlost` iterations) make the UI unresponsive while running; only the EXTI buttons interrupt.
+- Long positional motion loops still block the normal UI, but the `Benc` EXTI stop and limit-switch interrupts remain active and terminate the movement.

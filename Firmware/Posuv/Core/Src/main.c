@@ -73,7 +73,7 @@ void Menu_Task(void);
 void Menu_Inside(void);
 static char Keypad_ScanRaw(void);   // neblokujici sken: vrati stisknutou klavesu nebo 0
 static void Confirm_Action(void);   // sdilena akce potvrzeni: enkoder tlacitko (Benc) i '#'
-static void Keypad_Task(void);      // cteni numpadu: cislice/# do editace, # = potvrdit
+static void Keypad_Task(void);      // cislice = editace, # = potvrdit, * = Odpojeni motoru
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -111,18 +111,21 @@ int8_t _inMenu = 1;
 
 // ---- Inside screen state ----
 static int inside_cursor = 0;       // which line/field is highlighted
+static int inside_top = 0;          // first visible HW-setup item
 static int16_t enc1_last = 0;
 
 //POMOCNY RYCHLO FUNKCE
 static inline int16_t Encoder_GetSteps(void)
 {
-    return (int16_t)(TIM2->CNT >> 2);
+    // Fyzicky smer enkoderu je opacny proti smeru menu. Inverze je tady,
+    // aby platila jednotne pro hlavni menu, vnitrni menu i editaci hodnot.
+    return (int16_t)(-(int32_t)(TIM2->CNT >> 2));
 }
 static void PrintLineSel(uint8_t y, const char *text, uint8_t active)
 {
     char buf[24];
     if (active) snprintf(buf, sizeof(buf), ">%s", text);
-    else        snprintf(buf, sizeof(buf), " %s ", text);
+    else        snprintf(buf, sizeof(buf), " %s", text);
     GLCD_Font_Print(0, y, buf);
 }
 
@@ -140,28 +143,33 @@ static uint16_t      rowPins [4] = {Num_R1_Pin,  Num_R2_Pin,  Num_R3_Pin,  Num_R
 static GPIO_TypeDef* colPorts[4] = {Num_C1_GPIO_Port, Num_C2_GPIO_Port, Num_C3_GPIO_Port, Num_C4_GPIO_Port};
 static uint16_t      colPins [4] = {Num_C1_Pin,  Num_C2_Pin,  Num_C3_Pin,  Num_C4_Pin};
 
-// Promene na nastaveni
-int rychlost = 1;     // mm/s
+// Rychlost a pozice jsou ulozeny v setinach,
+// tedy 100 = 1.00 zvolene jednotky.
+int rychlost = 100;
 int rychlost_last = 0;
-int pozice = 0;       // mm
+int pozice = 0;
 int pozice_last = 0;
-int poziceAktualni = 0;
+int64_t poziceAktualniKroky = 0; // fyzicka poloha v STEP pulzech, nezavisla na zvolene jednotce
 int smer_pohybu = 1;   // 1 = Pravo, 0 = Levo, -1 = stop
 
 uint32_t adcValue1;
 uint32_t adcValue2;
-int maxSpeed = 70;   // "Max rychlost": uzivatelsky strop 'rychlost' (<= MAXSPEED_HARD_CAP)
-// Kalibrace vzdalenosti: kroky/mm = kroky motoru na otacku * mikrokrokovani
-// / stoupani sroubu (stoupaniUm, HW setup). Viz StepsForMm() nize.
+int maxSpeed = 7000;  // 70.00: uzivatelsky strop v setinach zvolene jednotky/s
+// Kalibrace vystupu: zvolena jednotka na otacku motoru je ulozena
+// v stoupaniSetiny (HW setup). Viz StepsForDistance() nize.
 #define MOTOR_STEPS_PER_REV  200   // krokovy motor 1.8 stupne
 #define MICROSTEP            8     // TB6600: M1=1,M2=0,M3=1 pri behu (Confirm_Action) = 1/8 krok
-const int POZICE_MAX = 999;   // horni mez pro zadani pozice z klavesnice (mm)
+#define POZICE_MAX           99999 // 999.99 zvolene jednotky
+#define UHEL_REL_CELY        36000 // 360.00 stupne v setinach
+#define UHEL_REL_MAX         35999 // nejvyssi zobrazitelna hodnota °Rel = 359.99
 static int keypad_fresh = 0;  // 1 = prvni cislice zacne nove cislo (prepise stavajici)
-// Tlacitko enkoderu (Benc) jen nastavi tento priznak v ISR; kresleni displeje
-// se deje az v hlavni smycce, aby ISR nepreteklo probihajici SW-SPI prenos na
-// ST7920 (jinak se displej rozsype - nahodne pixely/znaky).
+// Benc je EXTI tlacitko. Bez pohybu pouze frontuje UI udalost, kterou hlavni
+// smycka zpracuje mimo ISR (ochrana SW-SPI displeje). Pri pohybu nastavi STOP,
+// ktery prerusi cekani i vsechny krokovaci smycky; ISR navic ihned stahne STEP.
 static volatile uint8_t benc_event = 0;
 static volatile uint32_t benc_last_ms = 0;  // softwarovy debounce
+static volatile uint8_t motor_stop_request = 0;
+static volatile uint8_t motor_moving = 0;
 // Stav koncovych spinacu, udrzovany prerusenim EXTI3/4 (obe hrany, viz
 // HAL_GPIO_EXTI_Callback). 1 = nektery spinac sepnut -> zadny pohyb.
 static volatile uint8_t limit_stop = 0;
@@ -179,58 +187,231 @@ const uint8_t ICON_Flag[8]			={0x00,0x80,0xff,0x8e,0x0e,0x1c,0x18,0x10};
 // Po overeni na stroji lze doladit.
 #define STEP_RATE_MAX      8000
 #define STEP_HALF_MIN_TICKS ((MOTOR_TICKS_PER_S + 2*STEP_RATE_MAX - 1) / (2*STEP_RATE_MAX))
-#define JOG_SPEED          490    // rychly jog: pevna polperioda (ticky), bezpecny krok
-#define MAXSPEED_HARD_CAP  70     // tovarni strop Max rychlost [mm/s]
-#define STOUPANI_MIN       1      // 0.001 mm
-#define STOUPANI_MAX       99999  // 99.999 mm
-#define AKCEL_MIN          1      // mm/s^2
-#define AKCEL_MAX          999    // mm/s^2
+#define JOG_MICROSTEP      4      // M1=1, M2=0, M3=0 pri rucnim rychloposuvu
+#define JOG_SPEED_MIN      1     // 0.01 zvolene jednotky/s
+#define JOG_SPEED_MAX      99999 // 999.99 zvolene jednotky/s
+#define JOG_ACCEL_MIN      1      // zvolena jednotka/s^2
+#define JOG_ACCEL_MAX      999    // zvolena jednotka/s^2
+#define SPEED_VALUE_MAX    99999  // 999.99 v setinach; STEP_RATE_MAX je fyzicky strop
+#define STOUPANI_MIN       1      // 0.01 zvolene jednotky / otacku motoru
+#define STOUPANI_MAX       99999  // 999.99 zvolene jednotky / otacku motoru
+#define AKCEL_MIN          1      // zvolena jednotka/s^2
+#define AKCEL_MAX          999    // zvolena jednotka/s^2
 
 // ---- HW setup: hodnoty (perzistentni, viz Settings_Load/Save) ----
-int stoupaniUm = 2000;    // Stoupani zavitu v tisicinach mm (krok 0.001 mm) - kalibrace
-int akcelerace = 50;      // Akcelerace/decelerace rampy [mm/s^2] (viz MotorMove)
+int stoupaniSetiny = 200; // 2.00 zvolene jednotky vystupu na jednu otacku motoru
+int akcelerace = 50;      // Akcelerace/decelerace rampy [zvolena delka/s^2] (viz MotorMove)
+int rychlostManualSetiny = 128; // RyM 1.28: nejblizsi setinova hodnota puvodni rychlosti
+int rychlostManualAcc = 50;        // RyAcc [zvolena delka/s^2]
+int rychlostManualDec = 50;        // RyDec [zvolena delka/s^2]
 int orientace = 1;        // 1 = + doprava (vychozi), 0 = + doleva (fyzicky DIR invertovan)
 int odpojeniMotoru = 1;   // 1 = ANO (v klidu uvolnit), 0 = NE (drzet moment)
 
-// Pocet STEP pulzu pro posuv o 'mm' milimetru, ze stoupani sroubu a
-// mikrokrokovani (zaokrouhleno na nejblizsi krok). 64bit kvuli krajnim
-// hodnotam (stoupani az 0.001 mm, pozice az 999 mm by preteklo int).
-static int64_t StepsForMm(int mm)
+enum {
+	JEDNOTKA_DELKY_MM = 0,
+	JEDNOTKA_DELKY_STUPNE_REL,
+	JEDNOTKA_DELKY_STUPNE_ABS,
+	JEDNOTKA_DELKY_OT
+};
+enum { JEDNOTKA_CASU_S = 0, JEDNOTKA_CASU_MIN };
+int jednotkaDelky = JEDNOTKA_DELKY_MM;
+int jednotkaCasu = JEDNOTKA_CASU_S;
+
+static int IsRelativeDegreeUnit(void)
 {
-	int64_t num = (int64_t)mm * MOTOR_STEPS_PER_REV * MICROSTEP * 1000;
-	return (num + stoupaniUm/2) / stoupaniUm;
+	return jednotkaDelky == JEDNOTKA_DELKY_STUPNE_REL;
 }
 
-// Zpetny prevod: kolik mm (zaokrouhlene) odpovida 'kroky' STEP pulzum.
-// Pro dopocet skutecne pozice po pohybu prerusenem koncovym spinacem.
-static int MmForSteps(int64_t kroky)
+// Pocet otacek motoru na jednu zvolenou jednotku vystupu jako zlomek.
+// Stoupani je ulozeno v setinach vystupni jednotky na otacku motoru,
+// proto 1 jednotka vystupu = 100/stoupaniSetiny otacky motoru.
+static void LengthUnitRatio(int unit, int64_t *num, int64_t *den)
 {
-	int64_t den = (int64_t)MOTOR_STEPS_PER_REV * MICROSTEP * 1000;
-	return (int)((kroky * stoupaniUm + den/2) / den);
+	(void)unit; // jednotka meni vyznam a popisek, prevod urcuje stoupani
+	*num = 100;
+	*den = stoupaniSetiny;
 }
 
-// Polperioda STEP pulzu (ticky TIM4, 2 us) pro rychlost v mm/s pri aktualnim
-// stoupani: f [kroku/s] = v * kroky/mm; polperioda = (ticky/s) / (2*f).
-// Spodni mez STEP_HALF_MIN_TICKS drzi krokovou frekvenci pod STEP_RATE_MAX.
-static uint16_t StepHalfTicks(int v_mms)
+static int TimeUnitSeconds(int unit)
 {
-	if (v_mms < 1) v_mms = 1;
-	int64_t half = (int64_t)MOTOR_TICKS_PER_S * stoupaniUm
-	             / ((int64_t)2 * v_mms * MOTOR_STEPS_PER_REV * MICROSTEP * 1000);
+	return (unit == JEDNOTKA_CASU_MIN) ? 60 : 1;
+}
+
+static const char *LengthUnitText(void)
+{
+	switch (jednotkaDelky) {
+		case JEDNOTKA_DELKY_STUPNE_REL: return "\xF8" "Rel";
+		case JEDNOTKA_DELKY_STUPNE_ABS: return "\xF8" "Abs";
+		case JEDNOTKA_DELKY_OT:          return "ot";
+		default:                         return "mm";
+	}
+}
+
+// Zkraceny text pro Vzdalenost, R a Max, aby se hodnoty se setinami
+// vesly na 16 znaku displeje. Poz a Ink pouzivaji plne °Rel/°Abs.
+static const char *LengthUnitShortText(void)
+{
+	switch (jednotkaDelky) {
+		case JEDNOTKA_DELKY_STUPNE_REL: return "\xF8" "R";
+		case JEDNOTKA_DELKY_STUPNE_ABS: return "\xF8" "A";
+		case JEDNOTKA_DELKY_OT:          return "ot";
+		default:                         return "mm";
+	}
+}
+
+static const char *PitchUnitText(void)
+{
+	switch (jednotkaDelky) {
+		case JEDNOTKA_DELKY_STUPNE_REL: return "\xF8" "R/otM";
+		case JEDNOTKA_DELKY_STUPNE_ABS: return "\xF8" "A/otM";
+		case JEDNOTKA_DELKY_OT:          return "otV/otM";
+		default:                         return "mm/otM";
+	}
+}
+
+static const char *TimeUnitText(void)
+{
+	return (jednotkaCasu == JEDNOTKA_CASU_MIN) ? "min" : "s";
+}
+
+static void FormatHundredths(char *out, size_t outSize, int value)
+{
+	int magnitude = (value < 0) ? -value : value;
+	snprintf(out, outSize, "%s%d.%02d", value < 0 ? "-" : "",
+	         magnitude/100, magnitude%100);
+}
+
+static int64_t DivRoundSigned(int64_t num, int64_t den)
+{
+	if (num >= 0) return (num + den/2) / den;
+	return -((-num + den/2) / den);
+}
+
+// Prevede hodnotu mezi jednotkami delky tak, aby zustal zachovan fyzicky pohyb.
+static int ConvertLengthValue(int value, int oldUnit, int newUnit)
+{
+	int64_t oldNum, oldDen, newNum, newDen;
+	LengthUnitRatio(oldUnit, &oldNum, &oldDen);
+	LengthUnitRatio(newUnit, &newNum, &newDen);
+	return (int)DivRoundSigned((int64_t)value * oldNum * newDen,
+	                           oldDen * newNum);
+}
+
+// Stejny prevod pro rychlost; navic zohledni s/min ve jmenovateli.
+static int ConvertSpeedValue(int value, int oldLength, int oldTime,
+	                         int newLength, int newTime)
+{
+	int64_t oldNum, oldDen, newNum, newDen;
+	LengthUnitRatio(oldLength, &oldNum, &oldDen);
+	LengthUnitRatio(newLength, &newNum, &newDen);
+	int64_t num = (int64_t)value * oldNum * newDen * TimeUnitSeconds(newTime);
+	int64_t den = oldDen * newNum * TimeUnitSeconds(oldTime);
+	return (int)DivRoundSigned(num, den);
+}
+
+// Pocet STEP pulzu pro vzdalenost ulozenou v setinach zvolene jednotky.
+// Deleni stem je soucasti jmenovatele, aby zustal vypocet cely v int64_t.
+static int64_t StepsForDistance(int distanceHundredths)
+{
+	int64_t unitNum, unitDen;
+	LengthUnitRatio(jednotkaDelky, &unitNum, &unitDen);
+	int64_t num = (int64_t)distanceHundredths * MOTOR_STEPS_PER_REV * MICROSTEP * unitNum;
+	int64_t den = unitDen * 100;
+	return (num + den/2) / den;
+}
+
+// Polperioda STEP pulzu (ticky TIM4, 2 us) pro rychlost v setinach zvolene
+// jednotky/casu. Nasobek 100 v citateli kompenzuje setinnou reprezentaci.
+static uint16_t StepHalfTicks(int speedHundredths)
+{
+	if (speedHundredths < 1) speedHundredths = 1;
+	int64_t unitNum, unitDen;
+	LengthUnitRatio(jednotkaDelky, &unitNum, &unitDen);
+	int64_t num = (int64_t)MOTOR_TICKS_PER_S * unitDen
+	            * TimeUnitSeconds(jednotkaCasu) * 100;
+	int64_t den = (int64_t)2 * speedHundredths * MOTOR_STEPS_PER_REV
+	            * MICROSTEP * unitNum;
+	int64_t half = (num + den/2) / den;
 	if (half < STEP_HALF_MIN_TICKS) half = STEP_HALF_MIN_TICKS;
 	if (half > 65535) half = 65535;
 	return (uint16_t)half;
 }
 
-// Nejvyssi dosazitelna rychlost [mm/s] pri aktualnim stoupani (dana stropem
-// krokove frekvence STEP_RATE_MAX). Minimalne 1, aby slo vzdy neco zvolit.
-static int MaxRychlostMms(void)
+// Nejvyssi dosazitelna rychlost v setinach zvolene jednotky za zadany cas.
+static int PhysicalSpeedCapHundredths(int timeUnit)
 {
-	int64_t v = (int64_t)STEP_RATE_MAX * stoupaniUm
-	          / ((int64_t)MOTOR_STEPS_PER_REV * MICROSTEP * 1000);
+	int64_t unitNum, unitDen;
+	LengthUnitRatio(jednotkaDelky, &unitNum, &unitDen);
+	int64_t v = (int64_t)STEP_RATE_MAX * unitDen
+	          * TimeUnitSeconds(timeUnit) * 100
+	          / ((int64_t)MOTOR_STEPS_PER_REV * MICROSTEP * unitNum);
 	if (v < 1) v = 1;
-	if (v > MAXSPEED_HARD_CAP) v = MAXSPEED_HARD_CAP;
+	if (v > SPEED_VALUE_MAX) v = SPEED_VALUE_MAX;
 	return (int)v;
+}
+
+// RyM je v setinach zvolene jednotky/s a pouziva 1/4 krok rychloposuvu.
+static int PhysicalJogSpeedCapHundredths(void)
+{
+	int64_t unitNum, unitDen;
+	LengthUnitRatio(jednotkaDelky, &unitNum, &unitDen);
+	int64_t v = (int64_t)STEP_RATE_MAX * unitDen * 100
+	          / ((int64_t)MOTOR_STEPS_PER_REV * JOG_MICROSTEP * unitNum);
+	if (v < JOG_SPEED_MIN) v = JOG_SPEED_MIN;
+	if (v > JOG_SPEED_MAX) v = JOG_SPEED_MAX;
+	return (int)v;
+}
+
+static uint32_t JogTargetStepRate(void)
+{
+	int64_t unitNum, unitDen;
+	LengthUnitRatio(jednotkaDelky, &unitNum, &unitDen);
+	int64_t num = (int64_t)rychlostManualSetiny * MOTOR_STEPS_PER_REV
+	            * JOG_MICROSTEP * unitNum;
+	int64_t den = unitDen * 100;
+	int64_t rate = (num + den/2) / den;
+	if (rate < 1) rate = 1;
+	if (rate > STEP_RATE_MAX) rate = STEP_RATE_MAX;
+	return (uint32_t)rate;
+}
+
+// Max je vzdy ulozen a zobrazen za sekundu, nezavisle na volbe Cas.
+static int MaxRychlostPerSecond(void)
+{
+	return PhysicalSpeedCapHundredths(JEDNOTKA_CASU_S);
+}
+
+// Rychlost R pouziva zvoleny Cas. Uzivatelsky limit Max proto prevedeme ze
+// zvolene jednotky/s na stejnou jednotku/s nebo /min jako editovana rychlost.
+static int RychlostEditMax(void)
+{
+	int64_t userCap = (int64_t)maxSpeed * TimeUnitSeconds(jednotkaCasu);
+	int cap = PhysicalSpeedCapHundredths(jednotkaCasu);
+	if (userCap < cap) cap = (int)userCap;
+	if (cap < 1) cap = 1;
+	if (cap > SPEED_VALUE_MAX) cap = SPEED_VALUE_MAX;
+	return cap;
+}
+
+static void ClampSpeedValues(void)
+{
+	int cap = MaxRychlostPerSecond();
+	if (maxSpeed < 1) maxSpeed = 1;
+	if (maxSpeed > cap) maxSpeed = cap;
+	if (rychlost < 1) rychlost = 1;
+	cap = RychlostEditMax();
+	if (rychlost > cap) rychlost = cap;
+}
+
+static void ClampJogValues(void)
+{
+	int cap = PhysicalJogSpeedCapHundredths();
+	if (rychlostManualSetiny < JOG_SPEED_MIN) rychlostManualSetiny = JOG_SPEED_MIN;
+	if (rychlostManualSetiny > cap) rychlostManualSetiny = cap;
+	if (rychlostManualAcc < JOG_ACCEL_MIN) rychlostManualAcc = JOG_ACCEL_MIN;
+	if (rychlostManualAcc > JOG_ACCEL_MAX) rychlostManualAcc = JOG_ACCEL_MAX;
+	if (rychlostManualDec < JOG_ACCEL_MIN) rychlostManualDec = JOG_ACCEL_MIN;
+	if (rychlostManualDec > JOG_ACCEL_MAX) rychlostManualDec = JOG_ACCEL_MAX;
 }
 
 // Koncove spinace: 1 = nektery je sepnuty -> zastavit kazdy pohyb (Auto,
@@ -255,12 +436,20 @@ static uint32_t Isqrt64(uint64_t x)
 	return (uint32_t)r;
 }
 
-// Dvojnasobek akcelerace v krocich/s^2 (z 'akcelerace' [mm/s^2] a stoupani).
+// Dvojnasobek akcelerace v krocich/s^2 ze zvolene jednotky delky/s^2.
+static int64_t AccelerationA2(int acceleration, int microstep)
+{
+	int64_t unitNum, unitDen;
+	LengthUnitRatio(jednotkaDelky, &unitNum, &unitDen);
+	int64_t num = (int64_t)2 * acceleration * MOTOR_STEPS_PER_REV
+	            * microstep * unitNum;
+	int64_t a2 = (num + unitDen/2) / unitDen;
+	return (a2 < 1) ? 1 : a2;
+}
+
 static int64_t RampA2(void)
 {
-	int64_t a2 = ((int64_t)2 * akcelerace * MOTOR_STEPS_PER_REV * MICROSTEP * 1000
-	             + stoupaniUm/2) / stoupaniUm;
-	return (a2 < 1) ? 1 : a2;
+	return AccelerationA2(akcelerace, MICROSTEP);
 }
 
 // Polperioda n-teho kroku rozjezdu z klidu (n = 1, 2, ...): po n krocich je
@@ -277,12 +466,12 @@ static uint16_t RampHalfTicks(int64_t a2, int64_t n, uint16_t half_cil)
 }
 
 // Provede 'kroky' STEP pulzu s lichobeznikovou rampou: rozjezd z klidu na
-// 'rychlost' (akcelerace [mm/s^2]), konstantni jizda, dojezd zpet do klidu.
+// 'rychlost' (akcelerace [zvolena delka/s^2]), konstantni jizda, dojezd zpet do klidu.
 // Kratke pohyby prejdou na trojuhelnikovy profil (dojezd zacne v polovine,
 // jakmile zbyva prave tolik kroku, kolik jich rozjezd spotreboval).
 // Blokujici (jako drive) - UI bezi az po dokonceni pohybu.
 // Vraci pocet skutecne provedenych kroku: mene nez 'kroky', pokud pohyb
-// zastavil koncovy spinac.
+// zastavil koncovy spinac nebo pozadavek STOP z tlacitka enkoderu.
 static int64_t MotorMove(int64_t kroky)
 {
 	uint16_t half_cil = StepHalfTicks(rychlost);
@@ -291,7 +480,7 @@ static int64_t MotorMove(int64_t kroky)
 	uint8_t plna = 0;        // 1 = cilova rychlost dosazena, jede se konstantne
 
 	for (int64_t i = 0; i < kroky; i++) {
-		if (LimitHit()) return i;    // koncovy spinac: okamzite zastavit
+		if (motor_stop_request || LimitHit()) return i;
 		uint16_t half;
 		int64_t zbyva = kroky - i;
 		if (zbyva <= n_rozjezd) {
@@ -317,20 +506,96 @@ static int64_t auto_ramp_n = 0;
 static int auto_ramp_smer = -1;   // smer, pro ktery rozjezd probehl
 
 // Co se prave edituje v _inMenu==-1 (viz Edit_Binding()).
-enum { EDIT_NONE = 0, EDIT_RYCHLOST, EDIT_POZICE, EDIT_STOUPANI, EDIT_MAXRYCH, EDIT_AKCEL };
+enum {
+	EDIT_NONE = 0, EDIT_RYCHLOST, EDIT_POZICE, EDIT_STOUPANI,
+	EDIT_JEDNOTKA_DELKY, EDIT_JEDNOTKA_CASU, EDIT_MAXRYCH, EDIT_AKCEL,
+	EDIT_RYM, EDIT_RYACC, EDIT_RYDEC
+};
 int edit_target = EDIT_NONE;
+static int edit_old_jednotkaDelky = JEDNOTKA_DELKY_MM;
+static int edit_old_jednotkaCasu = JEDNOTKA_CASU_S;
+
+// U °Rel udrzuje zadani v rozsahu 0.00..359.99; ostatni jednotky jsou
+// podepsane a maji obecny rozsah -999.99..999.99.
+static void NormalizePositionValue(void)
+{
+	if (IsRelativeDegreeUnit()) {
+		pozice %= UHEL_REL_CELY;
+		if (pozice < 0) pozice += UHEL_REL_CELY;
+	} else {
+		if (pozice < -POZICE_MAX) pozice = -POZICE_MAX;
+		if (pozice > POZICE_MAX) pozice = POZICE_MAX;
+	}
+}
+
+// V absolutnim rezimu stupnu zvoli prepinac smer cesty k relativnimu cili.
+static int64_t AbsolutePositionDeltaSteps(void)
+{
+	int64_t target = StepsForDistance(abs(pozice));
+	if (pozice < 0) target = -target;
+	if (!IsRelativeDegreeUnit()) return target - poziceAktualniKroky;
+
+	int64_t fullTurn = StepsForDistance(UHEL_REL_CELY);
+	if (fullTurn < 1 || smer_pohybu < 0) return 0;
+
+	target %= fullTurn;
+	int64_t current = poziceAktualniKroky % fullTurn;
+	if (current < 0) current += fullTurn;
+
+	int64_t delta = target - current;
+	if (smer_pohybu == 1) {
+		if (delta < 0) delta += fullTurn;
+	} else {
+		if (delta > 0) delta -= fullTurn;
+	}
+	return delta;
+}
+
+// Po potvrzeni nove jednotky preved hodnoty tak, aby se fyzicka rychlost,
+// cilova poloha a akcelerace zmenily co nejmene.
+static void ConvertUnitDependentValues(int oldLength, int oldTime)
+{
+	rychlost = ConvertSpeedValue(rychlost, oldLength, oldTime,
+	                              jednotkaDelky, jednotkaCasu);
+	maxSpeed = ConvertSpeedValue(maxSpeed, oldLength, JEDNOTKA_CASU_S,
+	                              jednotkaDelky, JEDNOTKA_CASU_S);
+
+	if (oldLength != jednotkaDelky) {
+		pozice = ConvertLengthValue(pozice, oldLength, jednotkaDelky);
+		akcelerace = ConvertLengthValue(akcelerace, oldLength, jednotkaDelky);
+		rychlostManualSetiny = ConvertSpeedValue(rychlostManualSetiny,
+		                                               oldLength, JEDNOTKA_CASU_S,
+		                                               jednotkaDelky, JEDNOTKA_CASU_S);
+		rychlostManualAcc = ConvertLengthValue(rychlostManualAcc, oldLength, jednotkaDelky);
+		rychlostManualDec = ConvertLengthValue(rychlostManualDec, oldLength, jednotkaDelky);
+	}
+
+	NormalizePositionValue();
+	if (akcelerace < AKCEL_MIN) akcelerace = AKCEL_MIN;
+	if (akcelerace > AKCEL_MAX) akcelerace = AKCEL_MAX;
+	ClampSpeedValues();
+	ClampJogValues();
+}
 
 // Ukazatel na prave editovanou hodnotu (nebo NULL) + meze a krok enkoderu.
 static int *Edit_Binding(int *lo, int *hi, int *step)
 {
 	switch (edit_target) {
-		case EDIT_RYCHLOST: { int cap = MaxRychlostMms();
-		                    *lo = 1; *hi = (maxSpeed < cap) ? maxSpeed : cap;
+		case EDIT_RYCHLOST: { int cap = RychlostEditMax();
+		                    *lo = 1; *hi = cap;
 		                    *step = 1; return &rychlost; }
-		case EDIT_POZICE:   *lo = -POZICE_MAX;  *hi = POZICE_MAX;        *step = 1; return &pozice;
-		case EDIT_STOUPANI: *lo = STOUPANI_MIN; *hi = STOUPANI_MAX;      *step = 1; return &stoupaniUm;
-		case EDIT_MAXRYCH:  *lo = 1;            *hi = MAXSPEED_HARD_CAP; *step = 1; return &maxSpeed;
-		case EDIT_AKCEL:    *lo = AKCEL_MIN;    *hi = AKCEL_MAX;         *step = 1; return &akcelerace;
+		case EDIT_POZICE:
+			if (IsRelativeDegreeUnit()) { *lo = 0; *hi = UHEL_REL_MAX; }
+			else { *lo = -POZICE_MAX; *hi = POZICE_MAX; }
+			*step = 1; return &pozice;
+		case EDIT_STOUPANI:       *lo = STOUPANI_MIN;            *hi = STOUPANI_MAX;           *step = 1; return &stoupaniSetiny;
+		case EDIT_JEDNOTKA_DELKY: *lo = JEDNOTKA_DELKY_MM;       *hi = JEDNOTKA_DELKY_OT;      *step = 1; return &jednotkaDelky;
+		case EDIT_JEDNOTKA_CASU:  *lo = JEDNOTKA_CASU_S;         *hi = JEDNOTKA_CASU_MIN;      *step = 1; return &jednotkaCasu;
+		case EDIT_MAXRYCH:        *lo = 1;                        *hi = MaxRychlostPerSecond(); *step = 1; return &maxSpeed;
+		case EDIT_AKCEL:          *lo = AKCEL_MIN;                *hi = AKCEL_MAX;              *step = 1; return &akcelerace;
+		case EDIT_RYM:            *lo = JOG_SPEED_MIN;            *hi = PhysicalJogSpeedCapHundredths(); *step = 1; return &rychlostManualSetiny;
+		case EDIT_RYACC:          *lo = JOG_ACCEL_MIN;            *hi = JOG_ACCEL_MAX;          *step = 1; return &rychlostManualAcc;
+		case EDIT_RYDEC:          *lo = JOG_ACCEL_MIN;            *hi = JOG_ACCEL_MAX;          *step = 1; return &rychlostManualDec;
 		default: return NULL;
 	}
 }
@@ -343,19 +608,74 @@ static inline GPIO_PinState DirApply(int level)
 	return d ? GPIO_PIN_SET : GPIO_PIN_RESET;
 }
 
+static int ReadDirectionSwitch(void)
+{
+	if (HAL_GPIO_ReadPin(Left_GPIO_Port, Left_Pin)) return 1;
+	if (HAL_GPIO_ReadPin(Right_GPIO_Port, Right_Pin)) return 0;
+	return -1;
+}
+
+// Rychloposuv: po dobu drzeni zrychluje podle RyAcc, po uvolneni
+// dojede do nuly podle RyDec. STOP a koncovy spinac rampu obchazeji.
+static void JogMove(int direction)
+{
+	uint64_t speed2 = 0;
+	uint64_t targetRate = JogTargetStepRate();
+	uint64_t target2 = targetRate * targetRate;
+	uint64_t accelerate2 = (uint64_t)AccelerationA2(rychlostManualAcc, JOG_MICROSTEP);
+	uint64_t decelerate2 = (uint64_t)AccelerationA2(rychlostManualDec, JOG_MICROSTEP);
+
+	HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(direction));
+	HAL_GPIO_WritePin(M1_GPIO_Port, M1_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(M2_GPIO_Port, M2_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(M3_GPIO_Port, M3_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, GPIO_PIN_SET);
+
+	while (!LimitHit() && !motor_stop_request) {
+		uint8_t held = direction
+		             ? HAL_GPIO_ReadPin(Bleft_fast_GPIO_Port, Bleft_fast_Pin)
+		             : HAL_GPIO_ReadPin(Bright_fast_GPIO_Port, Bright_fast_Pin);
+
+		if (held) {
+			if (accelerate2 >= target2 - speed2) speed2 = target2;
+			else speed2 += accelerate2;
+		} else {
+			if (speed2 <= decelerate2) break;
+			speed2 -= decelerate2;
+		}
+
+		uint32_t rate = Isqrt64(speed2);
+		if (rate < 1) rate = 1;
+		uint32_t half = MOTOR_TICKS_PER_S / (2 * rate);
+		if (half < STEP_HALF_MIN_TICKS) half = STEP_HALF_MIN_TICKS;
+		if (half > 65535) half = 65535;
+
+		HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, GPIO_PIN_SET);
+		delay_us_motor((uint16_t)half);
+		HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, GPIO_PIN_RESET);
+		delay_us_motor((uint16_t)half);
+	}
+	HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, GPIO_PIN_RESET);
+}
+
 // ---- Trvale ulozeni HW-setup nastaveni do flash ----
 // Posledni 1KB stranka 128KB flash; program konci ~22KB, takze je volna.
 #define SETTINGS_FLASH_PAGE  0x0801FC00u
-#define SETTINGS_MAGIC       0x53503631u   // "SP61" - platny zaznam
 
 typedef struct {
-	uint32_t magic;
-	int32_t  stoupaniUm;
-	int32_t  maxSpeed;
+	int32_t  stoupaniSetiny;
+	int32_t  maxSpeedSetiny; // Max vzdy ve zvolene jednotce/s
 	int32_t  akcelerace;
+	int32_t  rychlostManualSetiny;
+	int32_t  rychlostManualAcc;
+	int32_t  rychlostManualDec;
 	int32_t  orientace;
 	int32_t  odpojeniMotoru;
-	uint32_t checksum;   // soucet predchozich slov
+	int32_t  jednotkaDelky;
+	int32_t  jednotkaCasu;
+	uint32_t checksum;         // soucet predchozich slov
 } SettingsFlash;
 
 static uint32_t Settings_Checksum(const SettingsFlash *s)
@@ -366,45 +686,65 @@ static uint32_t Settings_Checksum(const SettingsFlash *s)
 	return sum;
 }
 
-// Nacte nastaveni z flash (pokud je platne), jinak necha zkompilovane defaulty.
+// Nacte pouze aktualni rozlozeni. Pri neplatnem souctu zustanou vychozi hodnoty.
 static void Settings_Load(void)
 {
 	const SettingsFlash *s = (const SettingsFlash *)SETTINGS_FLASH_PAGE;
-	if (s->magic != SETTINGS_MAGIC) return;
-	if (s->checksum != Settings_Checksum(s)) return;
-	stoupaniUm     = s->stoupaniUm;
-	maxSpeed       = s->maxSpeed;
-	akcelerace     = s->akcelerace;
-	orientace      = s->orientace ? 1 : 0;
-	odpojeniMotoru = s->odpojeniMotoru ? 1 : 0;
-	// orez do platnych mezi (ochrana proti poskozenym datum)
-	if (stoupaniUm < STOUPANI_MIN) stoupaniUm = STOUPANI_MIN;
-	if (stoupaniUm > STOUPANI_MAX) stoupaniUm = STOUPANI_MAX;
-	if (maxSpeed < 1) maxSpeed = 1;
-	if (maxSpeed > MAXSPEED_HARD_CAP) maxSpeed = MAXSPEED_HARD_CAP;
+	if (s->checksum == Settings_Checksum(s)) {
+		stoupaniSetiny = s->stoupaniSetiny;
+		maxSpeed         = s->maxSpeedSetiny;
+		akcelerace       = s->akcelerace;
+		rychlostManualSetiny = s->rychlostManualSetiny;
+		rychlostManualAcc = s->rychlostManualAcc;
+		rychlostManualDec = s->rychlostManualDec;
+		orientace        = s->orientace ? 1 : 0;
+		odpojeniMotoru   = s->odpojeniMotoru ? 1 : 0;
+		jednotkaDelky    = s->jednotkaDelky;
+		jednotkaCasu     = s->jednotkaCasu;
+	}
+
+	// Orez do platnych mezi chrani i proti poskozenym datum.
+	if (stoupaniSetiny < STOUPANI_MIN) stoupaniSetiny = STOUPANI_MIN;
+	if (stoupaniSetiny > STOUPANI_MAX) stoupaniSetiny = STOUPANI_MAX;
+	if (jednotkaDelky < JEDNOTKA_DELKY_MM || jednotkaDelky > JEDNOTKA_DELKY_OT)
+		jednotkaDelky = JEDNOTKA_DELKY_MM;
+	if (jednotkaCasu < JEDNOTKA_CASU_S || jednotkaCasu > JEDNOTKA_CASU_MIN)
+		jednotkaCasu = JEDNOTKA_CASU_S;
 	if (akcelerace < AKCEL_MIN) akcelerace = AKCEL_MIN;
 	if (akcelerace > AKCEL_MAX) akcelerace = AKCEL_MAX;
-	if (rychlost > maxSpeed) rychlost = maxSpeed;
+	ClampSpeedValues();
+	ClampJogValues();
 }
 
-// Ulozi nastaveni do flash. Eraze+zapis jen kdyz se neco opravdu zmenilo (setri flash).
+// Ulozi nastaveni do flash. Vymazani a zapis probehne jen pri skutecne zmene.
 static void Settings_Save(void)
 {
 	SettingsFlash ns;
-	ns.magic          = SETTINGS_MAGIC;
-	ns.stoupaniUm     = stoupaniUm;
-	ns.maxSpeed       = maxSpeed;
-	ns.akcelerace     = akcelerace;
-	ns.orientace      = orientace;
-	ns.odpojeniMotoru = odpojeniMotoru;
-	ns.checksum       = Settings_Checksum(&ns);
+	ns.stoupaniSetiny = stoupaniSetiny;
+	ns.maxSpeedSetiny = maxSpeed;
+	ns.akcelerace       = akcelerace;
+	ns.rychlostManualSetiny = rychlostManualSetiny;
+	ns.rychlostManualAcc = rychlostManualAcc;
+	ns.rychlostManualDec = rychlostManualDec;
+	ns.orientace        = orientace;
+	ns.odpojeniMotoru   = odpojeniMotoru;
+	ns.jednotkaDelky    = jednotkaDelky;
+	ns.jednotkaCasu     = jednotkaCasu;
+	ns.checksum         = Settings_Checksum(&ns);
 
 	const SettingsFlash *cur = (const SettingsFlash *)SETTINGS_FLASH_PAGE;
-	if (cur->magic == ns.magic && cur->checksum == ns.checksum &&
-	    cur->stoupaniUm == ns.stoupaniUm && cur->maxSpeed == ns.maxSpeed &&
-	    cur->akcelerace == ns.akcelerace && cur->orientace == ns.orientace &&
-	    cur->odpojeniMotoru == ns.odpojeniMotoru) {
-		return;   // uz je ulozeno totez
+	if (cur->checksum == ns.checksum &&
+	    cur->stoupaniSetiny == ns.stoupaniSetiny &&
+	    cur->maxSpeedSetiny == ns.maxSpeedSetiny &&
+	    cur->akcelerace == ns.akcelerace &&
+	    cur->rychlostManualSetiny == ns.rychlostManualSetiny &&
+	    cur->rychlostManualAcc == ns.rychlostManualAcc &&
+	    cur->rychlostManualDec == ns.rychlostManualDec &&
+	    cur->orientace == ns.orientace &&
+	    cur->odpojeniMotoru == ns.odpojeniMotoru &&
+	    cur->jednotkaDelky == ns.jednotkaDelky &&
+	    cur->jednotkaCasu == ns.jednotkaCasu) {
+		return;
 	}
 
 	HAL_FLASH_Unlock();
@@ -517,6 +857,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  // Auto posuv neni blokujici, proto jeho STOP zpracujeme na zacatku iterace.
+	  if (motor_stop_request && _inMenu == -2 && selected == 0) {
+		  _inMenu = 0;
+		  motor_moving = 0;
+		  motor_stop_request = 0;
+		  Inside_Draw();
+	  }
+
 	  // Potvrzeni z tlacitka enkoderu (Benc) - zpracovano zde v hlavnim kontextu,
 	  // aby kresleni nikdy nepreruusilo SW-SPI prenos na displej.
 	  if (benc_event) {
@@ -555,8 +903,15 @@ int main(void)
 			  int *v = Edit_Binding(&lo, &hi, &step);
 			  if (v) {
 				  int nv = *v + (delta1 > 0 ? step : -step);
-				  if (nv < lo) nv = lo;
-				  if (nv > hi) nv = hi;
+				  if (edit_target == EDIT_JEDNOTKA_DELKY ||
+				      edit_target == EDIT_JEDNOTKA_CASU ||
+				      (edit_target == EDIT_POZICE && IsRelativeDegreeUnit())) {
+					  if (nv < lo) nv = hi;
+					  if (nv > hi) nv = lo;
+				  } else {
+					  if (nv < lo) nv = lo;
+					  if (nv > hi) nv = hi;
+				  }
 				  if (nv != *v) { *v = nv; Inside_Draw(); }
 			  }
 		  }
@@ -573,6 +928,7 @@ int main(void)
 		  if (smer_pohybu>=0 && selected==0) {
 			  if (LimitHit()) {
 				  _inMenu=0;                                // koncovy spinac: ukoncit beh
+				  motor_moving=0;
 				  Inside_Draw();
 			  } else {
 				  // Zmena smeru (nebo prvni krok po startu/stopu) -> rozjezd znovu.
@@ -595,63 +951,49 @@ int main(void)
 			  }
 		  } else if (selected==1) {
 
-			  int delta = pozice-poziceAktualni;   // mm se znamenkem
+			  int64_t deltaKroky = AbsolutePositionDeltaSteps();
+			  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin,
+			                    DirApply(deltaKroky >= 0 ? 1 : 0));
 
-			  if (delta>=0) {
-				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(1));
-			  } else {
-				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(0));
-			  }
-
-			  int64_t kroky = StepsForMm(abs(delta));
+			  int64_t kroky = (deltaKroky >= 0) ? deltaKroky : -deltaKroky;
 			  int64_t hotovo = MotorMove(kroky);
-			  if (hotovo == kroky) {
-				  poziceAktualni = pozice;
-			  } else {
-				  // Koncovy spinac: dopocitej, kam se skutecne dojelo.
-				  int mm = MmForSteps(hotovo);
-				  poziceAktualni += (delta >= 0) ? mm : -mm;
-			  }
+			  poziceAktualniKroky += (deltaKroky >= 0) ? hotovo : -hotovo;
 			  _inMenu=0;
+			  motor_moving=0;
+			  motor_stop_request=0;
 			  Inside_Draw();
 		  } else if (selected==2) {
 
-			  if (pozice>=0) {
-				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(1));
-			  } else if (pozice<=0) {
-				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(0));
+			  int smerKroku = IsRelativeDegreeUnit()
+			                  ? smer_pohybu : ((pozice >= 0) ? 1 : 0);
+			  if (smerKroku >= 0) {
+				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(smerKroku));
+				  int64_t kroky = StepsForDistance(abs(pozice));
+				  int64_t hotovo = MotorMove(kroky);
+				  poziceAktualniKroky += smerKroku ? hotovo : -hotovo;
 			  }
-
-			  MotorMove(StepsForMm(abs(pozice)));
 			  _inMenu=0;
+			  motor_moving=0;
+			  motor_stop_request=0;
 			  Inside_Draw();
 		  }
 	  }
 
 
-	  while (HAL_GPIO_ReadPin(Bright_fast_GPIO_Port, Bright_fast_Pin) && !LimitHit()) {
-		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
-		  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(0));//Anti clock wise rotation
-		  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
-		  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
-
-		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
-		  delay_us_motor(JOG_SPEED);  // Very short pulse
-		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
-		  delay_us_motor(JOG_SPEED);
+	  // Po nouzovem STOPu rychloposuv znovu povol az po uvolneni prepinace.
+	  uint8_t fastRight = HAL_GPIO_ReadPin(Bright_fast_GPIO_Port, Bright_fast_Pin);
+	  uint8_t fastLeft = HAL_GPIO_ReadPin(Bleft_fast_GPIO_Port, Bleft_fast_Pin);
+	  if (_inMenu != -2 && !fastRight && !fastLeft) {
+		  motor_stop_request = 0;
 	  }
-	  while (HAL_GPIO_ReadPin(Bleft_fast_GPIO_Port, Bleft_fast_Pin) && !LimitHit()) {
-		  HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
-		  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(1));//Anti clock wise rotation
-		  HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
-		  HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
-
-		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 1);
-		  delay_us_motor(JOG_SPEED);  // Very short pulse
-		  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
-		  delay_us_motor(JOG_SPEED);
+	  if (_inMenu != -2 && !motor_stop_request && !LimitHit() &&
+	      (fastRight || fastLeft)) {
+		  motor_moving = 1;
+		  JogMove(fastRight ? 0 : 1);
+		  motor_moving = 0;
 	  }
 	  if (_inMenu!=-2) {
+		  motor_moving = 0;
 		  auto_ramp_smer = -1;   // mimo beh: pristi Auto start zacne rampou
 		  auto_ramp_n = 0;
 		  HAL_GPIO_WritePin(M1_GPIO_Port, M1_Pin, 1);//Clock wise rotation
@@ -670,30 +1012,28 @@ int main(void)
 
 	  //BACK BUTTON
 	  if (HAL_GPIO_ReadPin(Bconf_GPIO_Port, Bconf_Pin)) {
+		  // Back behem volby jednotky znamena zrusit nepotvrzenou volbu.
+		  if (_inMenu == -1 &&
+		      (edit_target == EDIT_JEDNOTKA_DELKY || edit_target == EDIT_JEDNOTKA_CASU)) {
+			  jednotkaDelky = edit_old_jednotkaDelky;
+			  jednotkaCasu = edit_old_jednotkaCasu;
+		  }
+		  edit_target=EDIT_NONE;
 		  top=0;
 		  _inMenu=2;
-		  rychlost=1;
+		  motor_moving=0;
+		  motor_stop_request=0;
+		  rychlost=100;
 		  pozice=0;
-		  poziceAktualni=0;
+		  poziceAktualniKroky=0;
 		  //HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
 	  }
 
 	  //SMER POHYBU
-	  if (HAL_GPIO_ReadPin(Left_GPIO_Port, Left_Pin)) {
-		  if (_inMenu<=0 && smer_pohybu!=1) {
-			  smer_pohybu = 1;
-			  Inside_Draw();
-		  }
-	  } else if (HAL_GPIO_ReadPin(Right_GPIO_Port, Right_Pin)) {
-		  if (_inMenu<=0 && smer_pohybu!=0) {
-			  smer_pohybu = 0;
-			  Inside_Draw();
-		  }
-	  } else {
-		  if (_inMenu<=0 && smer_pohybu!=-1) {
-			  smer_pohybu = -1;
-			  Inside_Draw();
-		  }
+	  int novy_smer = ReadDirectionSwitch();
+	  if (_inMenu<=0 && novy_smer != smer_pohybu) {
+		  smer_pohybu = novy_smer;
+		  Inside_Draw();
 	  }
 
 	  //RESETING LED
@@ -1113,35 +1453,52 @@ static void Confirm_Action(void) {
 		int lo, hi, step;
 		int *v = Edit_Binding(&lo, &hi, &step);
 		if (v) { if (*v < lo) *v = lo; if (*v > hi) *v = hi; }
-		if (rychlost < 1) rychlost = 1;               // platna rychlost i po numpadu
-		if (rychlost > maxSpeed) rychlost = maxSpeed; // po zmene Max rychlost srovnej strop
-		{ int cap = MaxRychlostMms();                 // po zmene Stoupani srovnej dosazitelnou mez
-		  if (rychlost > cap) rychlost = cap; }
+
+		int was = edit_target;
+		if (was == EDIT_JEDNOTKA_DELKY || was == EDIT_JEDNOTKA_CASU) {
+			ConvertUnitDependentValues(edit_old_jednotkaDelky, edit_old_jednotkaCasu);
+		} else {
+			ClampSpeedValues(); // plati i po zmene Stoupani nebo Max rychlosti
+			ClampJogValues();
+		}
+
 		rychlost_last = rychlost;
 		pozice_last = pozice;
-		int was = edit_target;
 		edit_target = EDIT_NONE;
-		if (was == EDIT_STOUPANI || was == EDIT_MAXRYCH || was == EDIT_AKCEL) Settings_Save();
+		if (was == EDIT_STOUPANI || was == EDIT_JEDNOTKA_DELKY ||
+		    was == EDIT_JEDNOTKA_CASU || was == EDIT_MAXRYCH ||
+		    was == EDIT_AKCEL || was == EDIT_RYM ||
+		    was == EDIT_RYACC || was == EDIT_RYDEC) Settings_Save();
 		_inMenu=0;
 		enc_last = Encoder_GetSteps();   // re-sync cursor encoder so leaving edit doesn't jump
 		Inside_Draw();
 		return;
 	}
 	if (_inMenu==-2) {                 // beh motoru: Benc = STOP (Auto)
-		if (inside_cursor==1) { _inMenu=0; Inside_Draw(); }
+		_inMenu=0;
+		motor_moving=0;
+		motor_stop_request=0;
+		Inside_Draw();
 		return;
 	}
 	// ---- _inMenu==0 ----
 	if (selected==3) {                 // HW setup
+		edit_old_jednotkaDelky = jednotkaDelky;
+		edit_old_jednotkaCasu = jednotkaCasu;
 		switch (inside_cursor) {
-			case 0: edit_target = EDIT_STOUPANI; break;
-			case 1: edit_target = EDIT_MAXRYCH;  break;
-			case 2: edit_target = EDIT_AKCEL;    break;
-			case 3: orientace = !orientace;           Settings_Save(); Inside_Draw(); return; // +/-
-			case 4: odpojeniMotoru = !odpojeniMotoru; Settings_Save(); Inside_Draw(); return; // ANO / NE
+			case 0: edit_target = EDIT_STOUPANI;       break;
+			case 1: edit_target = EDIT_JEDNOTKA_DELKY; break;
+			case 2: edit_target = EDIT_JEDNOTKA_CASU;  break;
+			case 3: edit_target = EDIT_MAXRYCH;        break;
+			case 4: edit_target = EDIT_AKCEL;          break;
+			case 5: edit_target = EDIT_RYM;            break;
+			case 6: edit_target = EDIT_RYACC;          break;
+			case 7: edit_target = EDIT_RYDEC;          break;
+			case 8: orientace = !orientace;           Settings_Save(); Inside_Draw(); return; // +/-
+			case 9: odpojeniMotoru = !odpojeniMotoru; Settings_Save(); Inside_Draw(); return; // ANO / NE
 			default: return;
 		}
-		_inMenu=-1;                     // ciselne polozky se editaji jako rychlost/pozice
+		_inMenu=-1;
 		keypad_fresh = 1;
 		enc1_last = Encoder_GetSteps();
 		Inside_Draw();
@@ -1155,6 +1512,13 @@ static void Confirm_Action(void) {
 		enc1_last = Encoder_GetSteps();  // seed edit encoder so first detent = +/-1, no jump
 		Inside_Draw();
 	} else if ((inside_cursor==1 && selected==0) || (inside_cursor==3)) {
+		smer_pohybu = ReadDirectionSwitch();
+		if (selected != 0 && IsRelativeDegreeUnit() && smer_pohybu < 0) {
+			Inside_Draw();
+			return;
+		}
+		motor_stop_request=0;
+		motor_moving=1;
 		_inMenu=-2;                      // START
 		HAL_GPIO_WritePin(M1_GPIO_Port, M1_Pin, 1);//Clock wise rotation
 		HAL_GPIO_WritePin(M2_GPIO_Port, M2_Pin, 0);//Clock wise rotation
@@ -1163,13 +1527,13 @@ static void Confirm_Action(void) {
 		HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
 		Inside_Draw();
 	} else if (inside_cursor==2) {
-		poziceAktualni=0;               // NULOVY BOD
+		poziceAktualniKroky=0;          // NULOVY BOD
 		Inside_Draw();
 	}
 }
 
-// Cteni numpadu. Cislice a '*' upravuji editovanou hodnotu (jen v _inMenu==-1),
-// '#' se chova jako tlacitko enkoderu (potvrdit).
+// Cteni numpadu. Cislice edituji hodnotu, '#' potvrzuje a '*' bez hlaseni
+// prepina Odpojeni motoru mezi ANO/NE.
 static void Keypad_Task(void) {
 	// Neblokujici debounce pres casova razitka. Klavesa se ohlasi jednou pri
 	// stabilnim stisku (hrana nic->klavesa). Zadne blokujici cekani, takze
@@ -1198,8 +1562,15 @@ static void Keypad_Task(void) {
 		Confirm_Action();
 		return;
 	}
+	if (key == '*') {                 // tichy prepinac Odpojeni motoru ANO/NE
+		odpojeniMotoru = !odpojeniMotoru;
+		Settings_Save();
+		return;
+	}
 
 	if (_inMenu != -1) return;        // cislice davaji smysl jen pri editaci hodnoty
+	if (edit_target == EDIT_JEDNOTKA_DELKY ||
+	    edit_target == EDIT_JEDNOTKA_CASU) return; // jednotky se voli jen enkoderem
 
 	int lo, hi, step;
 	int *v = Edit_Binding(&lo, &hi, &step);
@@ -1210,12 +1581,12 @@ static void Keypad_Task(void) {
 		int cur = keypad_fresh ? 0 : *v;
 		if (cur < 0) cur = 0;             // numpad zadava jen nezaporne
 		cur = cur*10 + d;
-		if (cur > hi) cur = hi;
+		if (edit_target == EDIT_POZICE && IsRelativeDegreeUnit()) {
+			cur %= UHEL_REL_CELY;          // 360.00 -> 0.00, 361.00 -> 1.00
+		} else if (cur > hi) {
+			cur = hi;
+		}
 		*v = cur;
-		keypad_fresh = 0;
-		Inside_Draw();
-	} else if (key == '*') {          // '*' = smazat posledni cislici (backspace)
-		*v /= 10;
 		keypad_fresh = 0;
 		Inside_Draw();
 	}
@@ -1236,19 +1607,24 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 		return;
 	}
 
-	//CONFIRM BUTTON
+	// CONFIRM / STOP Z TLACITKA ENKODERU
 	if ( GPIO_Pin == Benc_Pin ) {
-		// Jen zaznamenat udalost + debounce; kresleni resi hlavni smycka (viz benc_event).
+		// Debounce zustava v ISR; displej se odsud nikdy nekresli.
 		uint32_t now_ms = HAL_GetTick();
 		if (now_ms - benc_last_ms >= 150) {
 			benc_last_ms = now_ms;
-			benc_event = 1;
+			if (motor_moving) {
+				motor_stop_request = 1;
+				HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, GPIO_PIN_RESET);
+			} else {
+				benc_event = 1;
+			}
 		}
 	}
 }
 void delay_us_motor (uint16_t us) {
 	__HAL_TIM_SET_COUNTER(&htim4,0);
-	while (__HAL_TIM_GET_COUNTER(&htim4) < us);
+	while (__HAL_TIM_GET_COUNTER(&htim4) < us && !motor_stop_request);
 }
 
 // Keep selected visible by adjusting 'top'
@@ -1282,20 +1658,37 @@ static void Menu_Draw(void)
 	ST7920_Update();
 }
 
+#define HW_MENU_COUNT 10
+#define HW_MENU_VISIBLE_LINES 7
+
 static int Inside_CursorCount(int sel)
 {
     switch (sel) {
         case 0: return 2; // Rychlost, START
-        case 1: return 4; // Rychlost, NULOVY BOD (or Pozice if you prefer)
-        case 2: return 4; // Rychlost, NULOVY BOD (or Inkrement if you prefer)
-        case 3: return 5; // 4 visible setup lines (you listed 5; screen has 4 rows)
+        case 1: return 4; // Rychlost, Pozice, NULOVY BOD, START
+        case 2: return 4; // Rychlost, Inkrement, NULOVY BOD, START
+        case 3: return HW_MENU_COUNT;
         default: return 1;
     }
 }
+
+static void Inside_KeepVisible(void)
+{
+	if (selected != 3) {
+		inside_top = 0;
+		return;
+	}
+	if (inside_cursor < inside_top) inside_top = inside_cursor;
+	if (inside_cursor >= inside_top + HW_MENU_VISIBLE_LINES)
+		inside_top = inside_cursor - (HW_MENU_VISIBLE_LINES - 1);
+	if (inside_top < 0) inside_top = 0;
+	if (inside_top > HW_MENU_COUNT - HW_MENU_VISIBLE_LINES)
+		inside_top = HW_MENU_COUNT - HW_MENU_VISIBLE_LINES;
+}
 static void Inside_Draw(void) {
 	char buf[32];
+	char value[16];
 	const char* pohybChar;
-
 
 	GLCD_Buf_Clear();   // clear RAM buffer only; ST7920_Update() repaints every pixel
 
@@ -1310,13 +1703,13 @@ static void Inside_Draw(void) {
 	{
 		/* ===================== 0: AUTO POSUV ===================== */
 		case 0:
-			snprintf(buf, sizeof(buf), "Tempo: %02d mm/s", rychlost);
+			FormatHundredths(value, sizeof(value), rychlost);
+			snprintf(buf, sizeof(buf), "R:%s%s/%s", value, LengthUnitShortText(), TimeUnitText());
 			PrintLineSel(1, buf, (inside_cursor == 0));
 
 			snprintf(buf, sizeof(buf), "Smer:%s", pohybChar);
 			PrintLineSel(2, buf, 0);
 
-			// Big visual separation
 			if (_inMenu!=-2) {
 				PrintLineSel(7, "         START", (inside_cursor == 1));
 			} else {
@@ -1326,20 +1719,26 @@ static void Inside_Draw(void) {
 
 		/* ===================== 1: ABSOLUTNI ===================== */
 		case 1:
-			snprintf(buf, sizeof(buf), "Tempo: %02d mm/s", rychlost);
+			FormatHundredths(value, sizeof(value), rychlost);
+			snprintf(buf, sizeof(buf), "R:%s%s/%s", value, LengthUnitShortText(), TimeUnitText());
 			PrintLineSel(1, buf, (inside_cursor == 0));
 
-			if ((pozice-poziceAktualni)>0) {
-				snprintf(buf, sizeof(buf), "Smer:%s", "Prava");
-			} else if ((pozice-poziceAktualni)<0) {
-				snprintf(buf, sizeof(buf), "Smer:%s", "Leva");
+			if (IsRelativeDegreeUnit()) {
+				snprintf(buf, sizeof(buf), "Smer:%s", pohybChar);
 			} else {
-				snprintf(buf, sizeof(buf), "Smer:%s", "Stop");
+				int64_t deltaKroky = AbsolutePositionDeltaSteps();
+				if (deltaKroky>0) {
+					snprintf(buf, sizeof(buf), "Smer:%s", "Prava");
+				} else if (deltaKroky<0) {
+					snprintf(buf, sizeof(buf), "Smer:%s", "Leva");
+				} else {
+					snprintf(buf, sizeof(buf), "Smer:%s", "Stop");
+				}
 			}
 			PrintLineSel(2, buf, 0);
 
-
-			snprintf(buf, sizeof(buf), "Pozice: %02d mm", pozice);
+			FormatHundredths(value, sizeof(value), pozice);
+			snprintf(buf, sizeof(buf), "Poz:%s%s", value, LengthUnitText());
 			PrintLineSel(4, buf, (inside_cursor == 1));
 
 			PrintLineSel(6, "    NULOVY BOD", (inside_cursor == 2));
@@ -1353,10 +1752,13 @@ static void Inside_Draw(void) {
 
 		/* ===================== 2: INKREMENTALNI ===================== */
 		case 2:
-			snprintf(buf, sizeof(buf), "Tempo: %02d mm/s", rychlost);
+			FormatHundredths(value, sizeof(value), rychlost);
+			snprintf(buf, sizeof(buf), "R:%s%s/%s", value, LengthUnitShortText(), TimeUnitText());
 			PrintLineSel(1, buf, (inside_cursor == 0));
 
-			if (pozice>0) {
+			if (IsRelativeDegreeUnit()) {
+				snprintf(buf, sizeof(buf), "Smer:%s", pohybChar);
+			} else if (pozice>0) {
 				snprintf(buf, sizeof(buf), "Smer:%s", "Prava");
 			} else if (pozice<0) {
 				snprintf(buf, sizeof(buf), "Smer:%s", "Leva");
@@ -1365,8 +1767,8 @@ static void Inside_Draw(void) {
 			}
 			PrintLineSel(2, buf, 0);
 
-
-			snprintf(buf, sizeof(buf), "Inkre: %02d mm", pozice);
+			FormatHundredths(value, sizeof(value), pozice);
+			snprintf(buf, sizeof(buf), "Ink:%s%s", value, LengthUnitText());
 			PrintLineSel(4, buf, (inside_cursor == 1));
 
 			PrintLineSel(6, "    NULOVY BOD", (inside_cursor == 2));
@@ -1376,21 +1778,54 @@ static void Inside_Draw(void) {
 			} else {
 				PrintLineSel(7, "         CEKEJ", (inside_cursor == 3));
 			}
-
 			break;
 
 		/* ===================== 3: HW SETUP ===================== */
 		case 3:
-			snprintf(buf, sizeof(buf), "Stoup:%d.%03dmm", stoupaniUm/1000, stoupaniUm%1000);
-			PrintLineSel(1, buf, (inside_cursor == 0));
-			snprintf(buf, sizeof(buf), "MaxR: %d mm/s", maxSpeed);
-			PrintLineSel(2, buf, (inside_cursor == 1));
-			snprintf(buf, sizeof(buf), "Akcel:%dmm/s2", akcelerace);
-			PrintLineSel(3, buf, (inside_cursor == 2));
-			snprintf(buf, sizeof(buf), "Orient: %c", orientace ? '+' : '-');
-			PrintLineSel(4, buf, (inside_cursor == 3));
-			snprintf(buf, sizeof(buf), "Odpoj mot: %s", odpojeniMotoru ? "ANO" : "NE");
-			PrintLineSel(5, buf, (inside_cursor == 4));
+			for (int item = inside_top;
+			     item < HW_MENU_COUNT && item < inside_top + HW_MENU_VISIBLE_LINES;
+			     item++) {
+				switch (item) {
+					case 0:
+						FormatHundredths(value, sizeof(value), stoupaniSetiny);
+						snprintf(buf, sizeof(buf), "S:%s%s", value, PitchUnitText());
+						break;
+					case 1:
+						snprintf(buf, sizeof(buf), "Vzdalenost[%s]", LengthUnitShortText());
+						break;
+					case 2:
+						snprintf(buf, sizeof(buf), "Cas[%s]", TimeUnitText());
+						break;
+					case 3:
+						FormatHundredths(value, sizeof(value), maxSpeed);
+						snprintf(buf, sizeof(buf), "Max:%s%s/s", value, LengthUnitShortText());
+						break;
+					case 4:
+						snprintf(buf, sizeof(buf), "Acc:%d%s/s2", akcelerace, LengthUnitText());
+						break;
+					case 5:
+						FormatHundredths(value, sizeof(value), rychlostManualSetiny);
+						snprintf(buf, sizeof(buf), "RyM:%s%s/s", value, LengthUnitShortText());
+						break;
+					case 6:
+						snprintf(buf, sizeof(buf), "RyAcc:%d%s/s2", rychlostManualAcc, LengthUnitShortText());
+						break;
+					case 7:
+						snprintf(buf, sizeof(buf), "RyDec:%d%s/s2", rychlostManualDec, LengthUnitShortText());
+						break;
+					case 8:
+						snprintf(buf, sizeof(buf), "Orient:%c", orientace ? '+' : '-');
+						break;
+					case 9:
+						snprintf(buf, sizeof(buf), "Odpoj mot:%s", odpojeniMotoru ? "ANO" : "NE");
+						break;
+					default:
+						buf[0] = '\0';
+						break;
+				}
+				PrintLineSel((uint8_t)(item - inside_top + 1), buf,
+				             inside_cursor == item);
+			}
 			break;
 
 		default:
@@ -1415,6 +1850,7 @@ void Menu_Inside_Init(void)
 {
     enc_last = Encoder_GetSteps();
     inside_cursor=0;
+    inside_top=0;
     _inMenu=0;
     Inside_Draw();
 }
@@ -1449,7 +1885,7 @@ void Menu_Task(void)
     }
 }
 void Menu_Inside(void) {
-	uint16_t enc_now = Encoder_GetSteps();
+	int16_t enc_now = Encoder_GetSteps();
 	int16_t delta = enc_now - enc_last;
 	if (delta >  ENC_HALF_RANGE) delta -= ENC_STEPS_RANGE; // wrapped forward
 	if (delta < -ENC_HALF_RANGE) delta += ENC_STEPS_RANGE; // wrapped backward
@@ -1457,13 +1893,14 @@ void Menu_Inside(void) {
 	if (delta != 0) {
 		enc_last = enc_now;
 
-		// move cursor by 1 per movement (stable, no crazy jumps)
+		// move cursor by 1 per movement (encoder direction is inverted centrally)
 		if (delta > 0) inside_cursor++;
 		else       inside_cursor--;
 
 		int cnt = Inside_CursorCount(selected);
 		if (inside_cursor < 0) inside_cursor = cnt - 1;
 		if (inside_cursor >= cnt) inside_cursor = 0;
+		Inside_KeepVisible();
 
 		Inside_Draw(); // redraw only when encoder moved
 	}

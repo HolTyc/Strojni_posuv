@@ -635,7 +635,7 @@ void GLCD_Font_Print(uint8_t x,uint8_t y,char * String)
 	while(*String)
 	{
 		for(i=0;i<8;i++)
-			GLCD_Buf[i+(x*8)+(y*128)]=Font[(*String)*8+i];
+			GLCD_Buf[i+(x*8)+(y*128)]=Font[((uint8_t)*String)*8+i];
 		String++;
 		x++;
 		if(x>15)
