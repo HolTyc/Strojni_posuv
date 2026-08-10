@@ -74,6 +74,7 @@ void Menu_Inside(void);
 static char Keypad_ScanRaw(void);   // neblokujici sken: vrati stisknutou klavesu nebo 0
 static void Confirm_Action(void);   // sdilena akce potvrzeni: enkoder tlacitko (Benc) i '#'
 static void Keypad_Task(void);      // cislice = editace, # = potvrdit, * = Odpojeni motoru
+static void Settings_Save(void);    // HW setup + R do flash (viz SettingsFlash)
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -123,7 +124,9 @@ static inline int16_t Encoder_GetSteps(void)
 }
 static void PrintLineSel(uint8_t y, const char *text, uint8_t active)
 {
-    char buf[24];
+    // Displej ma 16 sloupcu a GLCD_Font_Print delsi retezec zalomi na dalsi
+    // radek - na y=7 by zapisoval az za konec GLCD_Buf. Proto se tvrde orizne.
+    char buf[17];
     if (active) snprintf(buf, sizeof(buf), ">%s", text);
     else        snprintf(buf, sizeof(buf), " %s", text);
     GLCD_Font_Print(0, y, buf);
@@ -178,16 +181,33 @@ uint32_t last_print = 0, now = 0;
 int pos = 0;
 const uint8_t ICON_Flag[8]			={0x00,0x80,0xff,0x8e,0x0e,0x1c,0x18,0x10};
 // ---- HW setup: konstanty ----
-// Kalibrovany model rychlosti: TIM4 bezi na 32 MHz (APB1 16 MHz x2) / 64
-// = 0.5 MHz, takze 1 tick delay_us_motor() = 2 us.
-#define MOTOR_TICKS_PER_S  500000
+// Kalibrovany model rychlosti. Casova zakladna delay_us_motor() je TIM4, proto
+// se odvozuje primo z hodinoveho stromu (viz SystemClock_Config a Posuv.ioc):
+// HSE 16 MHz x PLL4 = 64 MHz SYSCLK, APB1 = /2 = 32 MHz, ale hodiny casovacu
+// na APB1 se pri delicce != 1 zdvojnasobuji zpet na 64 MHz. TIM4 PSC = 64,
+// takze 1 tick = 1 us.
+// POZOR: drive tu byla pevna 500000 (podle HSE 8 MHz / 32 MHz SYSCLK). Krystal
+// je ale 16 MHz, takze kazde cekani bylo o polovinu kratsi a vsechny posuvy
+// jely presne 2x rychleji, nez ukazoval displej. Odvozeni z HSE_VALUE brani
+// tomu, aby konstanta znovu tise zestarla.
+#define MOTOR_SYSCLK_HZ    (HSE_VALUE * 4u)              // PLLMUL = 4
+#define MOTOR_TIM4_HZ      (MOTOR_SYSCLK_HZ / 2u * 2u)   // APB1 /2, hodiny casovacu x2
+#define MOTOR_TIM4_PSC     64u                           // MX_TIM4_Init: Prescaler = 64-1
+#define MOTOR_TICKS_PER_S  (MOTOR_TIM4_HZ / MOTOR_TIM4_PSC)
 // Strop krokove frekvence: 8 kHz pri 1/8 kroku = 4 ot/s. Rozjezd/dojezd
 // resi akceleracni rampa (MotorMove/RampHalfTicks), limitem je tocivy moment
-// motoru a rezie bit-bang smycky (polperioda 8 kHz = 32 ticku = 64 us).
+// motoru a rezie bit-bang smycky (polperioda 8 kHz = 63 ticku = 63 us).
 // Po overeni na stroji lze doladit.
 #define STEP_RATE_MAX      8000
 #define STEP_HALF_MIN_TICKS ((MOTOR_TICKS_PER_S + 2*STEP_RATE_MAX - 1) / (2*STEP_RATE_MAX))
+_Static_assert(STEP_HALF_MIN_TICKS >= 1 && STEP_HALF_MIN_TICKS <= 65535,
+               "polperioda stropu rychlosti se musi vejit do delay_us_motor()");
 #define JOG_MICROSTEP      4      // M1=1, M2=0, M3=0 pri rucnim rychloposuvu
+// Poloha (poziceAktualniKroky) se vede v pulzech MICROSTEP. Rychloposuv jede
+// v hrubsim JOG_MICROSTEP, takze jeden jeho pulz je JOG_STEP_WEIGHT pulzu polohy.
+#define JOG_STEP_WEIGHT    (MICROSTEP / JOG_MICROSTEP)
+_Static_assert(MICROSTEP % JOG_MICROSTEP == 0,
+               "jog pulz musi byt cely nasobek pulzu polohy");
 #define JOG_SPEED_MIN      1     // 0.01 zvolene jednotky/s
 #define JOG_SPEED_MAX      99999 // 999.99 zvolene jednotky/s
 #define JOG_ACCEL_MIN      1      // zvolena jednotka/s^2
@@ -318,6 +338,18 @@ static int64_t StepsForDistance(int distanceHundredths)
 	int64_t num = (int64_t)distanceHundredths * MOTOR_STEPS_PER_REV * MICROSTEP * unitNum;
 	int64_t den = unitDen * 100;
 	return (num + den/2) / den;
+}
+
+// Opak StepsForDistance(): fyzicka poloha v STEP pulzech -> setiny zvolene
+// jednotky. Pouziva se pro zivy ukazatel drahy Dr: (poloha od nuloveho bodu).
+static int DistanceFromSteps(int64_t steps)
+{
+	int64_t unitNum, unitDen;
+	LengthUnitRatio(jednotkaDelky, &unitNum, &unitDen);
+	int64_t num = steps * unitDen * 100;
+	int64_t den = (int64_t)MOTOR_STEPS_PER_REV * MICROSTEP * unitNum;
+	if (den < 1) return 0;
+	return (int)DivRoundSigned(num, den);
 }
 
 // Polperioda STEP pulzu (ticky TIM4, 2 us) pro rychlost v setinach zvolene
@@ -505,6 +537,11 @@ static int64_t MotorMove(int64_t kroky)
 static int64_t auto_ramp_n = 0;
 static int auto_ramp_smer = -1;   // smer, pro ktery rozjezd probehl
 
+// NULOVY BOD: navrat do nuloveho bodu. Pohyb bezi stejnou vetvi jako pozicni
+// posuv (_inMenu==-2), jen s vlastnim poctem kroku -poziceAktualniKroky, tedy
+// presnym odvinutim ujete drahy (u °Rel vcetne celych otacek).
+static uint8_t navrat_do_nuly = 0;
+
 // Co se prave edituje v _inMenu==-1 (viz Edit_Binding()).
 enum {
 	EDIT_NONE = 0, EDIT_RYCHLOST, EDIT_POZICE, EDIT_STOUPANI,
@@ -512,6 +549,9 @@ enum {
 	EDIT_RYM, EDIT_RYACC, EDIT_RYDEC
 };
 int edit_target = EDIT_NONE;
+// Primy zapis numpadem bez otevrene editace: staci najet kurzorem na R:, Poz:
+// nebo Ink: a psat cislice. EDIT_NONE = zadny primy zapis neprobiha.
+static int direct_target = EDIT_NONE;
 static int edit_old_jednotkaDelky = JEDNOTKA_DELKY_MM;
 static int edit_old_jednotkaCasu = JEDNOTKA_CASU_S;
 
@@ -577,16 +617,19 @@ static void ConvertUnitDependentValues(int oldLength, int oldTime)
 	ClampJogValues();
 }
 
-// Ukazatel na prave editovanou hodnotu (nebo NULL) + meze a krok enkoderu.
-static int *Edit_Binding(int *lo, int *hi, int *step)
+// Ukazatel na hodnotu 'target' (nebo NULL) + meze a krok enkoderu.
+static int *Edit_Binding(int target, int *lo, int *hi, int *step)
 {
-	switch (edit_target) {
+	switch (target) {
 		case EDIT_RYCHLOST: { int cap = RychlostEditMax();
 		                    *lo = 1; *hi = cap;
 		                    *step = 1; return &rychlost; }
 		case EDIT_POZICE:
+			// V Inkrementalnim je Ink jen velikost - smer dava prepinac,
+			// takze zaporna hodnota nema vyznam. Absolutni cil zustava znamenkovy.
 			if (IsRelativeDegreeUnit()) { *lo = 0; *hi = UHEL_REL_MAX; }
-			else { *lo = -POZICE_MAX; *hi = POZICE_MAX; }
+			else if (selected == 2)     { *lo = 0; *hi = POZICE_MAX; }
+			else                        { *lo = -POZICE_MAX; *hi = POZICE_MAX; }
 			*step = 1; return &pozice;
 		case EDIT_STOUPANI:       *lo = STOUPANI_MIN;            *hi = STOUPANI_MAX;           *step = 1; return &stoupaniSetiny;
 		case EDIT_JEDNOTKA_DELKY: *lo = JEDNOTKA_DELKY_MM;       *hi = JEDNOTKA_DELKY_OT;      *step = 1; return &jednotkaDelky;
@@ -598,6 +641,56 @@ static int *Edit_Binding(int *lo, int *hi, int *step)
 		case EDIT_RYDEC:          *lo = JOG_ACCEL_MIN;            *hi = JOG_ACCEL_MAX;          *step = 1; return &rychlostManualDec;
 		default: return NULL;
 	}
+}
+
+// Kterou hodnotu lze zapsat numpadem primo z najeteho radku (_inMenu==0).
+// Editace se neotevira, takze enkoder dal posouva kurzor.
+static int DirectEditTarget(void)
+{
+	if (_inMenu != 0) return EDIT_NONE;
+	if (selected == 0) return (inside_cursor == 0) ? EDIT_RYCHLOST : EDIT_NONE;
+	if (selected == 1 || selected == 2) {
+		if (inside_cursor == 0) return EDIT_RYCHLOST;
+		if (inside_cursor == 1) return EDIT_POZICE;
+	}
+	return EDIT_NONE;   // HW setup se dal potvrzuje (uklada se do flash)
+}
+
+// Ukonci primy zapis se stejnymi mezemi a prepocty jako potvrzena editace.
+// Vola se pri odjezdu kurzoru, potvrzeni, startu pohybu i navratu do menu.
+static void DirectEntry_Finish(void)
+{
+	if (direct_target == EDIT_NONE) return;
+	int was = direct_target;
+	int lo, hi, step;
+	int *v = Edit_Binding(was, &lo, &hi, &step);
+	if (v) { if (*v < lo) *v = lo; if (*v > hi) *v = hi; }
+	ClampSpeedValues();
+	rychlost_last = rychlost;
+	pozice_last = pozice;
+	direct_target = EDIT_NONE;
+	keypad_fresh = 0;
+	if (was == EDIT_RYCHLOST) Settings_Save();  // R prezije i vypnuti napajeni
+}
+
+// Zapise cislici do hodnoty 'target' (spolecne pro editaci i primy zapis).
+static void ApplyDigit(int target, char key)
+{
+	int lo, hi, step;
+	int *v = Edit_Binding(target, &lo, &hi, &step);
+	if (!v) return;
+
+	int cur = keypad_fresh ? 0 : *v;
+	if (cur < 0) cur = 0;                 // numpad zadava jen nezaporne
+	cur = cur*10 + (key - '0');
+	if (target == EDIT_POZICE && IsRelativeDegreeUnit()) {
+		cur %= UHEL_REL_CELY;              // 360.00 -> 0.00, 361.00 -> 1.00
+	} else if (cur > hi) {
+		cur = hi;
+	}
+	*v = cur;
+	keypad_fresh = 0;
+	Inside_Draw();
 }
 
 // Aplikuje Orientaci na fyzickou uroven DIR. 'level' je vychozi (orientace=1) uroven pinu.
@@ -615,10 +708,26 @@ static int ReadDirectionSwitch(void)
 	return -1;
 }
 
+// START: 1/8 kroku, povoleni driveru a prechod do behoveho stavu _inMenu==-2.
+static void MotorStart(void)
+{
+	motor_stop_request = 0;
+	motor_moving = 1;
+	_inMenu = -2;
+	HAL_GPIO_WritePin(M1_GPIO_Port, M1_Pin, 1);
+	HAL_GPIO_WritePin(M2_GPIO_Port, M2_Pin, 0);
+	HAL_GPIO_WritePin(M3_GPIO_Port, M3_Pin, 1);
+	HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
+	HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
+}
+
 // Rychloposuv: po dobu drzeni zrychluje podle RyAcc, po uvolneni
 // dojede do nuly podle RyDec. STOP a koncovy spinac rampu obchazeji.
-static void JogMove(int direction)
+// Vraci pocet provedenych pulzu (v JOG_MICROSTEP), aby volajici mohl
+// dopocitat ujetou drahu do poziceAktualniKroky.
+static int64_t JogMove(int direction)
 {
+	int64_t pulzy = 0;
 	uint64_t speed2 = 0;
 	uint64_t targetRate = JogTargetStepRate();
 	uint64_t target2 = targetRate * targetRate;
@@ -656,13 +765,22 @@ static void JogMove(int direction)
 		delay_us_motor((uint16_t)half);
 		HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, GPIO_PIN_RESET);
 		delay_us_motor((uint16_t)half);
+		pulzy++;
 	}
 	HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, GPIO_PIN_RESET);
+	return pulzy;
 }
 
-// ---- Trvale ulozeni HW-setup nastaveni do flash ----
-// Posledni 1KB stranka 128KB flash; program konci ~22KB, takze je volna.
-#define SETTINGS_FLASH_PAGE  0x0801FC00u
+// ---- Trvale ulozeni nastaveni do flash (s rozlozenim opotrebeni) ----
+// Poslednich 8 KB 128KB flash; program konci ~32 KB, takze je volno.
+//
+// R se uklada pri kazde zmene (radove stovky za den), takze prepisovat porad
+// jedno misto by stranku vycerpalo za tydny (garantovanych 10 000 mazani).
+// Rezervovana oblast je proto pole slotu velikosti jednoho zaznamu: zapisuje
+// se vzdy do prvniho volneho slotu a maze se teprve az je cele pole plne.
+// Na jedno mazani stranky tak pripada SETTINGS_SLOTS zapisu.
+#define SETTINGS_FLASH_BASE  0x0801E000u        // 0x0801E000..0x0801FFFF
+#define SETTINGS_PAGES       8u
 
 typedef struct {
 	int32_t  stoupaniSetiny;
@@ -675,22 +793,65 @@ typedef struct {
 	int32_t  odpojeniMotoru;
 	int32_t  jednotkaDelky;
 	int32_t  jednotkaCasu;
+	int32_t  rychlostSetiny;   // R v setinach jednotek ze stejneho zaznamu
 	uint32_t checksum;         // soucet predchozich slov
 } SettingsFlash;
+
+#define SETTINGS_WORDS       (sizeof(SettingsFlash)/4)
+#define SETTINGS_SLOTS_PER_PAGE  (FLASH_PAGE_SIZE / sizeof(SettingsFlash))
+#define SETTINGS_SLOTS       (SETTINGS_SLOTS_PER_PAGE * SETTINGS_PAGES)
+
+_Static_assert(sizeof(SettingsFlash) % 4 == 0, "zaznam se zapisuje po slovech");
+_Static_assert(SETTINGS_SLOTS_PER_PAGE >= 1, "zaznam se musi vejit do stranky");
+_Static_assert(SETTINGS_FLASH_BASE + SETTINGS_PAGES * FLASH_PAGE_SIZE
+               == 0x08020000u, "oblast musi koncit na konci 128KB flash");
 
 static uint32_t Settings_Checksum(const SettingsFlash *s)
 {
 	const uint32_t *w = (const uint32_t *)s;
 	uint32_t sum = 0;
-	for (unsigned i = 0; i < sizeof(SettingsFlash)/4 - 1; i++) sum += w[i];
+	for (unsigned i = 0; i < SETTINGS_WORDS - 1; i++) sum += w[i];
 	return sum;
+}
+
+// Adresa slotu. Slot nikdy neprechazi pres hranici stranky, aby zustal
+// v celku i pri mazani po strankach (zbytek stranky za poslednim slotem
+// se necha nevyuzity).
+static const SettingsFlash *Settings_Slot(unsigned n)
+{
+	return (const SettingsFlash *)(SETTINGS_FLASH_BASE
+	     + (n / SETTINGS_SLOTS_PER_PAGE) * FLASH_PAGE_SIZE
+	     + (n % SETTINGS_SLOTS_PER_PAGE) * sizeof(SettingsFlash));
+}
+
+static int Settings_SlotErased(unsigned n)
+{
+	const uint32_t *w = (const uint32_t *)Settings_Slot(n);
+	for (unsigned i = 0; i < SETTINGS_WORDS; i++)
+		if (w[i] != 0xFFFFFFFFu) return 0;
+	return 1;
+}
+
+// Posledni ulozeny zaznam = platny slot s nejvyssim indexem: zapisuje se vzdy
+// do nejnizsiho volneho slotu, takze poradi slotu = poradi zapisu. Nedopsany
+// slot (vypadek napajeni behem zapisu) neprojde souctem a preskoci se, takze
+// zustane platny predchozi zaznam. Vymazany slot se platnym stat nemuze -
+// soucet SETTINGS_WORDS-1 slov 0xFFFFFFFF je 0xFFFFFFF5, ne 0xFFFFFFFF.
+// Vraci NULL, dokud nebyl ulozen zadny platny zaznam.
+static const SettingsFlash *Settings_Latest(void)
+{
+	for (unsigned n = SETTINGS_SLOTS; n-- > 0; ) {
+		const SettingsFlash *s = Settings_Slot(n);
+		if (s->checksum == Settings_Checksum(s)) return s;
+	}
+	return NULL;
 }
 
 // Nacte pouze aktualni rozlozeni. Pri neplatnem souctu zustanou vychozi hodnoty.
 static void Settings_Load(void)
 {
-	const SettingsFlash *s = (const SettingsFlash *)SETTINGS_FLASH_PAGE;
-	if (s->checksum == Settings_Checksum(s)) {
+	const SettingsFlash *s = Settings_Latest();
+	if (s) {
 		stoupaniSetiny = s->stoupaniSetiny;
 		maxSpeed         = s->maxSpeedSetiny;
 		akcelerace       = s->akcelerace;
@@ -701,6 +862,7 @@ static void Settings_Load(void)
 		odpojeniMotoru   = s->odpojeniMotoru ? 1 : 0;
 		jednotkaDelky    = s->jednotkaDelky;
 		jednotkaCasu     = s->jednotkaCasu;
+		rychlost         = s->rychlostSetiny;
 	}
 
 	// Orez do platnych mezi chrani i proti poskozenym datum.
@@ -716,7 +878,17 @@ static void Settings_Load(void)
 	ClampJogValues();
 }
 
-// Ulozi nastaveni do flash. Vymazani a zapis probehne jen pri skutecne zmene.
+static int Settings_Same(const SettingsFlash *a, const SettingsFlash *b)
+{
+	const uint32_t *wa = (const uint32_t *)a;
+	const uint32_t *wb = (const uint32_t *)b;
+	for (unsigned i = 0; i < SETTINGS_WORDS; i++)
+		if (wa[i] != wb[i]) return 0;
+	return 1;
+}
+
+// Ulozi nastaveni do flash. Zapis probehne jen pri skutecne zmene a jde vzdy
+// do dalsiho volneho slotu; mazani se dela az po zaplneni cele oblasti.
 static void Settings_Save(void)
 {
 	SettingsFlash ns;
@@ -730,34 +902,39 @@ static void Settings_Save(void)
 	ns.odpojeniMotoru   = odpojeniMotoru;
 	ns.jednotkaDelky    = jednotkaDelky;
 	ns.jednotkaCasu     = jednotkaCasu;
+	ns.rychlostSetiny   = rychlost;
 	ns.checksum         = Settings_Checksum(&ns);
 
-	const SettingsFlash *cur = (const SettingsFlash *)SETTINGS_FLASH_PAGE;
-	if (cur->checksum == ns.checksum &&
-	    cur->stoupaniSetiny == ns.stoupaniSetiny &&
-	    cur->maxSpeedSetiny == ns.maxSpeedSetiny &&
-	    cur->akcelerace == ns.akcelerace &&
-	    cur->rychlostManualSetiny == ns.rychlostManualSetiny &&
-	    cur->rychlostManualAcc == ns.rychlostManualAcc &&
-	    cur->rychlostManualDec == ns.rychlostManualDec &&
-	    cur->orientace == ns.orientace &&
-	    cur->odpojeniMotoru == ns.odpojeniMotoru &&
-	    cur->jednotkaDelky == ns.jednotkaDelky &&
-	    cur->jednotkaCasu == ns.jednotkaCasu) {
-		return;
+	const SettingsFlash *cur = Settings_Latest();
+	if (cur && Settings_Same(cur, &ns)) return;   // beze zmeny -> zadny zapis
+
+	// Prvni zcela vymazany slot. Nedopsany slot se preskoci (neni vymazany),
+	// takze se do nej uz nikdy nezapisuje.
+	unsigned slot = SETTINGS_SLOTS;
+	for (unsigned n = 0; n < SETTINGS_SLOTS; n++) {
+		if (Settings_SlotErased(n)) { slot = n; break; }
 	}
 
 	HAL_FLASH_Unlock();
-	FLASH_EraseInitTypeDef er = {0};
-	er.TypeErase   = FLASH_TYPEERASE_PAGES;
-	er.PageAddress = SETTINGS_FLASH_PAGE;
-	er.NbPages     = 1;
-	uint32_t pageError = 0;
-	if (HAL_FLASHEx_Erase(&er, &pageError) == HAL_OK) {
-		const uint32_t *w = (const uint32_t *)&ns;
-		for (unsigned i = 0; i < sizeof(SettingsFlash)/4; i++) {
-			HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, SETTINGS_FLASH_PAGE + i*4, w[i]);
+	if (slot >= SETTINGS_SLOTS) {                 // oblast plna -> smazat celou
+		FLASH_EraseInitTypeDef er = {0};
+		er.TypeErase   = FLASH_TYPEERASE_PAGES;
+		er.PageAddress = SETTINGS_FLASH_BASE;
+		er.NbPages     = SETTINGS_PAGES;
+		uint32_t pageError = 0;
+		if (HAL_FLASHEx_Erase(&er, &pageError) != HAL_OK) {
+			HAL_FLASH_Lock();
+			return;
 		}
+		slot = 0;
+	}
+
+	// Poradi je dulezite: soucet je posledni slovo zaznamu, takze pri preruseni
+	// zapisu zustane slot bez platneho souctu a Settings_Latest() ho preskoci.
+	uint32_t addr = (uint32_t)(uintptr_t)Settings_Slot(slot);
+	const uint32_t *w = (const uint32_t *)&ns;
+	for (unsigned i = 0; i < SETTINGS_WORDS; i++) {
+		HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, addr + i*4, w[i]);
 	}
 	HAL_FLASH_Lock();
 }
@@ -900,7 +1077,7 @@ int main(void)
 		  if (delta1 != 0) {
 			  enc1_last = enc1_now;
 			  int lo, hi, step;
-			  int *v = Edit_Binding(&lo, &hi, &step);
+			  int *v = Edit_Binding(edit_target, &lo, &hi, &step);
 			  if (v) {
 				  int nv = *v + (delta1 > 0 ? step : -step);
 				  if (edit_target == EDIT_JEDNOTKA_DELKY ||
@@ -925,7 +1102,21 @@ int main(void)
 			  auto_ramp_n = 0;
 		  }
 
-		  if (smer_pohybu>=0 && selected==0) {
+		  if (navrat_do_nuly) {
+			  // NULOVY BOD: presne odvinuti ujete drahy zpet do nuly.
+			  int64_t deltaKroky = -poziceAktualniKroky;
+			  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin,
+			                    DirApply(deltaKroky >= 0 ? 1 : 0));
+
+			  int64_t kroky = (deltaKroky >= 0) ? deltaKroky : -deltaKroky;
+			  int64_t hotovo = MotorMove(kroky);
+			  poziceAktualniKroky += (deltaKroky >= 0) ? hotovo : -hotovo;
+			  navrat_do_nuly=0;
+			  _inMenu=0;
+			  motor_moving=0;
+			  motor_stop_request=0;
+			  Inside_Draw();
+		  } else if (smer_pohybu>=0 && selected==0) {
 			  if (LimitHit()) {
 				  _inMenu=0;                                // koncovy spinac: ukoncit beh
 				  motor_moving=0;
@@ -948,6 +1139,9 @@ int main(void)
 				  delay_us_motor(half);  // Very short pulse
 				  HAL_GPIO_WritePin(STEP_GPIO_Port, STEP_Pin, 0);
 				  delay_us_motor(half);
+				  // Do drahy Dr: se pocita i Auto posuv, aby NULOVY BOD
+				  // umel vratit i to, co ujel volny posuv.
+				  poziceAktualniKroky += smer_pohybu ? 1 : -1;
 			  }
 		  } else if (selected==1) {
 
@@ -964,8 +1158,9 @@ int main(void)
 			  Inside_Draw();
 		  } else if (selected==2) {
 
-			  int smerKroku = IsRelativeDegreeUnit()
-			                  ? smer_pohybu : ((pozice >= 0) ? 1 : 0);
+			  // Smer inkrementu urcuje prepinac (ve vsech jednotkach, ne jen
+			  // v °Rel) - Ink je proto jen velikost kroku. Stred = zadny pohyb.
+			  int smerKroku = smer_pohybu;
 			  if (smerKroku >= 0) {
 				  HAL_GPIO_WritePin(DIR_GPIO_Port, DIR_Pin, DirApply(smerKroku));
 				  int64_t kroky = StepsForDistance(abs(pozice));
@@ -988,9 +1183,13 @@ int main(void)
 	  }
 	  if (_inMenu != -2 && !motor_stop_request && !LimitHit() &&
 	      (fastRight || fastLeft)) {
+		  int jogSmer = fastRight ? 0 : 1;
 		  motor_moving = 1;
-		  JogMove(fastRight ? 0 : 1);
+		  int64_t jogPulzy = JogMove(jogSmer);
 		  motor_moving = 0;
+		  // Rychloposuv jede v hrubsim kroku, prepocet na pulzy polohy.
+		  poziceAktualniKroky += (jogSmer ? jogPulzy : -jogPulzy) * JOG_STEP_WEIGHT;
+		  if (_inMenu<=0) Inside_Draw();   // Dr: se obnovi az po dojezdu
 	  }
 	  if (_inMenu!=-2) {
 		  motor_moving = 0;
@@ -1019,13 +1218,15 @@ int main(void)
 			  jednotkaCasu = edit_old_jednotkaCasu;
 		  }
 		  edit_target=EDIT_NONE;
+		  direct_target=EDIT_NONE;   // rozepsany primy zapis zahodit
+		  navrat_do_nuly=0;
 		  top=0;
 		  _inMenu=2;
 		  motor_moving=0;
 		  motor_stop_request=0;
-		  rychlost=100;
-		  pozice=0;
-		  poziceAktualniKroky=0;
+		  pozice=0;                  // R se pri navratu do menu nemaze (viz Settings_Load)
+		  // poziceAktualniKroky (a tim Dr:) se maze jen tlacitkem VYNULOVAT,
+		  // jinak by navrat do menu zahodil nulovy bod i ujetou drahu.
 		  //HAL_GPIO_WritePin(RGB_R_GPIO_Port, RGB_R_Pin, 1);
 	  }
 
@@ -1445,13 +1646,14 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 // Sdilena akce potvrzeni. Vola se z EXTI (tlacitko enkoderu Benc) i z klavesy '#'.
 static void Confirm_Action(void) {
+	DirectEntry_Finish();              // rozepsane cislo z numpadu nejdriv dokonci
 	if (_inMenu>=1) {
 		Menu_Inside_Init();
 		return;
 	}
 	if (_inMenu==-1) {                 // potvrzeni editace hodnoty -> zpet do modu
 		int lo, hi, step;
-		int *v = Edit_Binding(&lo, &hi, &step);
+		int *v = Edit_Binding(edit_target, &lo, &hi, &step);
 		if (v) { if (*v < lo) *v = lo; if (*v > hi) *v = hi; }
 
 		int was = edit_target;
@@ -1468,7 +1670,8 @@ static void Confirm_Action(void) {
 		if (was == EDIT_STOUPANI || was == EDIT_JEDNOTKA_DELKY ||
 		    was == EDIT_JEDNOTKA_CASU || was == EDIT_MAXRYCH ||
 		    was == EDIT_AKCEL || was == EDIT_RYM ||
-		    was == EDIT_RYACC || was == EDIT_RYDEC) Settings_Save();
+		    was == EDIT_RYACC || was == EDIT_RYDEC ||
+		    was == EDIT_RYCHLOST) Settings_Save();   // R prezije vypnuti napajeni
 		_inMenu=0;
 		enc_last = Encoder_GetSteps();   // re-sync cursor encoder so leaving edit doesn't jump
 		Inside_Draw();
@@ -1505,29 +1708,42 @@ static void Confirm_Action(void) {
 		return;
 	}
 	// ---- mody 0,1,2 ----
+	// Kurzor: 0 = R, 1 = Poz/Ink (mimo Auto), 2 = VYNULOVAT, 3 = NULOVY BOD,
+	// 4 = START. Auto posuv ma jen 0 = R a 1 = START.
 	if (inside_cursor==0 || (inside_cursor==1 && selected!=0)) {
 		edit_target = (inside_cursor==0) ? EDIT_RYCHLOST : EDIT_POZICE;
 		_inMenu=-1;
 		keypad_fresh = 1;                // prvni cislice prepise stavajici hodnotu
 		enc1_last = Encoder_GetSteps();  // seed edit encoder so first detent = +/-1, no jump
 		Inside_Draw();
-	} else if ((inside_cursor==1 && selected==0) || (inside_cursor==3)) {
-		smer_pohybu = ReadDirectionSwitch();
-		if (selected != 0 && IsRelativeDegreeUnit() && smer_pohybu < 0) {
+		return;
+	}
+	if (selected!=0 && inside_cursor==2) {
+		poziceAktualniKroky=0;           // VYNULOVAT: tady je novy nulovy bod
+		Inside_Draw();
+		return;
+	}
+	if (selected!=0 && inside_cursor==3) {
+		if (poziceAktualniKroky==0) {    // NULOVY BOD: uz v nule, neni co vracet
 			Inside_Draw();
 			return;
 		}
-		motor_stop_request=0;
-		motor_moving=1;
-		_inMenu=-2;                      // START
-		HAL_GPIO_WritePin(M1_GPIO_Port, M1_Pin, 1);//Clock wise rotation
-		HAL_GPIO_WritePin(M2_GPIO_Port, M2_Pin, 0);//Clock wise rotation
-		HAL_GPIO_WritePin(M3_GPIO_Port, M3_Pin, 1);//Clock wise rotation
-		HAL_GPIO_WritePin(Reset_GPIO_Port, Reset_Pin, 1);
-		HAL_GPIO_WritePin(Enable_GPIO_Port, Enable_Pin, 1);
+		navrat_do_nuly=1;                // navrat resi vetev _inMenu==-2
+		MotorStart();
 		Inside_Draw();
-	} else if (inside_cursor==2) {
-		poziceAktualniKroky=0;          // NULOVY BOD
+		return;
+	}
+	if ((selected==0 && inside_cursor==1) || (selected!=0 && inside_cursor==4)) {
+		smer_pohybu = ReadDirectionSwitch();
+		// Stred prepinace blokuje START tam, kde smer urcuje prepinac:
+		// Inkrementalni vzdy, Absolutni jen v °Rel. Auto se smi spustit i ve
+		// stredu - jen nekroku, dokud se packa neprehodi.
+		if (smer_pohybu < 0 &&
+		    (selected == 2 || (selected == 1 && IsRelativeDegreeUnit()))) {
+			Inside_Draw();
+			return;
+		}
+		MotorStart();                    // START
 		Inside_Draw();
 	}
 }
@@ -1568,28 +1784,26 @@ static void Keypad_Task(void) {
 		return;
 	}
 
-	if (_inMenu != -1) return;        // cislice davaji smysl jen pri editaci hodnoty
-	if (edit_target == EDIT_JEDNOTKA_DELKY ||
-	    edit_target == EDIT_JEDNOTKA_CASU) return; // jednotky se voli jen enkoderem
+	if (key < '0' || key > '9') return;
 
-	int lo, hi, step;
-	int *v = Edit_Binding(&lo, &hi, &step);
-	if (!v) return;
-
-	if (key >= '0' && key <= '9') {
-		int d = key - '0';
-		int cur = keypad_fresh ? 0 : *v;
-		if (cur < 0) cur = 0;             // numpad zadava jen nezaporne
-		cur = cur*10 + d;
-		if (edit_target == EDIT_POZICE && IsRelativeDegreeUnit()) {
-			cur %= UHEL_REL_CELY;          // 360.00 -> 0.00, 361.00 -> 1.00
-		} else if (cur > hi) {
-			cur = hi;
-		}
-		*v = cur;
-		keypad_fresh = 0;
-		Inside_Draw();
+	if (_inMenu == -1) {              // otevrena editace hodnoty
+		if (edit_target == EDIT_JEDNOTKA_DELKY ||
+		    edit_target == EDIT_JEDNOTKA_CASU) return; // jednotky jen enkoderem
+		ApplyDigit(edit_target, key);
+		return;
 	}
+
+	// Primy zapis: staci najet kurzorem na R:, Poz: nebo Ink: a psat.
+	// Editace se neotevira, takze enkoder dal posouva kurzor a odjezd z radku
+	// (nebo potvrzeni) hodnotu dorovna na meze - viz DirectEntry_Finish().
+	int target = DirectEditTarget();
+	if (target == EDIT_NONE) return;
+	if (target != direct_target) {    // nove pole -> prvni cislice ho prepise
+		DirectEntry_Finish();
+		direct_target = target;
+		keypad_fresh = 1;
+	}
+	ApplyDigit(target, key);
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
@@ -1665,8 +1879,8 @@ static int Inside_CursorCount(int sel)
 {
     switch (sel) {
         case 0: return 2; // Rychlost, START
-        case 1: return 4; // Rychlost, Pozice, NULOVY BOD, START
-        case 2: return 4; // Rychlost, Inkrement, NULOVY BOD, START
+        case 1: return 5; // Rychlost, Pozice, VYNULOVAT, NULOVY BOD, START
+        case 2: return 5; // Rychlost, Inkrement, VYNULOVAT, NULOVY BOD, START
         case 3: return HW_MENU_COUNT;
         default: return 1;
     }
@@ -1685,6 +1899,19 @@ static void Inside_KeepVisible(void)
 	if (inside_top > HW_MENU_COUNT - HW_MENU_VISIBLE_LINES)
 		inside_top = HW_MENU_COUNT - HW_MENU_VISIBLE_LINES;
 }
+// Posledni radek pohybovych obrazovek: ujeta draha od nuloveho bodu.
+// Zamerne se neobnovuje periodicky behem pohybu - jedno prekresleni displeje
+// trva desitky ms a delalo by diry v krokovaci smycce. Hodnota se tedy
+// dopocita az kdyz se pohyb zastavi (dojezd, STOP, koncovy spinac).
+static void PrintDrahaLine(void)
+{
+	char buf[24];
+	char value[16];
+	FormatHundredths(value, sizeof(value), DistanceFromSteps(poziceAktualniKroky));
+	snprintf(buf, sizeof(buf), "Dr:%s%s", value, LengthUnitText());
+	PrintLineSel(7, buf, 0);
+}
+
 static void Inside_Draw(void) {
 	char buf[32];
 	char value[16];
@@ -1711,10 +1938,11 @@ static void Inside_Draw(void) {
 			PrintLineSel(2, buf, 0);
 
 			if (_inMenu!=-2) {
-				PrintLineSel(7, "         START", (inside_cursor == 1));
+				PrintLineSel(6, "         START", (inside_cursor == 1));
 			} else {
-				PrintLineSel(7, "          STOP", (inside_cursor == 1));
+				PrintLineSel(6, "          STOP", (inside_cursor == 1));
 			}
+			PrintDrahaLine();
 			break;
 
 		/* ===================== 1: ABSOLUTNI ===================== */
@@ -1739,15 +1967,17 @@ static void Inside_Draw(void) {
 
 			FormatHundredths(value, sizeof(value), pozice);
 			snprintf(buf, sizeof(buf), "Poz:%s%s", value, LengthUnitText());
-			PrintLineSel(4, buf, (inside_cursor == 1));
+			PrintLineSel(3, buf, (inside_cursor == 1));
 
-			PrintLineSel(6, "    NULOVY BOD", (inside_cursor == 2));
+			PrintLineSel(4, "    VYNULOVAT", (inside_cursor == 2));
+			PrintLineSel(5, "    NULOVY BOD", (inside_cursor == 3));
 
 			if (_inMenu!=-2) {
-				PrintLineSel(7, "         START", (inside_cursor == 3));
+				PrintLineSel(6, "         START", (inside_cursor == 4));
 			} else {
-				PrintLineSel(7, "         CEKEJ", (inside_cursor == 3));
+				PrintLineSel(6, "         CEKEJ", (inside_cursor == 4));
 			}
+			PrintDrahaLine();
 			break;
 
 		/* ===================== 2: INKREMENTALNI ===================== */
@@ -1756,28 +1986,23 @@ static void Inside_Draw(void) {
 			snprintf(buf, sizeof(buf), "R:%s%s/%s", value, LengthUnitShortText(), TimeUnitText());
 			PrintLineSel(1, buf, (inside_cursor == 0));
 
-			if (IsRelativeDegreeUnit()) {
-				snprintf(buf, sizeof(buf), "Smer:%s", pohybChar);
-			} else if (pozice>0) {
-				snprintf(buf, sizeof(buf), "Smer:%s", "Prava");
-			} else if (pozice<0) {
-				snprintf(buf, sizeof(buf), "Smer:%s", "Leva");
-			} else {
-				snprintf(buf, sizeof(buf), "Smer:%s", "Stop");
-			}
+			// Smer inkrementu drzi prepinac ve vsech jednotkach.
+			snprintf(buf, sizeof(buf), "Smer:%s", pohybChar);
 			PrintLineSel(2, buf, 0);
 
 			FormatHundredths(value, sizeof(value), pozice);
 			snprintf(buf, sizeof(buf), "Ink:%s%s", value, LengthUnitText());
-			PrintLineSel(4, buf, (inside_cursor == 1));
+			PrintLineSel(3, buf, (inside_cursor == 1));
 
-			PrintLineSel(6, "    NULOVY BOD", (inside_cursor == 2));
+			PrintLineSel(4, "    VYNULOVAT", (inside_cursor == 2));
+			PrintLineSel(5, "    NULOVY BOD", (inside_cursor == 3));
 
 			if (_inMenu!=-2) {
-				PrintLineSel(7, "         START", (inside_cursor == 3));
+				PrintLineSel(6, "         START", (inside_cursor == 4));
 			} else {
-				PrintLineSel(7, "         CEKEJ", (inside_cursor == 3));
+				PrintLineSel(6, "         CEKEJ", (inside_cursor == 4));
 			}
+			PrintDrahaLine();
 			break;
 
 		/* ===================== 3: HW SETUP ===================== */
@@ -1851,7 +2076,26 @@ void Menu_Inside_Init(void)
     enc_last = Encoder_GetSteps();
     inside_cursor=0;
     inside_top=0;
+    direct_target=EDIT_NONE;
+    navrat_do_nuly=0;
     _inMenu=0;
+    // Auto posuv se rozjede uz otevrenim polozky - START se nemacka a kurzor
+    // proto rovnou stoji na radku STOP. Prepinac smeru ve stredu pohyb drzi,
+    // stejne jako sepnuty koncovy spinac (viz behova vetev _inMenu==-2).
+    if (selected==0) {
+        // Auto posuv je volny posuv, takze Dr: ma ukazovat drahu ujetou od
+        // otevreni polozky - nulovy bod se nastavi sem. (Absolutni a
+        // Inkrementalni si naopak nulovy bod drzi, meni ho jen VYNULOVAT.)
+        poziceAktualniKroky = 0;
+        smer_pohybu = ReadDirectionSwitch();
+        inside_cursor = 1;
+        MotorStart();
+    } else if (selected==1 || selected==2) {
+        // Kurzor rovnou na Poz:/Ink: - hodnotu, ktera se meni nejcasteji, tak
+        // jde zadat numpadem hned po otevreni, bez scrollovani a bez potvrzeni
+        // (viz DirectEditTarget()).
+        inside_cursor = 1;
+    }
     Inside_Draw();
 }
 
@@ -1892,6 +2136,7 @@ void Menu_Inside(void) {
 
 	if (delta != 0) {
 		enc_last = enc_now;
+		DirectEntry_Finish();   // odjezd z radku ukonci primy zapis numpadem
 
 		// move cursor by 1 per movement (encoder direction is inverted centrally)
 		if (delta > 0) inside_cursor++;
